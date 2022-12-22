@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SyncStageTestAppAndroid</string>
+    <string name="intro">SyncStage</string>
+    <string name="access">Access</string>
+    <string name="profile">Profile</string>
+    <string name="create_Join_Session">SyncStage</string>
+    <string name="location">SyncStage</string>
+    <string name="session">SyncStage</string>
+    <string name="back_button">Back</string>
+</resources>
