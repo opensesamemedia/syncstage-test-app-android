@@ -47,6 +47,11 @@ class MainActivity : ComponentActivity() ***REMOVED***
             ***REMOVED***
         ***REMOVED***
     ***REMOVED***
+
+    override fun onDestroy() ***REMOVED***
+        sendCommandToService(ACTION_STOP_SERVICE, this)
+        super.onDestroy()
+    ***REMOVED***
 ***REMOVED***
 
 @Composable

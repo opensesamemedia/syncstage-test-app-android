@@ -175,14 +175,14 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                             .background(color = Color.White)
                             .fillMaxWidth()
                             .padding(20.dp)) ***REMOVED***
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) ***REMOVED***
-                                Text(text = "Direct Monitor", modifier = Modifier.padding(end = 20.dp))
-                                Switch(checked = sessionViewModel.isDirectMonitorEnabled, onCheckedChange = ***REMOVED***
-                                    sessionViewModel.toggleDirectMonitor(it)
-                                ***REMOVED***)
-                            ***REMOVED***
+//                            Row(modifier = Modifier.fillMaxWidth(),
+//                                verticalAlignment = Alignment.CenterVertically,
+//                                horizontalArrangement = Arrangement.Start) ***REMOVED***
+//                                Text(text = "Direct Monitor", modifier = Modifier.padding(end = 20.dp))
+//                                Switch(checked = sessionViewModel.isDirectMonitorEnabled, onCheckedChange = ***REMOVED***
+//                                    sessionViewModel.toggleDirectMonitor(it)
+//                                ***REMOVED***)
+//                            ***REMOVED***
                             Row(modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Start) ***REMOVED***
@@ -191,15 +191,15 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                                     sessionViewModel.toggleInternalMicrophone(it)
                                 ***REMOVED***)
                             ***REMOVED***
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) ***REMOVED***
-                                Text(text = "Direct Monitor volume", modifier = Modifier.padding(end = 20.dp))
-                                Slider(value = sessionViewModel.getDirectMonitorVolume().toFloat(), onValueChange = ***REMOVED***
-                                    sessionViewModel.changeDirectMonitorVolume(it)
-                              ***REMOVED*** Modifier.width(100.dp))
-                            ***REMOVED***
-                            Text(text = "Note: A headphone required to enable the direct monitor feature.")
+//                            Row(modifier = Modifier.fillMaxWidth(),
+//                                verticalAlignment = Alignment.CenterVertically,
+//                                horizontalArrangement = Arrangement.Start) ***REMOVED***
+//                                Text(text = "Direct Monitor volume", modifier = Modifier.padding(end = 20.dp))
+//                                Slider(value = sessionViewModel.getDirectMonitorVolume().toFloat(), onValueChange = ***REMOVED***
+//                                    sessionViewModel.changeDirectMonitorVolume(it)
+//                              ***REMOVED*** Modifier.width(100.dp))
+//                            ***REMOVED***
+//                            Text(text = "Note: A headphone required to enable the direct monitor feature.")
                         ***REMOVED***
                     ***REMOVED***
                 ***REMOVED***
