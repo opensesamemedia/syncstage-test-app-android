@@ -7,7 +7,6 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
-import android.media.AudioManager
 import android.os.Build
 import android.os.PowerManager
 import android.util.Log
@@ -36,11 +35,11 @@ class ForegroundService : LifecycleService() {
         intent?.let {
             when (it.action) {
                 ACTION_START_SERVICE -> {
-                    startForegroundService()`
+                    startForegroundService()
                 }
                 ACTION_STOP_SERVICE -> {
                     Log.d(TAG, "Stopped service")
-                    stopForeground(true)
+                    stopForeground(STOP_FOREGROUND_REMOVE)
                 }
 
                 else -> {}
@@ -57,7 +56,6 @@ class ForegroundService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        audioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
     }
 
     private fun getNotificationChannelId(): String {
@@ -113,7 +111,6 @@ class ForegroundService : LifecycleService() {
         notificationId += 1
     }
 }
-
 
 fun sendCommandToService(action: String, ctx: Context) =
     Intent(ctx, ForegroundService::class.java).also {

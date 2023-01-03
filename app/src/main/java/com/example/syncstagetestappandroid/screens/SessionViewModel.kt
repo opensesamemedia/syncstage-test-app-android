@@ -4,7 +4,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.telephony.TelephonyManager
 import androidx.lifecycle.ViewModel
+import com.example.syncstagetestappandroid.ACTION_START_SERVICE
+import com.example.syncstagetestappandroid.ACTION_STOP_SERVICE
 import com.example.syncstagetestappandroid.repo.PreferencesRepo
+import com.example.syncstagetestappandroid.sendCommandToService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -188,6 +191,9 @@ class SessionViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             val result = syncStage.join(sessionCode = sessionCode, userId = userId, displayName = displayName)
             if(result.second == SyncStageSDKErrorCode.OK) {
+                context.get()?.let {
+                    sendCommandToService(ACTION_START_SERVICE, it)
+                }
                 val session = result.first
                 session?.let {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -210,6 +216,9 @@ class SessionViewModel @Inject constructor(
     fun leaveSession() {
         timer.cancel()
         CoroutineScope(Dispatchers.IO).launch {
+            context.get()?.let {
+                sendCommandToService(ACTION_STOP_SERVICE, it)
+            }
             val result = syncStage.leave()
             if(result == SyncStageSDKErrorCode.OK) {
                 CoroutineScope(Dispatchers.Main).launch {
