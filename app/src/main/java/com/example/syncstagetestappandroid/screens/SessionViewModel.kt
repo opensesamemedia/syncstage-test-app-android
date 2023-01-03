@@ -4,7 +4,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.telephony.TelephonyManager
 import androidx.lifecycle.ViewModel
+import com.example.syncstagetestappandroid.ACTION_START_SERVICE
+import com.example.syncstagetestappandroid.ACTION_STOP_SERVICE
 import com.example.syncstagetestappandroid.repo.PreferencesRepo
+import com.example.syncstagetestappandroid.sendCommandToService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +42,7 @@ data class SessionUIState(
     val connections: MutableList<ConnectionModel> = mutableListOf(),
     val networkType: String = "",
     val date: Date = Date(),
-    val directMonitorEnabled: Boolean = false,
+//    val directMonitorEnabled: Boolean = false,
     val internalMicrophoneEnabled: Boolean = false
 )
 
@@ -72,10 +75,10 @@ class SessionViewModel @Inject constructor(
             return connection?.isMuted ?: false
         ***REMOVED***
 
-    val isDirectMonitorEnabled: Boolean
-        get() ***REMOVED***
-            return uiState.value.directMonitorEnabled
-        ***REMOVED***
+//    val isDirectMonitorEnabled: Boolean
+//        get() ***REMOVED***
+//            return uiState.value.directMonitorEnabled
+//        ***REMOVED***
 
     val isInternalMicrophoneEnabled: Boolean
         get() ***REMOVED***
@@ -154,22 +157,22 @@ class SessionViewModel @Inject constructor(
         return syncStage.getReceiverVolume(identifier = identifier)
     ***REMOVED***
 
-    fun getDirectMonitorVolume(): Int ***REMOVED***
-        return syncStage.getDirectMonitorVolume()
-    ***REMOVED***
-
-    fun changeDirectMonitorVolume(volume: Float) ***REMOVED***
-        syncStage.changeDirectMonitorVolume(volume)
-    ***REMOVED***
-
-    fun toggleDirectMonitor(value: Boolean) ***REMOVED***
-        syncStage.toggleDirectMonitor(value)
-        _uiState.update ***REMOVED***
-            it.copy(
-                directMonitorEnabled = value
-            )
-        ***REMOVED***
-    ***REMOVED***
+//    fun getDirectMonitorVolume(): Int ***REMOVED***
+//        return syncStage.getDirectMonitorVolume()
+//    ***REMOVED***
+//
+//    fun changeDirectMonitorVolume(volume: Float) ***REMOVED***
+//        syncStage.changeDirectMonitorVolume(volume)
+//    ***REMOVED***
+//
+//    fun toggleDirectMonitor(value: Boolean) ***REMOVED***
+//        syncStage.toggleDirectMonitor(value)
+//        _uiState.update ***REMOVED***
+//            it.copy(
+//                directMonitorEnabled = value
+//            )
+//        ***REMOVED***
+//    ***REMOVED***
 
     fun toggleInternalMicrophone(value: Boolean) ***REMOVED***
         syncStage.toggleInternalMic(value)
@@ -188,6 +191,9 @@ class SessionViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch ***REMOVED***
             val result = syncStage.join(sessionCode = sessionCode, userId = userId, displayName = displayName)
             if(result.second == SyncStageSDKErrorCode.OK) ***REMOVED***
+                context.get()?.let ***REMOVED***
+                    sendCommandToService(ACTION_START_SERVICE, it)
+                ***REMOVED***
                 val session = result.first
                 session?.let ***REMOVED***
                     CoroutineScope(Dispatchers.Main).launch ***REMOVED***
@@ -210,6 +216,9 @@ class SessionViewModel @Inject constructor(
     fun leaveSession() ***REMOVED***
         timer.cancel()
         CoroutineScope(Dispatchers.IO).launch ***REMOVED***
+            context.get()?.let ***REMOVED***
+                sendCommandToService(ACTION_STOP_SERVICE, it)
+            ***REMOVED***
             val result = syncStage.leave()
             if(result == SyncStageSDKErrorCode.OK) ***REMOVED***
                 CoroutineScope(Dispatchers.Main).launch ***REMOVED***
