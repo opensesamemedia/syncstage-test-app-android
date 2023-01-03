@@ -47,6 +47,11 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+        sendCommandToService(ACTION_STOP_SERVICE, this)
+        super.onDestroy()
+    }
 }
 
 @Composable

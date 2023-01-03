@@ -32,10 +32,6 @@ fun LocationScreen(navController: NavHostController, zoneViewModel: LocationView
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
     var mExpanded by remember { mutableStateOf(false) }
     var showLoadingIndicator by remember { mutableStateOf(false) }
-    val icon = if (mExpanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
 
     zoneViewModel.createSessionCallback = { sessionCode ->
         showLoadingIndicator = false
@@ -86,10 +82,11 @@ fun LocationScreen(navController: NavHostController, zoneViewModel: LocationView
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(zoneUIState.selectedZone.ZoneName, modifier = Modifier.padding(start = 10.dp))
-                    Spacer(modifier = Modifier.fillMaxWidth(0.9f))
+                    Spacer(modifier = Modifier.weight(1.0f))
+                    val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
                     Icon(
                         icon, "contentDescription",
-                        Modifier.padding(end = 10.dp)
+                        Modifier.padding(end = 10.dp).size(30.dp, 30.dp)
                     )
                 }
                 DropdownMenu(

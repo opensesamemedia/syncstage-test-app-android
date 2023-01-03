@@ -175,14 +175,14 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                             .background(color = Color.White)
                             .fillMaxWidth()
                             .padding(20.dp)) {
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) {
-                                Text(text = "Direct Monitor", modifier = Modifier.padding(end = 20.dp))
-                                Switch(checked = sessionViewModel.isDirectMonitorEnabled, onCheckedChange = {
-                                    sessionViewModel.toggleDirectMonitor(it)
-                                })
-                            }
+//                            Row(modifier = Modifier.fillMaxWidth(),
+//                                verticalAlignment = Alignment.CenterVertically,
+//                                horizontalArrangement = Arrangement.Start) {
+//                                Text(text = "Direct Monitor", modifier = Modifier.padding(end = 20.dp))
+//                                Switch(checked = sessionViewModel.isDirectMonitorEnabled, onCheckedChange = {
+//                                    sessionViewModel.toggleDirectMonitor(it)
+//                                })
+//                            }
                             Row(modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Start) {
@@ -191,15 +191,15 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                                     sessionViewModel.toggleInternalMicrophone(it)
                                 })
                             }
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) {
-                                Text(text = "Direct Monitor volume", modifier = Modifier.padding(end = 20.dp))
-                                Slider(value = sessionViewModel.getDirectMonitorVolume().toFloat(), onValueChange = {
-                                    sessionViewModel.changeDirectMonitorVolume(it)
-                                }, Modifier.width(100.dp))
-                            }
-                            Text(text = "Note: A headphone required to enable the direct monitor feature.")
+//                            Row(modifier = Modifier.fillMaxWidth(),
+//                                verticalAlignment = Alignment.CenterVertically,
+//                                horizontalArrangement = Arrangement.Start) {
+//                                Text(text = "Direct Monitor volume", modifier = Modifier.padding(end = 20.dp))
+//                                Slider(value = sessionViewModel.getDirectMonitorVolume().toFloat(), onValueChange = {
+//                                    sessionViewModel.changeDirectMonitorVolume(it)
+//                                }, Modifier.width(100.dp))
+//                            }
+//                            Text(text = "Note: A headphone required to enable the direct monitor feature.")
                         }
                     }
                 }
