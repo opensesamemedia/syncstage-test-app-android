@@ -148,10 +148,14 @@ class Detection5G(
                 }
             }
             if (telephonyCallback != null && telephonyManager != null) {
-                telephonyManager.registerTelephonyCallback(
-                    ContextCompat.getMainExecutor(ctx),
-                    telephonyCallback!!
-                )
+                try {
+                    telephonyManager.registerTelephonyCallback(
+                        ContextCompat.getMainExecutor(ctx),
+                        telephonyCallback!!
+                    )
+                }catch(e: SecurityException){
+                    Log.e(TAG, "Could not register telephony callback. Insufficient permissions. ${e.toString()}")
+                }
             }else{
                 Log.w(TAG, "Could not register telephonyCallback")
             }
