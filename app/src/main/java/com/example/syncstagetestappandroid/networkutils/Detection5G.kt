@@ -148,10 +148,14 @@ class Detection5G(
                 ***REMOVED***
             ***REMOVED***
             if (telephonyCallback != null && telephonyManager != null) ***REMOVED***
-                telephonyManager.registerTelephonyCallback(
-                    ContextCompat.getMainExecutor(ctx),
-                    telephonyCallback!!
-                )
+                try ***REMOVED***
+                    telephonyManager.registerTelephonyCallback(
+                        ContextCompat.getMainExecutor(ctx),
+                        telephonyCallback!!
+                    )
+                ***REMOVED***catch(e: SecurityException)***REMOVED***
+                    Log.e(TAG, "Could not register telephony callback. Insufficient permissions. $***REMOVED***e.toString()***REMOVED***")
+                ***REMOVED***
             ***REMOVED***else***REMOVED***
                 Log.w(TAG, "Could not register telephonyCallback")
             ***REMOVED***
