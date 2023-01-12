@@ -195,7 +195,7 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Start) {
                                 Text(text = "Direct Monitor volume", modifier = Modifier.padding(end = 20.dp))
-                                Slider(value = sessionViewModel.getDirectMonitorVolume().toFloat(), onValueChange = {
+                                Slider(value = sessionUIState.directMonitorVolume, onValueChange = {
                                     sessionViewModel.changeDirectMonitorVolume(it)
                                 }, Modifier.width(100.dp))
                             }

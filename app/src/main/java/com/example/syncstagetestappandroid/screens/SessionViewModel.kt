@@ -43,6 +43,7 @@ data class SessionUIState(
     val networkType: String = "",
     val date: Date = Date(),
     val directMonitorEnabled: Boolean = false,
+    val directMonitorVolume: Float = 1F,
     val internalMicrophoneEnabled: Boolean = false
 )
 
@@ -158,11 +159,23 @@ class SessionViewModel @Inject constructor(
     }
 
     fun getDirectMonitorVolume(): Int {
-        return syncStage.getDirectMonitorVolume()
+        val dmVolume = syncStage.getDirectMonitorVolume()
+        _uiState.update { sessionUIState ->
+            sessionUIState.copy(
+                directMonitorVolume = (dmVolume/100).toFloat(),
+            )
+        }
+
+        return dmVolume
     }
 
     fun changeDirectMonitorVolume(volume: Float) {
-        syncStage.changeDirectMonitorVolume(volume)
+        syncStage.changeDirectMonitorVolume((volume * 100).toInt())
+        _uiState.update { sessionUIState ->
+            sessionUIState.copy(
+                directMonitorVolume = volume,
+            )
+        }
     }
 
     fun toggleDirectMonitor(value: Boolean) {
@@ -200,6 +213,7 @@ class SessionViewModel @Inject constructor(
                         updateSession(it)
                     }
                 }
+                getDirectMonitorVolume()
             }
         }
     }
