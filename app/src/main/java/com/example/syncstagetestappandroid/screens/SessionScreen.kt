@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.syncstagetestappandroid.SyncStageScreen
 import com.example.syncstagetestappandroid.components.LoadingIndicator
 import com.example.syncstagetestappandroid.components.UserConnection
 
@@ -212,7 +213,9 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
 
     LaunchedEffect(Unit) {
         if(sessionUIState.session == null) {
-            sessionViewModel.joinSession(sessionCode)
+            sessionViewModel.joinSession(
+                sessionCode = sessionCode,
+            )
             sessionViewModel.initiate5GDetection()
         }
     }

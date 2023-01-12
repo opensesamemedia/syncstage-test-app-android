@@ -3,6 +3,7 @@ package com.example.syncstagetestappandroid.screens
 import android.content.Context
 import android.net.ConnectivityManager
 import android.telephony.TelephonyManager
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.example.syncstagetestappandroid.ACTION_START_SERVICE
 import com.example.syncstagetestappandroid.ACTION_STOP_SERVICE
@@ -214,6 +215,13 @@ class SessionViewModel @Inject constructor(
                     }
                 }
                 getDirectMonitorVolume()
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    context.get()?.let {
+                        Toast.makeText(it, "Could not join the session. Please check the session code.", Toast.LENGTH_LONG).show()
+                    }
+                    sessionOut()
+                }
             }
         }
     }
