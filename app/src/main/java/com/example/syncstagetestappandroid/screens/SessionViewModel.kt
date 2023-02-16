@@ -3,6 +3,7 @@ package com.example.syncstagetestappandroid.screens
 import android.content.Context
 import android.net.ConnectivityManager
 import android.telephony.TelephonyManager
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.example.syncstagetestappandroid.ACTION_START_SERVICE
 import com.example.syncstagetestappandroid.ACTION_STOP_SERVICE
@@ -42,7 +43,8 @@ data class SessionUIState(
     val connections: MutableList<ConnectionModel> = mutableListOf(),
     val networkType: String = "",
     val date: Date = Date(),
-//    val directMonitorEnabled: Boolean = false,
+    val directMonitorEnabled: Boolean = false,
+    val directMonitorVolume: Float = 1F,
     val internalMicrophoneEnabled: Boolean = false
 )
 
@@ -75,10 +77,10 @@ class SessionViewModel @Inject constructor(
             return connection?.isMuted ?: false
         }
 
-//    val isDirectMonitorEnabled: Boolean
-//        get() {
-//            return uiState.value.directMonitorEnabled
-//        }
+    val isDirectMonitorEnabled: Boolean
+        get() {
+            return uiState.value.directMonitorEnabled
+        }
 
     val isInternalMicrophoneEnabled: Boolean
         get() {
@@ -157,22 +159,34 @@ class SessionViewModel @Inject constructor(
         return syncStage.getReceiverVolume(identifier = identifier)
     }
 
-//    fun getDirectMonitorVolume(): Int {
-//        return syncStage.getDirectMonitorVolume()
-//    }
-//
-//    fun changeDirectMonitorVolume(volume: Float) {
-//        syncStage.changeDirectMonitorVolume(volume)
-//    }
-//
-//    fun toggleDirectMonitor(value: Boolean) {
-//        syncStage.toggleDirectMonitor(value)
-//        _uiState.update {
-//            it.copy(
-//                directMonitorEnabled = value
-//            )
-//        }
-//    }
+    fun getDirectMonitorVolume(): Int {
+        val dmVolume = syncStage.getDirectMonitorVolume()
+        _uiState.update { sessionUIState ->
+            sessionUIState.copy(
+                directMonitorVolume = (dmVolume/100).toFloat(),
+            )
+        }
+
+        return dmVolume
+    }
+
+    fun changeDirectMonitorVolume(volume: Float) {
+        syncStage.changeDirectMonitorVolume((volume * 100).toInt())
+        _uiState.update { sessionUIState ->
+            sessionUIState.copy(
+                directMonitorVolume = volume,
+            )
+        }
+    }
+
+    fun toggleDirectMonitor(value: Boolean) {
+        syncStage.toggleDirectMonitor(value)
+        _uiState.update {
+            it.copy(
+                directMonitorEnabled = value
+            )
+        }
+    }
 
     fun toggleInternalMicrophone(value: Boolean) {
         syncStage.toggleInternalMic(value)
@@ -199,6 +213,14 @@ class SessionViewModel @Inject constructor(
                     CoroutineScope(Dispatchers.Main).launch {
                         updateSession(it)
                     }
+                }
+                getDirectMonitorVolume()
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    context.get()?.let {
+                        Toast.makeText(it, "Could not join the session. Please check the session code.", Toast.LENGTH_LONG).show()
+                    }
+                    sessionOut()
                 }
             }
         }
