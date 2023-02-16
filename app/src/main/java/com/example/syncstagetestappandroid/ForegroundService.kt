@@ -79,7 +79,6 @@ class ForegroundService : LifecycleService() {
             .setSmallIcon(R.drawable.sync_stage_logo)
             .setContentTitle("SyncStage")
             .setContentText("We are streaming data from your microphone.")
-            .setContentIntent(getMainActivityPendingIntent())
 
         startForeground(notificationId, notificationBuilder.build())
     }

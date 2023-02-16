@@ -22,11 +22,11 @@ import com.example.syncstagetestappandroid.SyncStageScreen
 import com.example.syncstagetestappandroid.components.LoadingIndicator
 
 @Composable
-fun CreateJoinSessionScreen(navController: NavHostController, loginViewModel: CreateJoinViewModel = hiltViewModel()) {
-    val loginUIState by loginViewModel.uiState.collectAsState()
+fun CreateJoinSessionScreen(navController: NavHostController, createJoinViewModel: CreateJoinViewModel = hiltViewModel()) {
+    val loginUIState by createJoinViewModel.uiState.collectAsState()
     var isEmptyTextField by remember { mutableStateOf(true) }
     val onSessionCodeChange = { text: String ->
-        loginViewModel.updateSessionCode(text)
+        createJoinViewModel.updateSessionCode(text)
         isEmptyTextField = text.isEmpty()
     }
 
@@ -97,7 +97,7 @@ fun CreateJoinSessionScreen(navController: NavHostController, loginViewModel: Cr
 
     LaunchedEffect(Unit) {
         if(!loginUIState.loggedIn) {
-            loginViewModel.initiateSyncStage()
+            createJoinViewModel.initiateSyncStage()
         }
     }
 }
