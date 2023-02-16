@@ -23,7 +23,14 @@ import com.example.syncstagetestappandroid.screens.ConnectionModel
 import media.opensesame.syncstagesdk.models.public.Measurements
 
 @Composable
-fun UserConnection(connectionModel: ConnectionModel, measurements: Measurements, networkType: String, isTransmitter: Boolean, value: Float, onValueChange: (value: Float) -> Unit) ***REMOVED***
+fun UserConnection(
+    connectionModel: ConnectionModel,
+    measurements: Measurements,
+    networkType: String,
+    isTransmitter: Boolean,
+    value: Float,
+    onValueChange: (value: Float) -> Unit
+) ***REMOVED***
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,11 +43,14 @@ fun UserConnection(connectionModel: ConnectionModel, measurements: Measurements,
             .padding(end = 10.dp), onDraw = ***REMOVED***
             drawCircle(color = if (connectionModel.isConnected) Color.Green else Color.Red)
         ***REMOVED***)
-        Text(text = "You ($***REMOVED***connectionModel.displayName ?: "Unknown"***REMOVED***)", modifier = Modifier.weight(1.0f))
+
         if (!isTransmitter) ***REMOVED***
+            Text(text = "$***REMOVED***connectionModel.displayName ?: "Unknown"***REMOVED***", modifier = Modifier.weight(1.0f))
             Slider(value = value, valueRange = 0f..100f, onValueChange = ***REMOVED***
                 onValueChange(it)
           ***REMOVED*** modifier = Modifier.width(100.dp))
+        ***REMOVED***else ***REMOVED***
+            Text(text = "You ($***REMOVED***connectionModel.displayName ?: "Unknown"***REMOVED***)", modifier = Modifier.weight(1.0f))
         ***REMOVED***
         val icon = if(connectionModel.isMuted) Icons.Filled.MicOff else Icons.Filled.Mic
         Icon(icon, "Mic")
