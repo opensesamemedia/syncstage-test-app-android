@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.syncstagetestappandroid.SyncStageScreen
 import com.example.syncstagetestappandroid.components.LoadingIndicator
 import com.example.syncstagetestappandroid.components.UserConnection
 
@@ -175,14 +176,14 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                             .background(color = Color.White)
                             .fillMaxWidth()
                             .padding(20.dp)) ***REMOVED***
-//                            Row(modifier = Modifier.fillMaxWidth(),
-//                                verticalAlignment = Alignment.CenterVertically,
-//                                horizontalArrangement = Arrangement.Start) ***REMOVED***
-//                                Text(text = "Direct Monitor", modifier = Modifier.padding(end = 20.dp))
-//                                Switch(checked = sessionViewModel.isDirectMonitorEnabled, onCheckedChange = ***REMOVED***
-//                                    sessionViewModel.toggleDirectMonitor(it)
-//                                ***REMOVED***)
-//                            ***REMOVED***
+                            Row(modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start) ***REMOVED***
+                                Text(text = "Direct Monitor", modifier = Modifier.padding(end = 20.dp))
+                                Switch(checked = sessionViewModel.isDirectMonitorEnabled, onCheckedChange = ***REMOVED***
+                                    sessionViewModel.toggleDirectMonitor(it)
+                                ***REMOVED***)
+                            ***REMOVED***
                             Row(modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Start) ***REMOVED***
@@ -191,15 +192,15 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                                     sessionViewModel.toggleInternalMicrophone(it)
                                 ***REMOVED***)
                             ***REMOVED***
-//                            Row(modifier = Modifier.fillMaxWidth(),
-//                                verticalAlignment = Alignment.CenterVertically,
-//                                horizontalArrangement = Arrangement.Start) ***REMOVED***
-//                                Text(text = "Direct Monitor volume", modifier = Modifier.padding(end = 20.dp))
-//                                Slider(value = sessionViewModel.getDirectMonitorVolume().toFloat(), onValueChange = ***REMOVED***
-//                                    sessionViewModel.changeDirectMonitorVolume(it)
-//                              ***REMOVED*** Modifier.width(100.dp))
-//                            ***REMOVED***
-//                            Text(text = "Note: A headphone required to enable the direct monitor feature.")
+                            Row(modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start) ***REMOVED***
+                                Text(text = "Direct Monitor volume", modifier = Modifier.padding(end = 20.dp))
+                                Slider(value = sessionUIState.directMonitorVolume, onValueChange = ***REMOVED***
+                                    sessionViewModel.changeDirectMonitorVolume(it)
+                              ***REMOVED*** Modifier.width(100.dp))
+                            ***REMOVED***
+                            Text(text = "Note: A headphone required to enable the direct monitor feature.")
                         ***REMOVED***
                     ***REMOVED***
                 ***REMOVED***
@@ -212,7 +213,9 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
 
     LaunchedEffect(Unit) ***REMOVED***
         if(sessionUIState.session == null) ***REMOVED***
-            sessionViewModel.joinSession(sessionCode)
+            sessionViewModel.joinSession(
+                sessionCode = sessionCode,
+            )
             sessionViewModel.initiate5GDetection()
         ***REMOVED***
     ***REMOVED***

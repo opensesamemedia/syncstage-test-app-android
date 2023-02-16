@@ -25,7 +25,9 @@ fun MicrophoneAccessScreen(navController: NavHostController) ***REMOVED***
                             android.Manifest.permission.ACCESS_NETWORK_STATE,
                             android.Manifest.permission.ACCESS_WIFI_STATE,
                             android.Manifest.permission.READ_PHONE_STATE,
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                            android.Manifest.permission.POST_NOTIFICATIONS,
+    )
     val permissionsState = rememberMultiplePermissionsState(permissions = permissions)
 
     Box(
