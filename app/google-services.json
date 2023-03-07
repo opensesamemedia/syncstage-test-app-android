@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "43735507988",
+    "project_id": "syncstagetestappandroid",
+    "storage_bucket": "syncstagetestappandroid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43735507988:android:f5f41e8de9650b4dc67301",
+        "android_client_info": {
+          "package_name": "media.opensesame.syncstagetestappandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "43735507988-rkqv94i1kdr2jvjirfn0m281l987nclf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2F1r4i7uhm4OPpSH7xlAZqdbgqor7m1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "43735507988-rkqv94i1kdr2jvjirfn0m281l987nclf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

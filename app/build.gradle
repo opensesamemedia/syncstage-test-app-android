@@ -3,14 +3,15 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
-    namespace 'com.example.syncstagetestappandroid'
+    namespace 'media.opensesame.syncstagetestappandroid'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.syncstagetestappandroid"
+        applicationId "media.opensesame.syncstagetestappandroid"
         minSdk 29
         targetSdk 33
         versionCode 1
@@ -49,7 +50,9 @@ android {
 }
 
 dependencies {
-    implementation 'media.opensesame:syncstagesdk:0.0.30'
+    implementation 'media.opensesame:syncstagesdk:0.0.34'
+    implementation platform('com.google.firebase:firebase-bom:31.2.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-service:2.4.1'
