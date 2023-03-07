@@ -3,10 +3,17 @@ buildscript ***REMOVED***
         compose_ui_version = '1.1.1'
 
         repositories ***REMOVED***
+            google()  // Google's Maven repository
+            mavenCentral()  // Maven Central repository
             maven ***REMOVED*** url "https://plugins.gradle.org/m2/" ***REMOVED***
+        ***REMOVED***
+        dependencies ***REMOVED***
+            classpath 'com.google.gms:google-services:4.3.15'
         ***REMOVED***
     ***REMOVED***
 ***REMOVED***// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+
 plugins ***REMOVED***
     id 'com.android.application' version '7.2.2' apply false
     id 'com.android.library' version '7.2.2' apply false
