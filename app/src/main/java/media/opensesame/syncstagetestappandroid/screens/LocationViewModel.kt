@@ -1,5 +1,7 @@
 package media.opensesame.syncstagetestappandroid.screens
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -10,7 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import media.opensesame.syncstagesdk.SyncStage
+import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
 import media.opensesame.syncstagetestappandroid.repo.PreferencesRepo
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 data class Zone(
@@ -25,6 +29,7 @@ data class ZonesUIState(
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
+    private val context: WeakReference<Context>,
     private val syncStage: SyncStage,
     private val preferencesRepo: PreferencesRepo
 ): ViewModel() {
@@ -41,7 +46,7 @@ class LocationViewModel @Inject constructor(
     fun getZones() {
         CoroutineScope(Dispatchers.IO).launch {
             val result = syncStage.zonesList()
-            if (!result.first.isNullOrEmpty()) {
+            if (result.second == SyncStageSDKErrorCode.OK) {
                 val zones = result.first!!.flatMap { region ->
                     region.zones.map { zone ->
                         Zone(zone.zoneId, "${region.regionName} - ${zone.zoneName}")
@@ -52,6 +57,12 @@ class LocationViewModel @Inject constructor(
                         it.copy(zones = zones)
                     }
                 }
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    context.get()?.let {
+                        Toast.makeText(it, "Failed to get zones - ${result.second}.", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         }
     }
@@ -60,9 +71,17 @@ class LocationViewModel @Inject constructor(
         val userId = preferencesRepo.getUserId()
         CoroutineScope(Dispatchers.IO).launch {
             val result = syncStage.createSession(_uiState.value.selectedZone.zoneId, userId = userId)
-            result.first?.sessionCode.let { sessionCode ->
+            if (result.second == SyncStageSDKErrorCode.OK) {
+                result.first?.sessionCode.let { sessionCode ->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        createSessionCallback(sessionCode!!)
+                    }
+                }
+            } else {
                 CoroutineScope(Dispatchers.Main).launch {
-                    createSessionCallback(sessionCode!!)
+                    context.get()?.let {
+                        Toast.makeText(it, "Failed to create new session - ${result.second}.", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }

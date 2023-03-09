@@ -19,7 +19,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import media.opensesame.syncstagetestappandroid.R
 import media.opensesame.syncstagetestappandroid.screens.*
 import media.opensesame.syncstagetestappandroid.ui.theme.SyncStageTestAppAndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
