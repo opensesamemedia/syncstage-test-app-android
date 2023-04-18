@@ -65,7 +65,7 @@ android {
 
 
 dependencies {
-    implementation 'media.opensesame:syncstagesdk:0.0.35'
+    implementation 'media.opensesame:syncstagesdk:0.0.38'
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
