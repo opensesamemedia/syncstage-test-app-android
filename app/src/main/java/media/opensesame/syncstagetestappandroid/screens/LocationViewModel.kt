@@ -45,7 +45,7 @@ class LocationViewModel @Inject constructor(
 
     fun getZones() {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = syncStage.zonesList()
+            val result = syncStage.zoneList()
             if (result.second == SyncStageSDKErrorCode.OK) {
                 val zones = result.first!!.flatMap { region ->
                     region.zones.map { zone ->
