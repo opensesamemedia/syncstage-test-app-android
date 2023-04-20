@@ -175,7 +175,7 @@ class SessionViewModel @Inject constructor(
         return syncStage.getReceiverVolume(identifier = identifier)
     }
 
-    fun getDirectMonitorVolume(): Int {
+    private fun getDirectMonitorVolume(): Int {
         val dmVolume = syncStage.getDirectMonitorVolume()
         _uiState.update { sessionUIState ->
             sessionUIState.copy(
