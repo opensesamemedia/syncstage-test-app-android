@@ -9,6 +9,7 @@ buildscript ***REMOVED***
         ***REMOVED***
         dependencies ***REMOVED***
             classpath 'com.google.gms:google-services:4.3.15'
+            classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.4'
         ***REMOVED***
     ***REMOVED***
 ***REMOVED***// Top-level build file where you can add configuration options common to all sub-projects/modules.

@@ -1,0 +1,260 @@
+[debug] [2023-04-21T12:10:17.237Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:10:17.241Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\production\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-production-debug.apk --app syncstagetestappandroid --groups internal
+[debug] [2023-04-21T12:10:17.243Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:10:17.243Z] Platform:      win32
+[debug] [2023-04-21T12:10:17.243Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:10:17.245Z] Time:          Fri Apr 21 2023 14:10:17 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:10:17.246Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:10:17.264Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:10:17.265Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:10:17.279Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [none]
+[debug] [2023-04-21T12:10:17.280Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [stream]
+[debug] [2023-04-21T12:10:56.069Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:10:56.072Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\development\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-development-debug.apk --app syncstagetestappandroid --groups internal --debug
+[debug] [2023-04-21T12:10:56.073Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:10:56.073Z] Platform:      win32
+[debug] [2023-04-21T12:10:56.073Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:10:56.075Z] Time:          Fri Apr 21 2023 14:10:56 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:10:56.076Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:10:56.093Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:10:56.096Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:10:56.104Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [none]
+[debug] [2023-04-21T12:10:56.105Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [stream]
+[debug] [2023-04-21T12:11:39.549Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload 400
+[debug] [2023-04-21T12:11:39.552Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload ***REMOVED***"error":***REMOVED***"code":400,"message":"Request contains an invalid argument.","status":"INVALID_ARGUMENT"***REMOVED******REMOVED***
+[error] 
+[error] Error: failed to upload release. HTTP Error: 400, Request contains an invalid argument.
+[debug] [2023-04-21T12:11:44.947Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:11:44.949Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\production\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-production-debug.apk --app syncstagetestappandroid --groups internal --debug
+[debug] [2023-04-21T12:11:44.950Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:11:44.950Z] Platform:      win32
+[debug] [2023-04-21T12:11:44.950Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:11:44.952Z] Time:          Fri Apr 21 2023 14:11:44 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:11:44.953Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:11:44.965Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:11:44.968Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:11:44.974Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [none]
+[debug] [2023-04-21T12:11:44.975Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [stream]
+[debug] [2023-04-21T12:12:34.404Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload 400
+[debug] [2023-04-21T12:12:34.429Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload ***REMOVED***"error":***REMOVED***"code":400,"message":"Request contains an invalid argument.","status":"INVALID_ARGUMENT"***REMOVED******REMOVED***
+[error] 
+[error] Error: failed to upload release. HTTP Error: 400, Request contains an invalid argument.
+[debug] [2023-04-21T12:12:40.632Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:12:40.635Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\staging\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-staging-debug.apk --app syncstagetestappandroid --groups internal --debug
+[debug] [2023-04-21T12:12:40.636Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:12:40.636Z] Platform:      win32
+[debug] [2023-04-21T12:12:40.636Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:12:40.638Z] Time:          Fri Apr 21 2023 14:12:40 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:12:40.638Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:12:40.652Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:12:40.655Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:12:40.662Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [none]
+[debug] [2023-04-21T12:12:40.663Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [stream]
+[debug] [2023-04-21T12:13:26.187Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload 400
+[debug] [2023-04-21T12:13:26.189Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload ***REMOVED***"error":***REMOVED***"code":400,"message":"Request contains an invalid argument.","status":"INVALID_ARGUMENT"***REMOVED******REMOVED***
+[error] 
+[error] Error: failed to upload release. HTTP Error: 400, Request contains an invalid argument.
+[debug] [2023-04-21T12:13:54.888Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:13:54.892Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\development\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-development-debug.apk --app syncstagetestappandroid --debug
+[debug] [2023-04-21T12:13:54.893Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:13:54.893Z] Platform:      win32
+[debug] [2023-04-21T12:13:54.893Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:13:54.895Z] Time:          Fri Apr 21 2023 14:13:54 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:13:54.896Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:13:54.912Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:13:54.915Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:13:54.924Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [none]
+[debug] [2023-04-21T12:13:54.924Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [stream]
+[debug] [2023-04-21T12:14:44.828Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload 400
+[debug] [2023-04-21T12:14:44.831Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload ***REMOVED***"error":***REMOVED***"code":400,"message":"Request contains an invalid argument.","status":"INVALID_ARGUMENT"***REMOVED******REMOVED***
+[error] 
+[error] Error: failed to upload release. HTTP Error: 400, Request contains an invalid argument.
+[debug] [2023-04-21T12:14:51.034Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:14:51.040Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\production\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-production-debug.apk --app syncstagetestappandroid --debug
+[debug] [2023-04-21T12:14:51.043Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:14:51.043Z] Platform:      win32
+[debug] [2023-04-21T12:14:51.043Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:14:51.048Z] Time:          Fri Apr 21 2023 14:14:51 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:14:51.049Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:14:51.085Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:14:51.104Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:14:51.139Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [none]
+[debug] [2023-04-21T12:14:51.142Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/undefined/apps/syncstagetestappandroid/releases:upload [stream]
+[debug] [2023-04-21T12:15:54.864Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:15:54.867Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\development\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-development-debug.apk --app 1:43735507988:android:f5f41e8de9650b4dc67301 --groups internal --debug
+[debug] [2023-04-21T12:15:54.868Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:15:54.868Z] Platform:      win32
+[debug] [2023-04-21T12:15:54.868Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:15:54.870Z] Time:          Fri Apr 21 2023 14:15:54 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:15:54.870Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:15:54.884Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:15:54.887Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:15:54.893Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [none]
+[debug] [2023-04-21T12:15:54.894Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [stream]
+[debug] [2023-04-21T12:16:41.335Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload 403
+[debug] [2023-04-21T12:16:41.337Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload ***REMOVED***"error":***REMOVED***"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"***REMOVED******REMOVED***
+[error] 
+[error] Error: failed to upload release. HTTP Error: 403, The caller does not have permission
+[debug] [2023-04-21T12:16:46.903Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:16:46.905Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\production\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-production-debug.apk --app 1:43735507988:android:f5f41e8de9650b4dc67301 --groups internal --debug
+[debug] [2023-04-21T12:16:46.906Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:16:46.906Z] Platform:      win32
+[debug] [2023-04-21T12:16:46.907Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:16:46.908Z] Time:          Fri Apr 21 2023 14:16:46 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:16:46.909Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:16:46.923Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:16:46.925Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:16:46.932Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [none]
+[debug] [2023-04-21T12:16:46.933Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [stream]
+[debug] [2023-04-21T12:17:28.955Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload 403
+[debug] [2023-04-21T12:17:28.962Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload ***REMOVED***"error":***REMOVED***"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"***REMOVED******REMOVED***
+[error] 
+[error] Error: failed to upload release. HTTP Error: 403, The caller does not have permission
+[debug] [2023-04-21T12:17:34.591Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:17:34.594Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\staging\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-staging-debug.apk --app 1:43735507988:android:f5f41e8de9650b4dc67301 --groups internal --debug
+[debug] [2023-04-21T12:17:34.595Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:17:34.595Z] Platform:      win32
+[debug] [2023-04-21T12:17:34.595Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:17:34.597Z] Time:          Fri Apr 21 2023 14:17:34 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:17:34.597Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:17:34.610Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:17:34.612Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:17:34.619Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [none]
+[debug] [2023-04-21T12:17:34.620Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [stream]
+[debug] [2023-04-21T12:18:34.921Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:18:34.926Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\development\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-development-debug.apk --app 1:43735507988:android:f5f41e8de9650b4dc67301 --groups internal --debug
+[debug] [2023-04-21T12:18:34.927Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:18:34.927Z] Platform:      win32
+[debug] [2023-04-21T12:18:34.928Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:18:34.930Z] Time:          Fri Apr 21 2023 14:18:34 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:18:34.931Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:18:34.948Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:18:34.951Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:18:34.960Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [none]
+[debug] [2023-04-21T12:18:34.961Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [stream]
+[debug] [2023-04-21T12:19:19.585Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload 200
+[debug] [2023-04-21T12:19:19.587Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa"***REMOVED***
+[debug] [2023-04-21T12:19:19.591Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa [none]
+[debug] [2023-04-21T12:19:20.570Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa 200
+[debug] [2023-04-21T12:19:20.571Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa"***REMOVED***
+[debug] [2023-04-21T12:19:22.586Z] [App Distribution Upload Poller] Retrying task index 0
+[debug] [2023-04-21T12:19:22.588Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa [none]
+[debug] [2023-04-21T12:19:23.565Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa 200
+[debug] [2023-04-21T12:19:23.565Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa"***REMOVED***
+[debug] [2023-04-21T12:19:27.574Z] [App Distribution Upload Poller] Retrying task index 0
+[debug] [2023-04-21T12:19:27.576Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa [none]
+[debug] [2023-04-21T12:19:28.590Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa 200
+[debug] [2023-04-21T12:19:28.591Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa","done":true,"response":***REMOVED***"@type":"type.googleapis.com/google.firebase.appdistro.v1.UploadReleaseResponse","result":"RELEASE_CREATED","release":***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/6rnhrin6bngqo","displayVersion":"0.2.0-4e864fb-sdk0.2.0-rc.8-development","buildVersion":"1","createTime":"2023-04-21T12:19:24.451977Z","firebaseConsoleUri":"https://console.firebase.google.com/project/syncstagetestappandroid/appdistribution/app/android:media.opensesame.syncstagetestappandroid/releases/6rnhrin6bngqo?utm_source=firebase-tools","testingUri":"https://appdistribution.firebase.google.com/testerapps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/6rnhrin6bngqo?utm_source=firebase-tools","binaryDownloadUri":"https://firebaseappdistribution.googleapis.com/app-binary-downloads/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/6rnhrin6bngqo/binaries/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa/app.apk?utm_source=firebase-tools&token=AFb1MRwAAAAAZEKNYL4jjUJz2gupeycI_s4VEcmwr1JMYwefC31gYImjEgRC7AehMFq8D_Ud45NqrgV2NqS2lUH7YdA6h7rdF6KxVn-fa00rvU_hlD09Og6u54S6c-sSMAOHXtVJ4cnaAwtiE017W8DVroNn8Ria-mq8E0uljjzR7B4c0AJ0XJdB-turRoM0drZ7a5aoxjNhjtNC8qnGdcZO3MRrS1gU93rGn8Fa8wUwDsulY_hBrE2f1XUZvhmJml9McDe3IAW0GIIQEvmSxREvXcKSKqW5JTssnfNblVdl6pkBCYn_1oFnAdwu-0ELWrhwoGp_9NaBW3u0U26aTkMoEIqgozG4pheA4lI"***REMOVED******REMOVED******REMOVED***
+[info] +  uploaded new release 0.2.0-4e864fb-sdk0.2.0-rc.8-development (1) successfully! 
+[info] +  View this release in the Firebase console: https://console.firebase.google.com/project/syncstagetestappandroid/appdistribution/app/android:media.opensesame.syncstagetestappandroid/releases/6rnhrin6bngqo?utm_source=firebase-tools 
+[info] +  Share this release with testers who have access: https://appdistribution.firebase.google.com/testerapps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/6rnhrin6bngqo?utm_source=firebase-tools 
+[info] +  Download the release binary (link expires in 1 hour): https://firebaseappdistribution.googleapis.com/app-binary-downloads/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/6rnhrin6bngqo/binaries/41df4162e0ebe9c84c6135090176f2c870a0dcd4a29f637a8e2c847f1af865aa/app.apk?utm_source=firebase-tools&token=AFb1MRwAAAAAZEKNYL4jjUJz2gupeycI_s4VEcmwr1JMYwefC31gYImjEgRC7AehMFq8D_Ud45NqrgV2NqS2lUH7YdA6h7rdF6KxVn-fa00rvU_hlD09Og6u54S6c-sSMAOHXtVJ4cnaAwtiE017W8DVroNn8Ria-mq8E0uljjzR7B4c0AJ0XJdB-turRoM0drZ7a5aoxjNhjtNC8qnGdcZO3MRrS1gU93rGn8Fa8wUwDsulY_hBrE2f1XUZvhmJml9McDe3IAW0GIIQEvmSxREvXcKSKqW5JTssnfNblVdl6pkBCYn_1oFnAdwu-0ELWrhwoGp_9NaBW3u0U26aTkMoEIqgozG4pheA4lI 
+[warn] !  no release notes specified, skipping 
+[info] i  distributing to testers/groups... 
+[debug] [2023-04-21T12:19:28.600Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/6rnhrin6bngqo:distribute [none]
+[debug] [2023-04-21T12:19:28.601Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/6rnhrin6bngqo:distribute ***REMOVED***"testerEmails":[],"groupAliases":["internal"]***REMOVED***
+[debug] [2023-04-21T12:19:29.835Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/6rnhrin6bngqo:distribute 200
+[debug] [2023-04-21T12:19:29.836Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/6rnhrin6bngqo:distribute ***REMOVED******REMOVED***
+[info] +  distributed to testers/groups successfully 
+[debug] [2023-04-21T12:19:37.541Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:19:37.544Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\production\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-production-debug.apk --app 1:43735507988:android:f5f41e8de9650b4dc67301 --groups internal --debug
+[debug] [2023-04-21T12:19:37.545Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:19:37.545Z] Platform:      win32
+[debug] [2023-04-21T12:19:37.545Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:19:37.547Z] Time:          Fri Apr 21 2023 14:19:37 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:19:37.548Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:19:37.564Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:19:37.566Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:19:37.575Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [none]
+[debug] [2023-04-21T12:19:37.576Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [stream]
+[debug] [2023-04-21T12:20:22.172Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload 200
+[debug] [2023-04-21T12:20:22.175Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f"***REMOVED***
+[debug] [2023-04-21T12:20:22.179Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f [none]
+[debug] [2023-04-21T12:20:23.183Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f 200
+[debug] [2023-04-21T12:20:23.183Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f"***REMOVED***
+[debug] [2023-04-21T12:20:25.200Z] [App Distribution Upload Poller] Retrying task index 0
+[debug] [2023-04-21T12:20:25.201Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f [none]
+[debug] [2023-04-21T12:20:25.530Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f 200
+[debug] [2023-04-21T12:20:25.532Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f"***REMOVED***
+[debug] [2023-04-21T12:20:29.535Z] [App Distribution Upload Poller] Retrying task index 0
+[debug] [2023-04-21T12:20:29.536Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f [none]
+[debug] [2023-04-21T12:20:29.876Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f 200
+[debug] [2023-04-21T12:20:29.876Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f"***REMOVED***
+[debug] [2023-04-21T12:20:37.882Z] [App Distribution Upload Poller] Retrying task index 0
+[debug] [2023-04-21T12:20:37.883Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f [none]
+[debug] [2023-04-21T12:20:39.111Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f 200
+[debug] [2023-04-21T12:20:39.111Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f","done":true,"response":***REMOVED***"@type":"type.googleapis.com/google.firebase.appdistro.v1.UploadReleaseResponse","result":"RELEASE_CREATED","release":***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/0jpn1cco04lj8","displayVersion":"0.2.0-4e864fb-sdk0.2.0-rc.8","buildVersion":"1","createTime":"2023-04-21T12:20:30.838953Z","firebaseConsoleUri":"https://console.firebase.google.com/project/syncstagetestappandroid/appdistribution/app/android:media.opensesame.syncstagetestappandroid/releases/0jpn1cco04lj8?utm_source=firebase-tools","testingUri":"https://appdistribution.firebase.google.com/testerapps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/0jpn1cco04lj8?utm_source=firebase-tools","binaryDownloadUri":"https://firebaseappdistribution.googleapis.com/app-binary-downloads/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/0jpn1cco04lj8/binaries/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f/app.apk?utm_source=firebase-tools&token=AFb1MRwAAAAAZEKNp52XXRX1bofmx7RDWtsChQHE41gfsDcOUeC5GJOgds6vgcgeGl9MMmn125DSrQWZPuuOVr77T5RsxhLxJpf5k6Q0D8SvWr6M-WwQjCNbAESEiSkXdObnAcvEFOb9I69NLsyIRjdjuDiaZnNn_Sv66Db0toMgfptQL8rQapb2Ru0GDVhK6xjJoZ34dG7_FnzadiLa851pp8nDHzBjiwD0ANS9T746VLqgofAPWu9CVXT7gp2RBOA2iw6Y3mQyjuWFMQ-QybTBsu8wLoretwEpRuPL9QZ9nxN_Q13oUmF81TK-rAiXGJ9n1TKzXIBZRuzykgiTOBvLCcuHglvFVN6gvT4"***REMOVED******REMOVED******REMOVED***
+[info] +  uploaded new release 0.2.0-4e864fb-sdk0.2.0-rc.8 (1) successfully! 
+[info] +  View this release in the Firebase console: https://console.firebase.google.com/project/syncstagetestappandroid/appdistribution/app/android:media.opensesame.syncstagetestappandroid/releases/0jpn1cco04lj8?utm_source=firebase-tools 
+[info] +  Share this release with testers who have access: https://appdistribution.firebase.google.com/testerapps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/0jpn1cco04lj8?utm_source=firebase-tools 
+[info] +  Download the release binary (link expires in 1 hour): https://firebaseappdistribution.googleapis.com/app-binary-downloads/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/0jpn1cco04lj8/binaries/bba5e32a67e32455006a4975e9d7c2ae6eb5a12b975a78b2d85dc05c4976491f/app.apk?utm_source=firebase-tools&token=AFb1MRwAAAAAZEKNp52XXRX1bofmx7RDWtsChQHE41gfsDcOUeC5GJOgds6vgcgeGl9MMmn125DSrQWZPuuOVr77T5RsxhLxJpf5k6Q0D8SvWr6M-WwQjCNbAESEiSkXdObnAcvEFOb9I69NLsyIRjdjuDiaZnNn_Sv66Db0toMgfptQL8rQapb2Ru0GDVhK6xjJoZ34dG7_FnzadiLa851pp8nDHzBjiwD0ANS9T746VLqgofAPWu9CVXT7gp2RBOA2iw6Y3mQyjuWFMQ-QybTBsu8wLoretwEpRuPL9QZ9nxN_Q13oUmF81TK-rAiXGJ9n1TKzXIBZRuzykgiTOBvLCcuHglvFVN6gvT4 
+[warn] !  no release notes specified, skipping 
+[info] i  distributing to testers/groups... 
+[debug] [2023-04-21T12:20:39.119Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/0jpn1cco04lj8:distribute [none]
+[debug] [2023-04-21T12:20:39.120Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/0jpn1cco04lj8:distribute ***REMOVED***"testerEmails":[],"groupAliases":["internal"]***REMOVED***
+[debug] [2023-04-21T12:20:39.736Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/0jpn1cco04lj8:distribute 200
+[debug] [2023-04-21T12:20:39.736Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/0jpn1cco04lj8:distribute ***REMOVED******REMOVED***
+[info] +  distributed to testers/groups successfully 
+[debug] [2023-04-21T12:20:44.797Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T12:20:44.801Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js appdistribution:distribute D:\os\syncstage-test-app-android\app\build\outputs\apk\staging\debug\media.opensesame.syncstagetestappandroid-0.2.0-4e864fb-sdk0.2.0-rc.8-staging-debug.apk --app 1:43735507988:android:f5f41e8de9650b4dc67301 --groups internal --debug
+[debug] [2023-04-21T12:20:44.802Z] CLI Version:   11.24.0
+[debug] [2023-04-21T12:20:44.802Z] Platform:      win32
+[debug] [2023-04-21T12:20:44.802Z] Node Version:  v16.17.0
+[debug] [2023-04-21T12:20:44.804Z] Time:          Fri Apr 21 2023 14:20:44 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2023-04-21T12:20:44.805Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T12:20:44.823Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T12:20:44.825Z] > authorizing via signed-in user (p.kaczmarek@move2edge.com)
+[info] i  uploading binary... 
+[debug] [2023-04-21T12:20:44.835Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [none]
+[debug] [2023-04-21T12:20:44.837Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload [stream]
+[debug] [2023-04-21T12:21:24.235Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload 200
+[debug] [2023-04-21T12:21:24.238Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/upload/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases:upload ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39"***REMOVED***
+[debug] [2023-04-21T12:21:24.243Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 [none]
+[debug] [2023-04-21T12:21:24.666Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 200
+[debug] [2023-04-21T12:21:24.667Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39"***REMOVED***
+[debug] [2023-04-21T12:21:26.677Z] [App Distribution Upload Poller] Retrying task index 0
+[debug] [2023-04-21T12:21:26.678Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 [none]
+[debug] [2023-04-21T12:21:27.749Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 200
+[debug] [2023-04-21T12:21:27.750Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39"***REMOVED***
+[debug] [2023-04-21T12:21:31.759Z] [App Distribution Upload Poller] Retrying task index 0
+[debug] [2023-04-21T12:21:31.760Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 [none]
+[debug] [2023-04-21T12:21:32.149Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 200
+[debug] [2023-04-21T12:21:32.149Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39"***REMOVED***
+[debug] [2023-04-21T12:21:40.160Z] [App Distribution Upload Poller] Retrying task index 0
+[debug] [2023-04-21T12:21:40.161Z] >>> [apiv2][query] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 [none]
+[debug] [2023-04-21T12:21:40.532Z] <<< [apiv2][status] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 200
+[debug] [2023-04-21T12:21:40.533Z] <<< [apiv2][body] GET https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39 ***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/-/operations/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39","done":true,"response":***REMOVED***"@type":"type.googleapis.com/google.firebase.appdistro.v1.UploadReleaseResponse","result":"RELEASE_CREATED","release":***REMOVED***"name":"projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/5cdcgakbf32m0","displayVersion":"0.2.0-4e864fb-sdk0.2.0-rc.8-staging","buildVersion":"1","createTime":"2023-04-21T12:21:32.223269Z","firebaseConsoleUri":"https://console.firebase.google.com/project/syncstagetestappandroid/appdistribution/app/android:media.opensesame.syncstagetestappandroid/releases/5cdcgakbf32m0?utm_source=firebase-tools","testingUri":"https://appdistribution.firebase.google.com/testerapps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/5cdcgakbf32m0?utm_source=firebase-tools","binaryDownloadUri":"https://firebaseappdistribution.googleapis.com/app-binary-downloads/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/5cdcgakbf32m0/binaries/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39/app.apk?utm_source=firebase-tools&token=AFb1MRwAAAAAZEKN5NvYkPJbjc4lCRlCDVMmxeyAvnFUkQ7gTg21OPFuU97AhJLWG7euHiWVh9R2w1ghedVuHbE_YpcjgdPiy01qECuS1mC10UWOLWJeK9F-Ew4siEasZ_ttltAp8aMavmsgxypeF35E0xDrXcZSFZzk3ZNzzfRmDfOsyIu-zSjmNA04VBYqVtkDZSVRUrVN0Tj8EzoOViV9Iz1fb0EToj_3VdZM6GmeajVOTwS8sWt0Ov-Q__B32K_8U-NyZHpgOsv_dlDaIgfcoDxP4j4TiWo9ak1dbT0LaRRX5ZWmdhykRSOoZHwrbHnkzOFCXWO_ivFPEDyipBZ1FoQGIJ0xQpzRryk"***REMOVED******REMOVED******REMOVED***
+[info] +  uploaded new release 0.2.0-4e864fb-sdk0.2.0-rc.8-staging (1) successfully! 
+[info] +  View this release in the Firebase console: https://console.firebase.google.com/project/syncstagetestappandroid/appdistribution/app/android:media.opensesame.syncstagetestappandroid/releases/5cdcgakbf32m0?utm_source=firebase-tools 
+[info] +  Share this release with testers who have access: https://appdistribution.firebase.google.com/testerapps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/5cdcgakbf32m0?utm_source=firebase-tools 
+[info] +  Download the release binary (link expires in 1 hour): https://firebaseappdistribution.googleapis.com/app-binary-downloads/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/5cdcgakbf32m0/binaries/b5b7d6917c9b4479f754795142ed2960cf1c895fa8a980298c8c576568138a39/app.apk?utm_source=firebase-tools&token=AFb1MRwAAAAAZEKN5NvYkPJbjc4lCRlCDVMmxeyAvnFUkQ7gTg21OPFuU97AhJLWG7euHiWVh9R2w1ghedVuHbE_YpcjgdPiy01qECuS1mC10UWOLWJeK9F-Ew4siEasZ_ttltAp8aMavmsgxypeF35E0xDrXcZSFZzk3ZNzzfRmDfOsyIu-zSjmNA04VBYqVtkDZSVRUrVN0Tj8EzoOViV9Iz1fb0EToj_3VdZM6GmeajVOTwS8sWt0Ov-Q__B32K_8U-NyZHpgOsv_dlDaIgfcoDxP4j4TiWo9ak1dbT0LaRRX5ZWmdhykRSOoZHwrbHnkzOFCXWO_ivFPEDyipBZ1FoQGIJ0xQpzRryk 
+[warn] !  no release notes specified, skipping 
+[info] i  distributing to testers/groups... 
+[debug] [2023-04-21T12:21:40.541Z] >>> [apiv2][query] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/5cdcgakbf32m0:distribute [none]
+[debug] [2023-04-21T12:21:40.542Z] >>> [apiv2][body] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/5cdcgakbf32m0:distribute ***REMOVED***"testerEmails":[],"groupAliases":["internal"]***REMOVED***
+[debug] [2023-04-21T12:21:41.745Z] <<< [apiv2][status] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/5cdcgakbf32m0:distribute 200
+[debug] [2023-04-21T12:21:41.746Z] <<< [apiv2][body] POST https://firebaseappdistribution.googleapis.com/v1/projects/43735507988/apps/1:43735507988:android:f5f41e8de9650b4dc67301/releases/5cdcgakbf32m0:distribute ***REMOVED******REMOVED***
+[info] +  distributed to testers/groups successfully 

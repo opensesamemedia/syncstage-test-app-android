@@ -175,7 +175,7 @@ class SessionViewModel @Inject constructor(
         return syncStage.getReceiverVolume(identifier = identifier)
     ***REMOVED***
 
-    fun getDirectMonitorVolume(): Int ***REMOVED***
+    private fun getDirectMonitorVolume(): Int ***REMOVED***
         val dmVolume = syncStage.getDirectMonitorVolume()
         _uiState.update ***REMOVED*** sessionUIState ->
             sessionUIState.copy(
@@ -187,29 +187,35 @@ class SessionViewModel @Inject constructor(
     ***REMOVED***
 
     fun changeDirectMonitorVolume(volume: Float) ***REMOVED***
-        syncStage.changeDirectMonitorVolume((volume * 100).toInt())
-        _uiState.update ***REMOVED*** sessionUIState ->
-            sessionUIState.copy(
-                directMonitorVolume = volume,
-            )
+        val result = syncStage.changeDirectMonitorVolume((volume * 100).toInt())
+        if (result == SyncStageSDKErrorCode.OK) ***REMOVED***
+            _uiState.update ***REMOVED*** sessionUIState ->
+                sessionUIState.copy(
+                    directMonitorVolume = volume,
+                )
+            ***REMOVED***
         ***REMOVED***
     ***REMOVED***
 
     fun toggleDirectMonitor(value: Boolean) ***REMOVED***
-        syncStage.toggleDirectMonitor(value)
-        _uiState.update ***REMOVED***
-            it.copy(
-                directMonitorEnabled = value
-            )
+        val result = syncStage.toggleDirectMonitor(value)
+        if (result == SyncStageSDKErrorCode.OK) ***REMOVED***
+            _uiState.update ***REMOVED***
+                it.copy(
+                    directMonitorEnabled = value
+                )
+            ***REMOVED***
         ***REMOVED***
     ***REMOVED***
 
     fun toggleInternalMicrophone(value: Boolean) ***REMOVED***
-        syncStage.toggleInternalMic(value)
-        _uiState.update ***REMOVED***
-            it.copy(
-                internalMicrophoneEnabled = value
-            )
+        val result = syncStage.toggleInternalMic(value)
+        if (result == SyncStageSDKErrorCode.OK) ***REMOVED***
+            _uiState.update ***REMOVED***
+                it.copy(
+                    internalMicrophoneEnabled = value
+                )
+            ***REMOVED***
         ***REMOVED***
     ***REMOVED***
 

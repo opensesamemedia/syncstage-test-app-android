@@ -1,3 +1,4 @@
 /build
-/main/assets/SyncStageSecret.json
+/main/assets
 google-services.json
+firebase-debug.log
