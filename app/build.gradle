@@ -10,17 +10,30 @@ plugins {
 }
 
 ext {
-    sdkVersion = "0.2.0-rc.1"
+    sdkVersion = "0.2.0-rc.8"
 }
 
 def getVersionName = { String flavorName ->
+    exec {
+        commandLine 'git', 'fetch', '--all', '--tags'
+    }
+
     def stdout = new ByteArrayOutputStream()
     exec {
         commandLine 'git', 'describe', '--tags', '--abbrev=0'
         standardOutput = stdout
     }
-    def baseVersionName = stdout.toString().trim() + "-sdk$sdkVersion"
-    return flavorName == "production" ? baseVersionName : "$baseVersionName-$flavorName"
+
+    def baseVersionName = stdout.toString().trim()
+
+    def commitHashStdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = commitHashStdout
+    }
+    def commitHash = commitHashStdout.toString().trim()
+
+    return flavorName == "production" ? "$baseVersionName-$commitHash-sdk$sdkVersion" : "$baseVersionName-$commitHash-sdk$sdkVersion-$flavorName"
 }
 
 android {
@@ -38,7 +51,6 @@ android {
             useSupportLibrary true
         }
 
-        archivesBaseName = "$applicationId-($versionName)"
         defaultPublishConfig "production"
     }
     compileOptions {
@@ -67,16 +79,25 @@ android {
             dimension "environment"
             versionName getVersionName("development")
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("development")}\""
+            defaultConfig {
+                archivesBaseName = "$applicationId-${getVersionName('development')}"
+            }
         }
         staging {
             dimension "environment"
             versionName getVersionName("staging")
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("staging")}\""
+            defaultConfig {
+                archivesBaseName = "$applicationId-${getVersionName('staging')}"
+            }
         }
         production {
             dimension "environment"
             versionName getVersionName("production")
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("production")}\""
+            defaultConfig {
+                archivesBaseName = "$applicationId-${getVersionName('production')}"
+            }
         }
     }
 
@@ -95,7 +116,7 @@ android {
 
 
 dependencies {
-    implementation "media.opensesame:syncstagesdk:${sdkVersion}"
+    productionImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
     developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
     stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
 
