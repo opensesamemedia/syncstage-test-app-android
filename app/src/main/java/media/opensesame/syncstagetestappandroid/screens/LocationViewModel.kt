@@ -1,5 +1,7 @@
 package media.opensesame.syncstagetestappandroid.screens
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -10,7 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import media.opensesame.syncstagesdk.SyncStage
+import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
 import media.opensesame.syncstagetestappandroid.repo.PreferencesRepo
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 data class Zone(
@@ -25,6 +29,7 @@ data class ZonesUIState(
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
+    private val context: WeakReference<Context>,
     private val syncStage: SyncStage,
     private val preferencesRepo: PreferencesRepo
 ): ViewModel() ***REMOVED***
@@ -40,8 +45,8 @@ class LocationViewModel @Inject constructor(
 
     fun getZones() ***REMOVED***
         CoroutineScope(Dispatchers.IO).launch ***REMOVED***
-            val result = syncStage.zonesList()
-            if (!result.first.isNullOrEmpty()) ***REMOVED***
+            val result = syncStage.zoneList()
+            if (result.second == SyncStageSDKErrorCode.OK) ***REMOVED***
                 val zones = result.first!!.flatMap ***REMOVED*** region ->
                     region.zones.map ***REMOVED*** zone ->
                         Zone(zone.zoneId, "$***REMOVED***region.regionName***REMOVED*** - $***REMOVED***zone.zoneName***REMOVED***")
@@ -52,6 +57,12 @@ class LocationViewModel @Inject constructor(
                         it.copy(zones = zones)
                     ***REMOVED***
                 ***REMOVED***
+            ***REMOVED*** else ***REMOVED***
+                CoroutineScope(Dispatchers.Main).launch ***REMOVED***
+                    context.get()?.let ***REMOVED***
+                        Toast.makeText(it, "Failed to get zones - $***REMOVED***result.second***REMOVED***.", Toast.LENGTH_LONG).show()
+                    ***REMOVED***
+                ***REMOVED***
             ***REMOVED***
         ***REMOVED***
     ***REMOVED***
@@ -60,9 +71,17 @@ class LocationViewModel @Inject constructor(
         val userId = preferencesRepo.getUserId()
         CoroutineScope(Dispatchers.IO).launch ***REMOVED***
             val result = syncStage.createSession(_uiState.value.selectedZone.zoneId, userId = userId)
-            result.first?.sessionCode.let ***REMOVED*** sessionCode ->
+            if (result.second == SyncStageSDKErrorCode.OK) ***REMOVED***
+                result.first?.sessionCode.let ***REMOVED*** sessionCode ->
+                    CoroutineScope(Dispatchers.Main).launch ***REMOVED***
+                        createSessionCallback(sessionCode!!)
+                    ***REMOVED***
+                ***REMOVED***
+            ***REMOVED*** else ***REMOVED***
                 CoroutineScope(Dispatchers.Main).launch ***REMOVED***
-                    createSessionCallback(sessionCode!!)
+                    context.get()?.let ***REMOVED***
+                        Toast.makeText(it, "Failed to create new session - $***REMOVED***result.second***REMOVED***.", Toast.LENGTH_LONG).show()
+                    ***REMOVED***
                 ***REMOVED***
             ***REMOVED***
         ***REMOVED***
