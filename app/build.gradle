@@ -3,8 +3,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
-
-//  Plugins should be enabled only for official test app build made by OSM
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
 }
