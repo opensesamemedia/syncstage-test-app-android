@@ -17,13 +17,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import media.opensesame.syncstagetestappandroid.R
 import media.opensesame.syncstagetestappandroid.SyncStageScreen
 
 
 @Composable
-fun IntroScreen(navController: NavHostController) {
+fun IntroScreen(navController: NavHostController, introViewModel: IntroViewModel = hiltViewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -37,6 +39,8 @@ fun IntroScreen(navController: NavHostController) {
             Image(painter = painterResource(id = R.drawable.syncstage), contentDescription = "", modifier = Modifier.size(120.dp))
             Spacer(modifier = Modifier.size(10.dp))
             Text(text = "SyncStage Example Application", fontWeight = FontWeight.Bold, style = TextStyle(fontSize = 17.sp))
+            Spacer(modifier = Modifier.size(10.dp))
+            Text(text = " ${introViewModel.getAppVersion()}", fontWeight = FontWeight.Bold, style = TextStyle(fontSize = 17.sp))
             Text(
                 buildAnnotatedString {
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {

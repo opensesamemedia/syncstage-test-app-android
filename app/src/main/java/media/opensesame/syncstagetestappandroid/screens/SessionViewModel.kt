@@ -175,7 +175,7 @@ class SessionViewModel @Inject constructor(
         return syncStage.getReceiverVolume(identifier = identifier)
     }
 
-    fun getDirectMonitorVolume(): Int {
+    private fun getDirectMonitorVolume(): Int {
         val dmVolume = syncStage.getDirectMonitorVolume()
         _uiState.update { sessionUIState ->
             sessionUIState.copy(
@@ -187,29 +187,35 @@ class SessionViewModel @Inject constructor(
     }
 
     fun changeDirectMonitorVolume(volume: Float) {
-        syncStage.changeDirectMonitorVolume((volume * 100).toInt())
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
-                directMonitorVolume = volume,
-            )
+        val result = syncStage.changeDirectMonitorVolume((volume * 100).toInt())
+        if (result == SyncStageSDKErrorCode.OK) {
+            _uiState.update { sessionUIState ->
+                sessionUIState.copy(
+                    directMonitorVolume = volume,
+                )
+            }
         }
     }
 
     fun toggleDirectMonitor(value: Boolean) {
-        syncStage.toggleDirectMonitor(value)
-        _uiState.update {
-            it.copy(
-                directMonitorEnabled = value
-            )
+        val result = syncStage.toggleDirectMonitor(value)
+        if (result == SyncStageSDKErrorCode.OK) {
+            _uiState.update {
+                it.copy(
+                    directMonitorEnabled = value
+                )
+            }
         }
     }
 
     fun toggleInternalMicrophone(value: Boolean) {
-        syncStage.toggleInternalMic(value)
-        _uiState.update {
-            it.copy(
-                internalMicrophoneEnabled = value
-            )
+        val result = syncStage.toggleInternalMic(value)
+        if (result == SyncStageSDKErrorCode.OK) {
+            _uiState.update {
+                it.copy(
+                    internalMicrophoneEnabled = value
+                )
+            }
         }
     }
 
