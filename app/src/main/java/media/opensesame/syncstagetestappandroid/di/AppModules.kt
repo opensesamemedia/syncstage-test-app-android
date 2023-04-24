@@ -17,11 +17,13 @@ import javax.inject.Singleton
 class AppModules {
     @Singleton
     @Provides
-    fun provideContext(application: Application): WeakReference<Context> = WeakReference(application.applicationContext)
+    fun provideContext(application: Application): WeakReference<Context> =
+        WeakReference(application.applicationContext)
 
     @Singleton
     @Provides
-    fun providePreferencesRepo(@ApplicationContext context: Context) = PreferencesRepo(context = context)
+    fun providePreferencesRepo(@ApplicationContext context: Context) =
+        PreferencesRepo(context = context)
 
     @Singleton
     @Provides

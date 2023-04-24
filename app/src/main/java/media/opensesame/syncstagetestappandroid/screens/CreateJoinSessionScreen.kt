@@ -5,24 +5,28 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import media.opensesame.syncstagetestappandroid.SyncStageScreen
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 
 @Composable
-fun CreateJoinSessionScreen(navController: NavHostController, createJoinViewModel: CreateJoinViewModel = hiltViewModel()) {
+fun CreateJoinSessionScreen(
+    navController: NavHostController,
+    createJoinViewModel: CreateJoinViewModel = hiltViewModel()
+) {
     val loginUIState by createJoinViewModel.uiState.collectAsState()
     var isEmptyTextField by remember { mutableStateOf(true) }
     val onSessionCodeChange = { text: String ->
@@ -96,7 +100,7 @@ fun CreateJoinSessionScreen(navController: NavHostController, createJoinViewMode
     }
 
     LaunchedEffect(Unit) {
-        if(!loginUIState.loggedIn) {
+        if (!loginUIState.loggedIn) {
             createJoinViewModel.initiateSyncStage()
         }
     }

@@ -24,7 +24,7 @@ data class Zone(
 
 data class ZonesUIState(
     val zones: List<Zone> = listOf(),
-    val selectedZone: Zone = Zone("","")
+    val selectedZone: Zone = Zone("", "")
 )
 
 @HiltViewModel
@@ -32,7 +32,7 @@ class LocationViewModel @Inject constructor(
     private val context: WeakReference<Context>,
     private val syncStage: SyncStage,
     private val preferencesRepo: PreferencesRepo
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(ZonesUIState())
     val uiState: StateFlow<ZonesUIState> = _uiState.asStateFlow()
     lateinit var createSessionCallback: (sessionCode: String) -> Unit
@@ -60,7 +60,11 @@ class LocationViewModel @Inject constructor(
             } else {
                 CoroutineScope(Dispatchers.Main).launch {
                     context.get()?.let {
-                        Toast.makeText(it, "Failed to get zones - ${result.second}.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            it,
+                            "Failed to get zones - ${result.second}.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
@@ -70,7 +74,8 @@ class LocationViewModel @Inject constructor(
     fun createNewSession() {
         val userId = preferencesRepo.getUserId()
         CoroutineScope(Dispatchers.IO).launch {
-            val result = syncStage.createSession(_uiState.value.selectedZone.zoneId, userId = userId)
+            val result =
+                syncStage.createSession(_uiState.value.selectedZone.zoneId, userId = userId)
             if (result.second == SyncStageSDKErrorCode.OK) {
                 result.first?.sessionCode.let { sessionCode ->
                     CoroutineScope(Dispatchers.Main).launch {
@@ -80,7 +85,11 @@ class LocationViewModel @Inject constructor(
             } else {
                 CoroutineScope(Dispatchers.Main).launch {
                     context.get()?.let {
-                        Toast.makeText(it, "Failed to create new session - ${result.second}.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            it,
+                            "Failed to create new session - ${result.second}.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }

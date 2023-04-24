@@ -1,9 +1,11 @@
 package media.opensesame.syncstagetestappandroid.screens
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -27,7 +29,11 @@ import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
 
 @Composable
-fun SessionScreen(navController: NavHostController, sessionCode: String, sessionViewModel: SessionViewModel = hiltViewModel()) {
+fun SessionScreen(
+    navController: NavHostController,
+    sessionCode: String,
+    sessionViewModel: SessionViewModel = hiltViewModel()
+) {
     val sessionUIState by sessionViewModel.uiState.collectAsState()
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     var popupControl by remember { mutableStateOf(false) }
@@ -67,19 +73,26 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                     )
                     sessionUIState.connections.let {
                         it.forEach { connectionModel ->
-                            val isTransmitter = sessionViewModel.transmitterIdentifier == connectionModel.identifier
+                            val isTransmitter =
+                                sessionViewModel.transmitterIdentifier == connectionModel.identifier
                             var value = 0.0f
                             if (!isTransmitter) {
-                                value = sessionViewModel.getReceiverVolume(identifier = connectionModel.identifier).toFloat()
+                                value =
+                                    sessionViewModel.getReceiverVolume(identifier = connectionModel.identifier)
+                                        .toFloat()
                             }
-                            val measurements = sessionViewModel.getMeasurements(identifier = connectionModel.identifier)
+                            val measurements =
+                                sessionViewModel.getMeasurements(identifier = connectionModel.identifier)
                             UserConnection(connectionModel = connectionModel,
                                 measurements = measurements,
                                 networkType = sessionUIState.networkType,
                                 isTransmitter,
                                 value = value,
                                 onValueChange = { volume ->
-                                    sessionViewModel.changeReceiverVolume(connectionModel.identifier, volume)
+                                    sessionViewModel.changeReceiverVolume(
+                                        connectionModel.identifier,
+                                        volume
+                                    )
                                 }
                             )
                         }
@@ -150,7 +163,11 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                                 .fillMaxHeight(),
                             shape = RectangleShape
                         ) {
-                            val icon = if(sessionViewModel.isMuted) { Icons.Filled.MicOff } else { Icons.Filled.Mic }
+                            val icon = if (sessionViewModel.isMuted) {
+                                Icons.Filled.MicOff
+                            } else {
+                                Icons.Filled.Mic
+                            }
                             Icon(icon, "Mute")
                         }
                         Button(
@@ -165,36 +182,57 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                         }
                     }
                 }
-                if(popupControl) {
+                if (popupControl) {
                     Popup(
                         //alignment = Alignment.Center,
                         onDismissRequest = { popupControl = false }
                     ) {
-                        Column(modifier = Modifier
-                            .shadow(5.dp, shape = RoundedCornerShape(5.dp), clip = false)
-                            .background(color = Color.White)
-                            .fillMaxWidth()
-                            .padding(20.dp)) {
-                            Row(modifier = Modifier.fillMaxWidth(),
+                        Column(
+                            modifier = Modifier
+                                .shadow(5.dp, shape = RoundedCornerShape(5.dp), clip = false)
+                                .background(color = Color.White)
+                                .fillMaxWidth()
+                                .padding(20.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) {
-                                Text(text = "Direct Monitor", modifier = Modifier.padding(end = 20.dp))
-                                Switch(checked = sessionViewModel.isDirectMonitorEnabled, onCheckedChange = {
-                                    sessionViewModel.toggleDirectMonitor(it)
-                                })
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Text(
+                                    text = "Direct Monitor",
+                                    modifier = Modifier.padding(end = 20.dp)
+                                )
+                                Switch(
+                                    checked = sessionViewModel.isDirectMonitorEnabled,
+                                    onCheckedChange = {
+                                        sessionViewModel.toggleDirectMonitor(it)
+                                    })
                             }
-                            Row(modifier = Modifier.fillMaxWidth(),
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) {
-                                Text(text = "Internal Microphone", modifier = Modifier.padding(end = 20.dp))
-                                Switch(checked = sessionViewModel.isInternalMicrophoneEnabled, onCheckedChange = {
-                                    sessionViewModel.toggleInternalMicrophone(it)
-                                })
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Text(
+                                    text = "Internal Microphone",
+                                    modifier = Modifier.padding(end = 20.dp)
+                                )
+                                Switch(
+                                    checked = sessionViewModel.isInternalMicrophoneEnabled,
+                                    onCheckedChange = {
+                                        sessionViewModel.toggleInternalMicrophone(it)
+                                    })
                             }
-                            Row(modifier = Modifier.fillMaxWidth(),
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) {
-                                Text(text = "Direct Monitor volume", modifier = Modifier.padding(end = 20.dp))
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Text(
+                                    text = "Direct Monitor volume",
+                                    modifier = Modifier.padding(end = 20.dp)
+                                )
                                 Slider(value = sessionUIState.directMonitorVolume, onValueChange = {
                                     sessionViewModel.changeDirectMonitorVolume(it)
                                 }, Modifier.width(100.dp))
@@ -211,7 +249,7 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
     }
 
     LaunchedEffect(Unit) {
-        if(sessionUIState.session == null) {
+        if (sessionUIState.session == null) {
             sessionViewModel.joinSession(
                 sessionCode = sessionCode,
             )

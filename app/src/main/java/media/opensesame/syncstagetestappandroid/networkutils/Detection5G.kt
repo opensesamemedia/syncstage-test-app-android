@@ -20,7 +20,7 @@ class Detection5G(
     val onNetworkTypeChange: (String) -> Unit,
     val telephonyManager: TelephonyManager,
 
-){
+    ) {
     private val TAG = "Detection5G"
     private var connectivityManagerCallback: ConnectivityManager.NetworkCallback? = null
     private var phoneStateListener: PhoneStateListener? = null
@@ -34,12 +34,12 @@ class Detection5G(
 
     private fun isAirplaneModeOn(context: Context): Boolean {
         return Settings.Global.getInt(
-                context.contentResolver,
-                Settings.Global.AIRPLANE_MODE_ON, 0
-            ) !== 0
+            context.contentResolver,
+            Settings.Global.AIRPLANE_MODE_ON, 0
+        ) !== 0
     }
 
-    private fun isSimInCorrectState(simState: Int): Boolean{
+    private fun isSimInCorrectState(simState: Int): Boolean {
         return when (simState) {
             TelephonyManager.SIM_STATE_ABSENT -> false
             TelephonyManager.SIM_STATE_NETWORK_LOCKED -> false
@@ -55,19 +55,22 @@ class Detection5G(
         val simStateMain: Int = telephonyManager.getSimState(0)
         val simStateSecond: Int = telephonyManager.getSimState(1)
 
-        val simInserted = isSimInCorrectState(simStateMain) || isSimInCorrectState(simStateSecond) || ! isAirplaneModeOn(ctx)
+        val simInserted =
+            isSimInCorrectState(simStateMain) || isSimInCorrectState(simStateSecond) || !isAirplaneModeOn(
+                ctx
+            )
         return simInserted
     }
 
     fun startListenNetworkType() {
-        if (started){
+        if (started) {
             return
-        }else{
+        } else {
             started = true
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             Log.d(TAG, "5G network probing will not be activated due to too low sdk version.")
-        } else{
+        } else {
 
             listenUnlimitedNetwork {
                 Log.d(TAG, "listenUnlimitedNetwork: Unlimited network: ${it}")
@@ -82,7 +85,7 @@ class Detection5G(
                     Log.i(TAG, "onCellInfoCallback: $text")
                 },
                 onDisplayInfoCallback = {
-                    var text =  when (it.overrideNetworkType) {
+                    var text = when (it.overrideNetworkType) {
                         TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_LTE_ADVANCED_PRO -> "LTE Advanced Pro（5Ge）"
                         TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_LTE_CA -> "LTE carrier aggregation"
                         TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA -> "5G Sub-6 network (NSA)"
@@ -90,7 +93,7 @@ class Detection5G(
                         TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_ADVANCED -> "5G Millimeter-wave (or equivalent) network"
                         else -> "callback unkn: ${it.overrideNetworkType} ${getNetworkTypeOldAPI(ctx)}"
                     }
-                    if (isWifiConnected(ctx)){
+                    if (isWifiConnected(ctx)) {
                         text = "WIFI"
                     }
 
@@ -98,7 +101,8 @@ class Detection5G(
                     onNetworkTypeChange(text)
                 },
                 onAnchorBandCallback = {
-                    val text = if (it) "Anchor band is connected" else "Not in 4G connection or anchor band."
+                    val text =
+                        if (it) "Anchor band is connected" else "Not in 4G connection or anchor band."
                     Log.i(TAG, "onAnchorBandCallback: $text")
                 }
             )
@@ -119,23 +123,25 @@ class Detection5G(
         fun checkAnchorBand() {
             if (tempCellInfo == null && tempTelephonyDisplayInfo == null) return
             // If CellInfo is LTE and the icon actually displayed is 5G, the anchor band
-            val isAnchorBand = tempCellInfo is CellInfoLte && tempTelephonyDisplayInfo?.overrideNetworkType == TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA
+            val isAnchorBand =
+                tempCellInfo is CellInfoLte && tempTelephonyDisplayInfo?.overrideNetworkType == TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA
             onAnchorBandCallback(isAnchorBand)
         }
 
         // Android 12
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            telephonyCallback = object : TelephonyCallback(), TelephonyCallback.DisplayInfoListener, TelephonyCallback.CellInfoListener {
+            telephonyCallback = object : TelephonyCallback(), TelephonyCallback.DisplayInfoListener,
+                TelephonyCallback.CellInfoListener {
                 override fun onCellInfoChanged(cellInfo: MutableList<CellInfo>) {
                     try {
-                        if (cellInfo.size >0) {
+                        if (cellInfo.size > 0) {
                             onCellInfoCallback(cellInfo[0])
                             tempCellInfo = cellInfo[0]
                             checkAnchorBand()
-                        }else{
+                        } else {
                             Log.w(TAG, "Cell info size = 0, cannot execute onCellInfoChanged.")
                         }
-                    }catch (e: java.lang.NullPointerException){
+                    } catch (e: java.lang.NullPointerException) {
                         Log.w(TAG, "Error in onCellInfoChanged: ${e}")
                     }
 
@@ -153,28 +159,31 @@ class Detection5G(
                         ContextCompat.getMainExecutor(ctx),
                         telephonyCallback!!
                     )
-                }catch(e: SecurityException){
-                    Log.e(TAG, "Could not register telephony callback. Insufficient permissions. ${e.toString()}")
+                } catch (e: SecurityException) {
+                    Log.e(
+                        TAG,
+                        "Could not register telephony callback. Insufficient permissions. ${e.toString()}"
+                    )
                 }
-            }else{
+            } else {
                 Log.w(TAG, "Could not register telephonyCallback")
             }
         } else {
             phoneStateListener = object : PhoneStateListener() {
 
-                 @SuppressLint("MissingPermission")
-                 override fun onCellInfoChanged(cellInfo: MutableList<CellInfo>?) {
-                     try {
-                         if (cellInfo != null){
-                             super.onCellInfoChanged(cellInfo)
-                             cellInfo[0].let {
-                                 onCellInfoCallback(it)
-                             }
-                         }
-                     }catch (e: java.lang.NullPointerException){
-                         Log.w(TAG, "Error in onCellInfoChanged: ${e}")
-                     }
-                 }
+                @SuppressLint("MissingPermission")
+                override fun onCellInfoChanged(cellInfo: MutableList<CellInfo>?) {
+                    try {
+                        if (cellInfo != null) {
+                            super.onCellInfoChanged(cellInfo)
+                            cellInfo[0].let {
+                                onCellInfoCallback(it)
+                            }
+                        }
+                    } catch (e: java.lang.NullPointerException) {
+                        Log.w(TAG, "Error in onCellInfoChanged: ${e}")
+                    }
+                }
 
                 @SuppressLint("MissingPermission")
                 override fun onDisplayInfoChanged(telephonyDisplayInfo: TelephonyDisplayInfo) {
@@ -182,24 +191,31 @@ class Detection5G(
                     onDisplayInfoCallback(telephonyDisplayInfo)
                 }
             }
-            telephonyManager.listen(phoneStateListener!!, PhoneStateListener.LISTEN_DISPLAY_INFO_CHANGED or PhoneStateListener.LISTEN_CELL_INFO)
+            telephonyManager.listen(
+                phoneStateListener!!,
+                PhoneStateListener.LISTEN_DISPLAY_INFO_CHANGED or PhoneStateListener.LISTEN_CELL_INFO
+            )
         }
     }
 
     private fun listenUnlimitedNetwork(onResult: (Boolean) -> Unit) {
         connectivityManagerCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+            override fun onCapabilitiesChanged(
+                network: Network,
+                networkCapabilities: NetworkCapabilities
+            ) {
                 super.onCapabilitiesChanged(network, networkCapabilities)
                 // If you have an unlimited plan = true
-                val isUnlimited = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED) ||
-                        networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED)
+                val isUnlimited =
+                    networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED) ||
+                            networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED)
                 onResult(isUnlimited)
             }
         }
         connectivityManager.registerDefaultNetworkCallback(connectivityManagerCallback!!)
     }
 
-    fun destroy(){
+    fun destroy() {
 //        if (!isSIMInsertedAndNotAirplaneModeOn()){
 //            Log.i(TAG, "Sim card not inserted.");
 //            return

@@ -82,7 +82,7 @@ fun isWifiConnected(context: Context): Boolean {
 
 
 fun getNetworkTypeOldAPI(context: Context): String {
-    if (isWifiConnected(context)){
+    if (isWifiConnected(context)) {
         return "WIFI"
     }
 
@@ -103,7 +103,7 @@ fun getNetworkTypeOldAPI(context: Context): String {
         }
     }
 
-    if(!isLocationEnabled(context)){
+    if (!isLocationEnabled(context)) {
         networkTypeString = "Mobile network"
     }
 
