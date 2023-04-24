@@ -1,17 +1,18 @@
 package media.opensesame.syncstagetestappandroid.screens
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -19,14 +20,19 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import media.opensesame.syncstagetestappandroid.SyncStageScreen
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 
 @Composable
-fun LocationScreen(navController: NavHostController, zoneViewModel: LocationViewModel = hiltViewModel()) {
+fun LocationScreen(
+    navController: NavHostController,
+    zoneViewModel: LocationViewModel = hiltViewModel()
+) {
     val zoneUIState by zoneViewModel.uiState.collectAsState()
 
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
@@ -81,12 +87,18 @@ fun LocationScreen(navController: NavHostController, zoneViewModel: LocationView
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(zoneUIState.selectedZone.ZoneName, modifier = Modifier.padding(start = 10.dp))
+                    Text(
+                        zoneUIState.selectedZone.ZoneName,
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
                     Spacer(modifier = Modifier.weight(1.0f))
-                    val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
+                    val icon =
+                        if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
                     Icon(
                         icon, "contentDescription",
-                        Modifier.padding(end = 10.dp).size(30.dp, 30.dp)
+                        Modifier
+                            .padding(end = 10.dp)
+                            .size(30.dp, 30.dp)
                     )
                 }
                 DropdownMenu(
@@ -108,11 +120,15 @@ fun LocationScreen(navController: NavHostController, zoneViewModel: LocationView
                     }
                 }
             }
-            Button(onClick = {
-                showLoadingIndicator = true
-                zoneViewModel.createNewSession()
-                //navController.navigate(SyncStageScreen.Session.name)
-            }, modifier = Modifier.padding(top = 20.dp), enabled = zoneUIState.selectedZone.zoneId.isNotEmpty()) {
+            Button(
+                onClick = {
+                    showLoadingIndicator = true
+                    zoneViewModel.createNewSession()
+                    //navController.navigate(SyncStageScreen.Session.name)
+                },
+                modifier = Modifier.padding(top = 20.dp),
+                enabled = zoneUIState.selectedZone.zoneId.isNotEmpty()
+            ) {
                 Text(text = "START NOW")
             }
         }

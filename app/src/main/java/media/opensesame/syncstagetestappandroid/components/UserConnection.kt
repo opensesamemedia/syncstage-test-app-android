@@ -45,24 +45,38 @@ fun UserConnection(
         })
 
         if (!isTransmitter) {
-            Text(text = "${connectionModel.displayName ?: "Unknown"}", modifier = Modifier.weight(1.0f))
+            Text(
+                text = "${connectionModel.displayName ?: "Unknown"}",
+                modifier = Modifier.weight(1.0f)
+            )
             Slider(value = value, valueRange = 0f..100f, onValueChange = {
                 onValueChange(it)
             }, modifier = Modifier.width(100.dp))
-        }else {
-            Text(text = "You (${connectionModel.displayName ?: "Unknown"})", modifier = Modifier.weight(1.0f))
+        } else {
+            Text(
+                text = "You (${connectionModel.displayName ?: "Unknown"})",
+                modifier = Modifier.weight(1.0f)
+            )
         }
-        val icon = if(connectionModel.isMuted) Icons.Filled.MicOff else Icons.Filled.Mic
+        val icon = if (connectionModel.isMuted) Icons.Filled.MicOff else Icons.Filled.Mic
         Icon(icon, "Mic")
     }
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(bottom = 10.dp)) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 10.dp)
+    ) {
         Text(buildAnnotatedString {
             withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Quality: ")
             }
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, color = colorForQuality(measurements.quality))) {
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 13.sp,
+                    color = colorForQuality(measurements.quality)
+                )
+            ) {
                 append("${measurements.quality} %")
             }
         }, modifier = Modifier.weight(0.33f))
@@ -70,7 +84,13 @@ fun UserConnection(
             withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Ping: ")
             }
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, color = colorForPing(measurements.networkDelayMs))) {
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 13.sp,
+                    color = colorForPing(measurements.networkDelayMs)
+                )
+            ) {
                 append("${if (measurements.networkDelayMs != 0) measurements.networkDelayMs else '-'} ms")
             }
         }, modifier = Modifier.weight(0.33f))
@@ -78,22 +98,30 @@ fun UserConnection(
             withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Jitter: ")
             }
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, color = colorForJitter(measurements.networkJitterMs))) {
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 13.sp,
+                    color = colorForJitter(measurements.networkJitterMs)
+                )
+            ) {
                 append("${if (measurements.networkJitterMs != 0) measurements.networkJitterMs else '-'} ms")
             }
         }, modifier = Modifier.weight(0.33f))
     }
-    if(isTransmitter) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 10.dp)) {
+    if (isTransmitter) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp)
+        ) {
             Text(text = "Network type: $networkType")
         }
     }
     Divider(color = Color.Gray)
 }
 
-fun colorForJitter(value: Int):Color {
+fun colorForJitter(value: Int): Color {
     return if (value < 5) {
         Color.Green
     } else if (value == 5) {
@@ -103,7 +131,7 @@ fun colorForJitter(value: Int):Color {
     }
 }
 
-fun colorForPing(value: Int):Color {
+fun colorForPing(value: Int): Color {
     return if (value < 25) {
         Color.Green
     } else if (value in 25..34) {
@@ -113,7 +141,7 @@ fun colorForPing(value: Int):Color {
     }
 }
 
-fun colorForQuality(value: Int):Color {
+fun colorForQuality(value: Int): Color {
     return if (value >= 80) {
         Color.Green
     } else if (value in 50..79) {

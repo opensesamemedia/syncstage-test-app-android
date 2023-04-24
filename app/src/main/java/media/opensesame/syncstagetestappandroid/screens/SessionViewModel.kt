@@ -54,13 +54,17 @@ class SessionViewModel @Inject constructor(
     private val context: WeakReference<Context>,
     private val syncStage: SyncStage,
     private val preferencesRepo: PreferencesRepo
-): ViewModel(), SyncStageUserDelegate, SyncStageConnectivityDelegate {
+) : ViewModel(), SyncStageUserDelegate, SyncStageConnectivityDelegate {
     private val _uiState = MutableStateFlow(SessionUIState())
     val uiState: StateFlow<SessionUIState> = _uiState.asStateFlow()
     lateinit var sessionLeft: () -> Unit
 
-    private val connectivityManager by lazy { context.get()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
-    private val telephonyManager by lazy { context.get()?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager }
+    private val connectivityManager by lazy {
+        context.get()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+    private val telephonyManager by lazy {
+        context.get()?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    }
     private lateinit var detection5G: Detection5G
     private var networkType: String = ""
 
@@ -131,13 +135,24 @@ class SessionViewModel @Inject constructor(
     private fun updateSession(value: Session) {
         val connections: MutableList<ConnectionModel> = mutableListOf()
         value.transmitter?.let {
-            connections.add(ConnectionModel(identifier = it.identifier, userId = it.userId, displayName = it.displayName, isMuted = it.isMuted))
+            connections.add(
+                ConnectionModel(
+                    identifier = it.identifier,
+                    userId = it.userId,
+                    displayName = it.displayName,
+                    isMuted = it.isMuted
+                )
+            )
         }
         value.receivers.forEach { receiver ->
-            connections.add(ConnectionModel(identifier = receiver.identifier,
-                userId = receiver.userId,
-                displayName = receiver.displayName,
-                isMuted = receiver.isMuted))
+            connections.add(
+                ConnectionModel(
+                    identifier = receiver.identifier,
+                    userId = receiver.userId,
+                    displayName = receiver.displayName,
+                    isMuted = receiver.isMuted
+                )
+            )
         }
         _uiState.update { sessionUIState ->
             sessionUIState.copy(
@@ -179,7 +194,7 @@ class SessionViewModel @Inject constructor(
         val dmVolume = syncStage.getDirectMonitorVolume()
         _uiState.update { sessionUIState ->
             sessionUIState.copy(
-                directMonitorVolume = (dmVolume/100).toFloat(),
+                directMonitorVolume = (dmVolume / 100).toFloat(),
             )
         }
 
@@ -225,8 +240,12 @@ class SessionViewModel @Inject constructor(
         val displayName = preferencesRepo.getUserName()
         val userId = preferencesRepo.getUserId()
         CoroutineScope(Dispatchers.IO).launch {
-            val result = syncStage.join(sessionCode = sessionCode, userId = userId, displayName = displayName)
-            if(result.second == SyncStageSDKErrorCode.OK) {
+            val result = syncStage.join(
+                sessionCode = sessionCode,
+                userId = userId,
+                displayName = displayName
+            )
+            if (result.second == SyncStageSDKErrorCode.OK) {
                 context.get()?.let {
                     sendCommandToService(ACTION_START_SERVICE, it)
                 }
@@ -240,7 +259,11 @@ class SessionViewModel @Inject constructor(
             } else {
                 CoroutineScope(Dispatchers.Main).launch {
                     context.get()?.let {
-                        Toast.makeText(it, "Could not join the session. Please check the session code.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            it,
+                            "Could not join the session. Please check the session code.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                     sessionOut()
                 }
@@ -264,7 +287,7 @@ class SessionViewModel @Inject constructor(
                 sendCommandToService(ACTION_STOP_SERVICE, it)
             }
             val result = syncStage.leave()
-            if(result == SyncStageSDKErrorCode.OK) {
+            if (result == SyncStageSDKErrorCode.OK) {
                 CoroutineScope(Dispatchers.Main).launch {
                     sessionLeft()
                 }
@@ -273,7 +296,7 @@ class SessionViewModel @Inject constructor(
     }
 
     fun getMeasurements(identifier: String): Measurements {
-        return if(identifier == transmitterIdentifier) {
+        return if (identifier == transmitterIdentifier) {
             syncStage.getTransmitterMeasurements()
         } else {
             syncStage.getReceiverMeasurements(identifier = identifier)
@@ -287,7 +310,14 @@ class SessionViewModel @Inject constructor(
     override fun userJoined(connection: Connection) {
         _uiState.update {
             val connections = it.connections.toMutableList()
-            connections.add(ConnectionModel(identifier = connection.identifier, userId = connection.userId, displayName = connection.displayName, isMuted = connection.isMuted))
+            connections.add(
+                ConnectionModel(
+                    identifier = connection.identifier,
+                    userId = connection.userId,
+                    displayName = connection.displayName,
+                    isMuted = connection.isMuted
+                )
+            )
             it.copy(
                 connections = connections
             )
@@ -325,7 +355,7 @@ class SessionViewModel @Inject constructor(
     }
 
     override fun transmitterConnectivityChanged(connected: Boolean) {
-        if(transmitterIdentifier == _uiState.value.connections.firstOrNull()?.identifier) {
+        if (transmitterIdentifier == _uiState.value.connections.firstOrNull()?.identifier) {
             updateConnection(transmitterIdentifier) {
                 it.copy(isConnected = connected)
             }

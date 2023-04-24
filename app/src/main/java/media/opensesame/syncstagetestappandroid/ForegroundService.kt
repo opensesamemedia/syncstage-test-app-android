@@ -10,7 +10,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 
@@ -114,7 +113,7 @@ fun sendCommandToService(action: String, ctx: Context) =
     Intent(ctx, ForegroundService::class.java).also {
         it.action = action
         ctx.startService(it)
-}
+    }
 
 
 

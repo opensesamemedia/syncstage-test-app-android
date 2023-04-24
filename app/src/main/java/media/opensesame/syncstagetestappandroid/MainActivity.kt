@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,9 +21,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import media.opensesame.syncstagetestappandroid.screens.*
 import media.opensesame.syncstagetestappandroid.ui.theme.SyncStageTestAppAndroidTheme
-import dagger.hilt.android.AndroidEntryPoint
 
 enum class SyncStageScreen(@StringRes val title: Int) {
     Intro(title = R.string.intro),
@@ -56,9 +58,14 @@ fun SyncStageAppBar(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if(canNavigateBack) {
+    if (canNavigateBack) {
         TopAppBar(
-            title = { Text(stringResource(currentScreen.title), modifier = Modifier.fillMaxWidth()) },
+            title = {
+                Text(
+                    stringResource(currentScreen.title),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
             modifier = modifier.fillMaxWidth(),
             navigationIcon = {
                 IconButton(onClick = navigateUp) {
@@ -71,7 +78,12 @@ fun SyncStageAppBar(
         )
     } else {
         TopAppBar(
-            title = { Text(stringResource(currentScreen.title), modifier = Modifier.fillMaxWidth()) },
+            title = {
+                Text(
+                    stringResource(currentScreen.title),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
             modifier = modifier.fillMaxWidth()
         )
     }
@@ -154,7 +166,6 @@ fun SyncStageApp(
         )
     }
 }
-
 
 
 @Preview(showBackground = true)

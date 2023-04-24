@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val prefRepo: PreferencesRepo
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileUIState(userName = prefRepo.getUserName()))
     val uiState: StateFlow<ProfileUIState> = _uiState.asStateFlow()
 
