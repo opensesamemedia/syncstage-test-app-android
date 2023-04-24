@@ -30,95 +30,95 @@ fun UserConnection(
     isTransmitter: Boolean,
     value: Float,
     onValueChange: (value: Float) -> Unit
-) ***REMOVED***
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
-    ) ***REMOVED***
+    ) {
         Canvas(modifier = Modifier
             .size(30.dp)
-            .padding(end = 10.dp), onDraw = ***REMOVED***
+            .padding(end = 10.dp), onDraw = {
             drawCircle(color = if (connectionModel.isConnected) Color.Green else Color.Red)
-        ***REMOVED***)
+        })
 
-        if (!isTransmitter) ***REMOVED***
-            Text(text = "$***REMOVED***connectionModel.displayName ?: "Unknown"***REMOVED***", modifier = Modifier.weight(1.0f))
-            Slider(value = value, valueRange = 0f..100f, onValueChange = ***REMOVED***
+        if (!isTransmitter) {
+            Text(text = "${connectionModel.displayName ?: "Unknown"}", modifier = Modifier.weight(1.0f))
+            Slider(value = value, valueRange = 0f..100f, onValueChange = {
                 onValueChange(it)
-          ***REMOVED*** modifier = Modifier.width(100.dp))
-        ***REMOVED***else ***REMOVED***
-            Text(text = "You ($***REMOVED***connectionModel.displayName ?: "Unknown"***REMOVED***)", modifier = Modifier.weight(1.0f))
-        ***REMOVED***
+            }, modifier = Modifier.width(100.dp))
+        }else {
+            Text(text = "You (${connectionModel.displayName ?: "Unknown"})", modifier = Modifier.weight(1.0f))
+        }
         val icon = if(connectionModel.isMuted) Icons.Filled.MicOff else Icons.Filled.Mic
         Icon(icon, "Mic")
-    ***REMOVED***
+    }
     Row(modifier = Modifier
         .fillMaxWidth()
-        .padding(bottom = 10.dp)) ***REMOVED***
-        Text(buildAnnotatedString ***REMOVED***
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) ***REMOVED***
+        .padding(bottom = 10.dp)) {
+        Text(buildAnnotatedString {
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Quality: ")
-            ***REMOVED***
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, color = colorForQuality(measurements.quality))) ***REMOVED***
-                append("$***REMOVED***measurements.quality***REMOVED*** %")
-            ***REMOVED***
-      ***REMOVED*** modifier = Modifier.weight(0.33f))
-        Text(buildAnnotatedString ***REMOVED***
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) ***REMOVED***
+            }
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, color = colorForQuality(measurements.quality))) {
+                append("${measurements.quality} %")
+            }
+        }, modifier = Modifier.weight(0.33f))
+        Text(buildAnnotatedString {
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Ping: ")
-            ***REMOVED***
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, color = colorForPing(measurements.networkDelayMs))) ***REMOVED***
-                append("$***REMOVED***if (measurements.networkDelayMs != 0) measurements.networkDelayMs else '-'***REMOVED*** ms")
-            ***REMOVED***
-      ***REMOVED*** modifier = Modifier.weight(0.33f))
-        Text(buildAnnotatedString ***REMOVED***
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) ***REMOVED***
+            }
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, color = colorForPing(measurements.networkDelayMs))) {
+                append("${if (measurements.networkDelayMs != 0) measurements.networkDelayMs else '-'} ms")
+            }
+        }, modifier = Modifier.weight(0.33f))
+        Text(buildAnnotatedString {
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Jitter: ")
-            ***REMOVED***
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, color = colorForJitter(measurements.networkJitterMs))) ***REMOVED***
-                append("$***REMOVED***if (measurements.networkJitterMs != 0) measurements.networkJitterMs else '-'***REMOVED*** ms")
-            ***REMOVED***
-      ***REMOVED*** modifier = Modifier.weight(0.33f))
-    ***REMOVED***
-    if(isTransmitter) ***REMOVED***
+            }
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, color = colorForJitter(measurements.networkJitterMs))) {
+                append("${if (measurements.networkJitterMs != 0) measurements.networkJitterMs else '-'} ms")
+            }
+        }, modifier = Modifier.weight(0.33f))
+    }
+    if(isTransmitter) {
         Row(modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 10.dp)) ***REMOVED***
+            .padding(bottom = 10.dp)) {
             Text(text = "Network type: $networkType")
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
     Divider(color = Color.Gray)
-***REMOVED***
+}
 
-fun colorForJitter(value: Int):Color ***REMOVED***
-    return if (value < 5) ***REMOVED***
+fun colorForJitter(value: Int):Color {
+    return if (value < 5) {
         Color.Green
-    ***REMOVED*** else if (value == 5) ***REMOVED***
+    } else if (value == 5) {
         Color.Yellow
-    ***REMOVED*** else ***REMOVED***
+    } else {
         Color.Red
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
-fun colorForPing(value: Int):Color ***REMOVED***
-    return if (value < 25) ***REMOVED***
+fun colorForPing(value: Int):Color {
+    return if (value < 25) {
         Color.Green
-    ***REMOVED*** else if (value in 25..34) ***REMOVED***
+    } else if (value in 25..34) {
         Color.Yellow
-    ***REMOVED*** else ***REMOVED***
+    } else {
         Color.Red
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
-fun colorForQuality(value: Int):Color ***REMOVED***
-    return if (value >= 80) ***REMOVED***
+fun colorForQuality(value: Int):Color {
+    return if (value >= 80) {
         Color.Green
-    ***REMOVED*** else if (value in 50..79) ***REMOVED***
+    } else if (value in 50..79) {
         Color.Yellow
-    ***REMOVED*** else ***REMOVED***
+    } else {
         Color.Red
-    ***REMOVED***
-***REMOVED***
+    }
+}

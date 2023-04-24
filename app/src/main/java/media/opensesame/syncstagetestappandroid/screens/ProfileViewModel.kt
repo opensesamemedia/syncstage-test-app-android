@@ -14,22 +14,22 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val prefRepo: PreferencesRepo
-): ViewModel() ***REMOVED***
+): ViewModel() {
     private val _uiState = MutableStateFlow(ProfileUIState(userName = prefRepo.getUserName()))
     val uiState: StateFlow<ProfileUIState> = _uiState.asStateFlow()
 
-    fun updateUserName(userName: String) ***REMOVED***
-        _uiState.update ***REMOVED***
+    fun updateUserName(userName: String) {
+        _uiState.update {
             it.copy(userName = userName)
-        ***REMOVED***
+        }
         prefRepo.updateUserName(userName)
-    ***REMOVED***
+    }
 
-    fun createUserId() ***REMOVED***
+    fun createUserId() {
         val userId = prefRepo.getUserId()
-        if (userId.isEmpty()) ***REMOVED***
+        if (userId.isEmpty()) {
             val uuid = UUID.randomUUID().toString()
             prefRepo.updateUserId(uuid)
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

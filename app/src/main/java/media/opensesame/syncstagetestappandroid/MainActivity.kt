@@ -23,31 +23,31 @@ import media.opensesame.syncstagetestappandroid.screens.*
 import media.opensesame.syncstagetestappandroid.ui.theme.SyncStageTestAppAndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-enum class SyncStageScreen(@StringRes val title: Int) ***REMOVED***
+enum class SyncStageScreen(@StringRes val title: Int) {
     Intro(title = R.string.intro),
     Access(title = R.string.access),
     Profile(title = R.string.profile),
     CreateJoinSession(title = R.string.create_Join_Session),
     Location(title = R.string.location),
     Session(title = R.string.session),
-***REMOVED***
+}
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() ***REMOVED***
-    override fun onCreate(savedInstanceState: Bundle?) ***REMOVED***
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent ***REMOVED***
-            SyncStageTestAppAndroidTheme ***REMOVED***
+        setContent {
+            SyncStageTestAppAndroidTheme {
                 SyncStageApp()
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
+    }
 
-    override fun onDestroy() ***REMOVED***
+    override fun onDestroy() {
         sendCommandToService(ACTION_STOP_SERVICE, this)
         super.onDestroy()
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 @Composable
 fun SyncStageAppBar(
@@ -55,112 +55,112 @@ fun SyncStageAppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
-) ***REMOVED***
-    if(canNavigateBack) ***REMOVED***
+) {
+    if(canNavigateBack) {
         TopAppBar(
-            title = ***REMOVED*** Text(stringResource(currentScreen.title), modifier = Modifier.fillMaxWidth()) ***REMOVED***,
+            title = { Text(stringResource(currentScreen.title), modifier = Modifier.fillMaxWidth()) },
             modifier = modifier.fillMaxWidth(),
-            navigationIcon = ***REMOVED***
-                IconButton(onClick = navigateUp) ***REMOVED***
+            navigationIcon = {
+                IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back_button)
                     )
-                ***REMOVED***
-            ***REMOVED***
+                }
+            }
         )
-    ***REMOVED*** else ***REMOVED***
+    } else {
         TopAppBar(
-            title = ***REMOVED*** Text(stringResource(currentScreen.title), modifier = Modifier.fillMaxWidth()) ***REMOVED***,
+            title = { Text(stringResource(currentScreen.title), modifier = Modifier.fillMaxWidth()) },
             modifier = modifier.fillMaxWidth()
         )
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
-class CustomNavController(context: Context) : NavController(context) ***REMOVED***
-    override fun popBackStack(): Boolean ***REMOVED***
+class CustomNavController(context: Context) : NavController(context) {
+    override fun popBackStack(): Boolean {
         return super.popBackStack()
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 @Composable
 fun SyncStageApp(
     modifier: Modifier = Modifier
-) ***REMOVED***
+) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SyncStageScreen.valueOf(
         backStackEntry?.destination?.route?.substringBefore("?") ?: SyncStageScreen.Intro.name
     )
     // A surface container using the 'background' color from the theme
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) ***REMOVED***
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
         Scaffold(
-            //topBar = ***REMOVED*** TopAppBar(title = ***REMOVED*** Text(modifier = Modifier.fillMaxWidth(), text = "SyncStage", textAlign = TextAlign.Center) ***REMOVED***) ***REMOVED***,
-            topBar = ***REMOVED***
+            //topBar = { TopAppBar(title = { Text(modifier = Modifier.fillMaxWidth(), text = "SyncStage", textAlign = TextAlign.Center) }) },
+            topBar = {
                 SyncStageAppBar(
                     currentScreen = currentScreen,
                     canNavigateBack = navController.previousBackStackEntry != null
                             && navController.currentDestination?.route?.substringBefore("?") != SyncStageScreen.Session.name,
-                    navigateUp = ***REMOVED***
+                    navigateUp = {
                         navController.navigateUp()
-                    ***REMOVED***
+                    }
                 )
-          ***REMOVED***
-            content = ***REMOVED*** innerPadding ->
+            },
+            content = { innerPadding ->
                 //val uiState by viewModel.uiState.collectAsState()
 
                 NavHost(
                     navController = navController,
                     startDestination = SyncStageScreen.Intro.name,
                     modifier = modifier.padding(innerPadding)
-                ) ***REMOVED***
-                    composable(route = SyncStageScreen.Intro.name) ***REMOVED***
+                ) {
+                    composable(route = SyncStageScreen.Intro.name) {
                         IntroScreen(navController = navController)
-                    ***REMOVED***
+                    }
 
-                    composable(route = SyncStageScreen.Access.name) ***REMOVED***
+                    composable(route = SyncStageScreen.Access.name) {
                         MicrophoneAccessScreen(navController = navController)
-                    ***REMOVED***
+                    }
 
-                    composable(route = SyncStageScreen.Profile.name) ***REMOVED***
+                    composable(route = SyncStageScreen.Profile.name) {
                         ProfileScreen(navController = navController)
-                    ***REMOVED***
+                    }
 
-                    composable(route = SyncStageScreen.CreateJoinSession.name) ***REMOVED***
+                    composable(route = SyncStageScreen.CreateJoinSession.name) {
                         CreateJoinSessionScreen(navController = navController)
-                    ***REMOVED***
+                    }
 
-                    composable(route = SyncStageScreen.Location.name) ***REMOVED***
+                    composable(route = SyncStageScreen.Location.name) {
                         LocationScreen(navController = navController)
-                    ***REMOVED***
+                    }
 
-                    composable(route = SyncStageScreen.Session.name + "?sessionCode=***REMOVED***sessionCode***REMOVED***") ***REMOVED***
+                    composable(route = SyncStageScreen.Session.name + "?sessionCode={sessionCode}") {
                         val sessionCode = it.arguments?.getString("sessionCode")
-                        sessionCode?.let ***REMOVED*** sessionCode ->
+                        sessionCode?.let { sessionCode ->
                             SessionScreen(navController = navController, sessionCode)
-                        ***REMOVED***
-                    ***REMOVED***
+                        }
+                    }
 
-                    /*composable(NavRoutes.Welcome.route + "/?***REMOVED***userName***REMOVED***") ***REMOVED***
+                    /*composable(NavRoutes.Welcome.route + "/?{userName}") {
                         val userName = it.arguments?.getString("userName")
                         Welcome(navController = navController, userName)
-                    ***REMOVED***
+                    }
 
-                    composable(NavRoutes.Profile.route) ***REMOVED***
+                    composable(NavRoutes.Profile.route) {
                         Profile()
-                    ***REMOVED****/
-                ***REMOVED***
-            ***REMOVED***
+                    }*/
+                }
+            }
         )
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() ***REMOVED***
-    SyncStageTestAppAndroidTheme ***REMOVED***
+fun DefaultPreview() {
+    SyncStageTestAppAndroidTheme {
 
-    ***REMOVED***
-***REMOVED***
+    }
+}

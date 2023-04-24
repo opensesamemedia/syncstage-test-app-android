@@ -1,4 +1,4 @@
 /build
-/main/assets
+/src/main/assets/
 google-services.json
 firebase-debug.log

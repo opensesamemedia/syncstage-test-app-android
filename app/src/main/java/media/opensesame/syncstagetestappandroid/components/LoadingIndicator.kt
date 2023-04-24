@@ -15,10 +15,10 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun LoadingIndicator() ***REMOVED***
-    Box(modifier = Modifier.fillMaxSize().clickable(indication = null, interactionSource = remember ***REMOVED*** MutableInteractionSource() ***REMOVED***, onClick = ***REMOVED******REMOVED***), contentAlignment = Alignment.Center) ***REMOVED***
-        Box(modifier = Modifier.background(Color(0.1f,0.1f,0.1f,0.3f), shape = RoundedCornerShape(10.0f)).size(100.dp,100.dp), contentAlignment = Alignment.Center) ***REMOVED***
+fun LoadingIndicator() {
+    Box(modifier = Modifier.fillMaxSize().clickable(indication = null, interactionSource = remember { MutableInteractionSource() }, onClick = {}), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.background(Color(0.1f,0.1f,0.1f,0.3f), shape = RoundedCornerShape(10.0f)).size(100.dp,100.dp), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

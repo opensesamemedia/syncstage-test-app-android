@@ -1,122 +1,122 @@
-plugins ***REMOVED***
+plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
-***REMOVED***
+}
 
-ext ***REMOVED***
+ext {
     sdkVersion = "0.2.0-rc.9"
-***REMOVED***
+}
 
-def getVersionName = ***REMOVED*** String flavorName ->
-    exec ***REMOVED***
+def getVersionName = { String flavorName ->
+    exec {
         commandLine 'git', 'fetch', '--all', '--tags'
-    ***REMOVED***
+    }
 
     def stdout = new ByteArrayOutputStream()
-    exec ***REMOVED***
+    exec {
         commandLine 'git', 'describe', '--tags', '--abbrev=0', '--always'
         standardOutput = stdout
-    ***REMOVED***
+    }
 
     def baseVersionName = stdout.toString().trim()
 
     def commitHashStdout = new ByteArrayOutputStream()
-    exec ***REMOVED***
+    exec {
         commandLine 'git', 'rev-parse', '--short', 'HEAD'
         standardOutput = commitHashStdout
-    ***REMOVED***
+    }
     def commitHash = commitHashStdout.toString().trim()
 
     return flavorName == "production" ? "$baseVersionName-$commitHash-sdk$sdkVersion" : "$baseVersionName-$commitHash-sdk$sdkVersion-$flavorName"
-***REMOVED***
+}
 
-android ***REMOVED***
+android {
     namespace 'media.opensesame.syncstagetestappandroid'
     compileSdk 33
 
-    defaultConfig ***REMOVED***
+    defaultConfig {
         applicationId "media.opensesame.syncstagetestappandroid"
         minSdk 29
         targetSdk 33
         versionCode 1
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables ***REMOVED***
+        vectorDrawables {
             useSupportLibrary true
-        ***REMOVED***
+        }
 
         defaultPublishConfig "production"
-    ***REMOVED***
-    compileOptions ***REMOVED***
+    }
+    compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    ***REMOVED***
-    kotlinOptions ***REMOVED***
+    }
+    kotlinOptions {
         jvmTarget = '1.8'
-    ***REMOVED***
-    buildFeatures ***REMOVED***
+    }
+    buildFeatures {
         compose true
-    ***REMOVED***
-    composeOptions ***REMOVED***
+    }
+    composeOptions {
         kotlinCompilerExtensionVersion '1.1.1'
-    ***REMOVED***
-    packagingOptions ***REMOVED***
-        resources ***REMOVED***
-            excludes += '/META-INF/***REMOVED***AL2.0,LGPL2.1***REMOVED***'
-        ***REMOVED***
-    ***REMOVED***
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
 
     flavorDimensions "environment"
 
-    productFlavors ***REMOVED***
-        development ***REMOVED***
+    productFlavors {
+        development {
             dimension "environment"
             versionName getVersionName("development")
-            buildConfigField "String", "VERSION_NAME", "\"$***REMOVED***getVersionName("development")***REMOVED***\""
-            defaultConfig ***REMOVED***
-                archivesBaseName = "$applicationId-$***REMOVED***getVersionName('development')***REMOVED***"
-            ***REMOVED***
-        ***REMOVED***
-        staging ***REMOVED***
+            buildConfigField "String", "VERSION_NAME", "\"${getVersionName("development")}\""
+            defaultConfig {
+                archivesBaseName = "$applicationId-${getVersionName('development')}"
+            }
+        }
+        staging {
             dimension "environment"
             versionName getVersionName("staging")
-            buildConfigField "String", "VERSION_NAME", "\"$***REMOVED***getVersionName("staging")***REMOVED***\""
-            defaultConfig ***REMOVED***
-                archivesBaseName = "$applicationId-$***REMOVED***getVersionName('staging')***REMOVED***"
-            ***REMOVED***
-        ***REMOVED***
-        production ***REMOVED***
+            buildConfigField "String", "VERSION_NAME", "\"${getVersionName("staging")}\""
+            defaultConfig {
+                archivesBaseName = "$applicationId-${getVersionName('staging')}"
+            }
+        }
+        production {
             dimension "environment"
             versionName getVersionName("production")
-            buildConfigField "String", "VERSION_NAME", "\"$***REMOVED***getVersionName("production")***REMOVED***\""
-            defaultConfig ***REMOVED***
-                archivesBaseName = "$applicationId-$***REMOVED***getVersionName('production')***REMOVED***"
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+            buildConfigField "String", "VERSION_NAME", "\"${getVersionName("production")}\""
+            defaultConfig {
+                archivesBaseName = "$applicationId-${getVersionName('production')}"
+            }
+        }
+    }
 
-    buildTypes ***REMOVED***
-        release ***REMOVED***
+    buildTypes {
+        release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        ***REMOVED***
+        }
 
-        debug ***REMOVED***
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}
 
 
-dependencies ***REMOVED***
-    productionImplementation "media.opensesame:syncstagesdk:$***REMOVED***sdkVersion***REMOVED***"
-    developmentImplementation "media.opensesame:syncstagesdk:$***REMOVED***sdkVersion***REMOVED***-development"
-    stagingImplementation "media.opensesame:syncstagesdk:$***REMOVED***sdkVersion***REMOVED***-staging"
+dependencies {
+    productionImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
+    developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
+    stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
 
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
@@ -140,9 +140,9 @@ dependencies ***REMOVED***
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
-***REMOVED***
+}
 
 // Allow references to generated code
-kapt ***REMOVED***
+kapt {
     correctErrorTypes true
-***REMOVED***
+}

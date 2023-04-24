@@ -27,36 +27,36 @@ import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
 
 @Composable
-fun SessionScreen(navController: NavHostController, sessionCode: String, sessionViewModel: SessionViewModel = hiltViewModel()) ***REMOVED***
+fun SessionScreen(navController: NavHostController, sessionCode: String, sessionViewModel: SessionViewModel = hiltViewModel()) {
     val sessionUIState by sessionViewModel.uiState.collectAsState()
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
-    var popupControl by remember ***REMOVED*** mutableStateOf(false) ***REMOVED***
-    var showLoadingIndicator by remember ***REMOVED*** mutableStateOf(false) ***REMOVED***
+    var popupControl by remember { mutableStateOf(false) }
+    var showLoadingIndicator by remember { mutableStateOf(false) }
 
-    sessionViewModel.sessionLeft = ***REMOVED***
+    sessionViewModel.sessionLeft = {
         showLoadingIndicator = false
         navController.popBackStack()
-    ***REMOVED***
+    }
 
-    BackHandler ***REMOVED***
+    BackHandler {
         sessionViewModel.leaveSession()
-    ***REMOVED***
+    }
 
-    Box(modifier = Modifier.fillMaxSize()) ***REMOVED***
-        Column ***REMOVED***
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column {
             Box(
                 modifier = Modifier
                     .weight(1.0f)
                     .fillMaxWidth(),
                 contentAlignment = Alignment.TopCenter,
-            ) ***REMOVED***
+            ) {
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center, modifier = Modifier
                         .padding(start = 20.dp, end = 20.dp)
                         .verticalScroll(rememberScrollState())
-                ) ***REMOVED***
+                ) {
                     Text(
                         text = "Participants",
                         style = TextStyle(fontSize = 24.sp),
@@ -65,34 +65,34 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                             .fillMaxWidth()
                             .padding(bottom = 20.dp, top = 20.dp)
                     )
-                    sessionUIState.connections.let ***REMOVED***
-                        it.forEach ***REMOVED*** connectionModel ->
+                    sessionUIState.connections.let {
+                        it.forEach { connectionModel ->
                             val isTransmitter = sessionViewModel.transmitterIdentifier == connectionModel.identifier
                             var value = 0.0f
-                            if (!isTransmitter) ***REMOVED***
+                            if (!isTransmitter) {
                                 value = sessionViewModel.getReceiverVolume(identifier = connectionModel.identifier).toFloat()
-                            ***REMOVED***
+                            }
                             val measurements = sessionViewModel.getMeasurements(identifier = connectionModel.identifier)
                             UserConnection(connectionModel = connectionModel,
                                 measurements = measurements,
                                 networkType = sessionUIState.networkType,
                                 isTransmitter,
                                 value = value,
-                                onValueChange = ***REMOVED*** volume ->
+                                onValueChange = { volume ->
                                     sessionViewModel.changeReceiverVolume(connectionModel.identifier, volume)
-                                ***REMOVED***
+                                }
                             )
-                        ***REMOVED***
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
+                        }
+                    }
+                }
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(158.dp),
                 contentAlignment = Alignment.Center
-            ) ***REMOVED***
-                Column(horizontalAlignment = Alignment.CenterHorizontally) ***REMOVED***
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         "Invite others",
                         fontSize = 17.sp,
@@ -102,120 +102,120 @@ fun SessionScreen(navController: NavHostController, sessionCode: String, session
                             .padding(start = 30.dp)
                     )
                     Text(
-                        buildAnnotatedString ***REMOVED***
-                            withStyle(style = SpanStyle(fontSize = 13.sp, color = Color.Gray)) ***REMOVED***
+                        buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontSize = 13.sp, color = Color.Gray)) {
                                 append("Share this code with others: ")
-                            ***REMOVED***
-                            withStyle(style = SpanStyle(fontSize = 15.sp)) ***REMOVED***
+                            }
+                            withStyle(style = SpanStyle(fontSize = 15.sp)) {
                                 append(sessionCode)
-                            ***REMOVED***
-                      ***REMOVED***
+                            }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 30.dp)
                             .padding(bottom = 15.dp)
                     )
-                    Button(onClick = ***REMOVED***
+                    Button(onClick = {
                         clipboardManager.setText(AnnotatedString(sessionCode))
-                  ***REMOVED*** modifier = Modifier.padding(bottom = 10.dp)) ***REMOVED***
+                    }, modifier = Modifier.padding(bottom = 10.dp)) {
                         Icon(
                             Icons.Filled.FileCopy, "contentDescription",
                         )
                         Text(text = "COPY JOINING CODE")
-                    ***REMOVED***
+                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(45.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
-                    ) ***REMOVED***
+                    ) {
                         Button(
-                            onClick = ***REMOVED***
+                            onClick = {
                                 showLoadingIndicator = true
                                 sessionViewModel.leaveSession()
-                          ***REMOVED***
+                            },
                             modifier = Modifier
                                 .weight(33.3f)
                                 .fillMaxHeight(),
                             shape = RectangleShape
-                        ) ***REMOVED***
+                        ) {
                             Icon(Icons.Filled.CallEnd, "contentDescription")
-                        ***REMOVED***
+                        }
                         Button(
-                            onClick = ***REMOVED***
+                            onClick = {
                                 sessionViewModel.toggleMicrophone(!sessionViewModel.isMuted)
-                          ***REMOVED*** modifier = Modifier
+                            }, modifier = Modifier
                                 .weight(33.3f)
                                 .fillMaxHeight(),
                             shape = RectangleShape
-                        ) ***REMOVED***
-                            val icon = if(sessionViewModel.isMuted) ***REMOVED*** Icons.Filled.MicOff ***REMOVED*** else ***REMOVED*** Icons.Filled.Mic ***REMOVED***
+                        ) {
+                            val icon = if(sessionViewModel.isMuted) { Icons.Filled.MicOff } else { Icons.Filled.Mic }
                             Icon(icon, "Mute")
-                        ***REMOVED***
+                        }
                         Button(
-                            onClick = ***REMOVED***
+                            onClick = {
                                 popupControl = true
-                          ***REMOVED*** modifier = Modifier
+                            }, modifier = Modifier
                                 .weight(33.3f)
                                 .fillMaxHeight(),
                             shape = RectangleShape
-                        ) ***REMOVED***
+                        ) {
                             Icon(Icons.Filled.Menu, "contentDescription")
-                        ***REMOVED***
-                    ***REMOVED***
-                ***REMOVED***
-                if(popupControl) ***REMOVED***
+                        }
+                    }
+                }
+                if(popupControl) {
                     Popup(
                         //alignment = Alignment.Center,
-                        onDismissRequest = ***REMOVED*** popupControl = false ***REMOVED***
-                    ) ***REMOVED***
+                        onDismissRequest = { popupControl = false }
+                    ) {
                         Column(modifier = Modifier
                             .shadow(5.dp, shape = RoundedCornerShape(5.dp), clip = false)
                             .background(color = Color.White)
                             .fillMaxWidth()
-                            .padding(20.dp)) ***REMOVED***
+                            .padding(20.dp)) {
                             Row(modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) ***REMOVED***
+                                horizontalArrangement = Arrangement.Start) {
                                 Text(text = "Direct Monitor", modifier = Modifier.padding(end = 20.dp))
-                                Switch(checked = sessionViewModel.isDirectMonitorEnabled, onCheckedChange = ***REMOVED***
+                                Switch(checked = sessionViewModel.isDirectMonitorEnabled, onCheckedChange = {
                                     sessionViewModel.toggleDirectMonitor(it)
-                                ***REMOVED***)
-                            ***REMOVED***
+                                })
+                            }
                             Row(modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) ***REMOVED***
+                                horizontalArrangement = Arrangement.Start) {
                                 Text(text = "Internal Microphone", modifier = Modifier.padding(end = 20.dp))
-                                Switch(checked = sessionViewModel.isInternalMicrophoneEnabled, onCheckedChange = ***REMOVED***
+                                Switch(checked = sessionViewModel.isInternalMicrophoneEnabled, onCheckedChange = {
                                     sessionViewModel.toggleInternalMicrophone(it)
-                                ***REMOVED***)
-                            ***REMOVED***
+                                })
+                            }
                             Row(modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start) ***REMOVED***
+                                horizontalArrangement = Arrangement.Start) {
                                 Text(text = "Direct Monitor volume", modifier = Modifier.padding(end = 20.dp))
-                                Slider(value = sessionUIState.directMonitorVolume, onValueChange = ***REMOVED***
+                                Slider(value = sessionUIState.directMonitorVolume, onValueChange = {
                                     sessionViewModel.changeDirectMonitorVolume(it)
-                              ***REMOVED*** Modifier.width(100.dp))
-                            ***REMOVED***
+                                }, Modifier.width(100.dp))
+                            }
                             Text(text = "Note: A headphone required to enable the direct monitor feature.")
-                        ***REMOVED***
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-        if (sessionUIState.session == null || showLoadingIndicator) ***REMOVED***
+                        }
+                    }
+                }
+            }
+        }
+        if (sessionUIState.session == null || showLoadingIndicator) {
             LoadingIndicator()
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    LaunchedEffect(Unit) ***REMOVED***
-        if(sessionUIState.session == null) ***REMOVED***
+    LaunchedEffect(Unit) {
+        if(sessionUIState.session == null) {
             sessionViewModel.joinSession(
                 sessionCode = sessionCode,
             )
             sessionViewModel.initiate5GDetection()
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

@@ -28,54 +28,54 @@ data class LoginUIState(
 class CreateJoinViewModel @Inject constructor(
     private val context: WeakReference<Context>,
     private val syncStage: SyncStage
-): ViewModel() ***REMOVED***
+): ViewModel() {
     private val _uiState = MutableStateFlow(LoginUIState())
     val uiState: StateFlow<LoginUIState> = _uiState.asStateFlow()
     private var initRetries = 0
 
-    private fun updateLoginState(value: Boolean) ***REMOVED***
-        _uiState.update ***REMOVED***
+    private fun updateLoginState(value: Boolean) {
+        _uiState.update {
             it.copy(loggedIn = value)
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    fun updateSessionCode(code: String) ***REMOVED***
-        _uiState.update ***REMOVED***
+    fun updateSessionCode(code: String) {
+        _uiState.update {
             it.copy(
                 sessionCode = code
             )
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    fun initiateSyncStage() ***REMOVED***
-        syncStage.init ***REMOVED*** error ->
-            if (error != SyncStageSDKErrorCode.OK) ***REMOVED***
+    fun initiateSyncStage() {
+        syncStage.init { error ->
+            if (error != SyncStageSDKErrorCode.OK) {
                 Log.e("CreateJoinViewModel", "SyncStage init failed")
                 updateLoginState(false)
 
-                if (initRetries < 3)***REMOVED***
-                    CoroutineScope(Dispatchers.Main).launch ***REMOVED***
-                        context.get()?.let ***REMOVED***
+                if (initRetries < 3){
+                    CoroutineScope(Dispatchers.Main).launch {
+                        context.get()?.let {
                             Toast.makeText(it, "Could not init SyncStage, retrying...", Toast.LENGTH_SHORT).show()
-                        ***REMOVED***
-                    ***REMOVED***
-                    CoroutineScope(Dispatchers.Default).launch ***REMOVED***
+                        }
+                    }
+                    CoroutineScope(Dispatchers.Default).launch {
                         initRetries += 1
                         delay(2500)
                         initiateSyncStage()
-                    ***REMOVED***
-                ***REMOVED***else ***REMOVED***
-                    CoroutineScope(Dispatchers.Main).launch ***REMOVED***
-                        context.get()?.let ***REMOVED***
+                    }
+                }else {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        context.get()?.let {
                             Toast.makeText(it, "Failed to init SyncStage.", Toast.LENGTH_SHORT).show()
-                        ***REMOVED***
-                    ***REMOVED***
+                        }
+                    }
                     throw RuntimeException("SyncStage init retries exceeded.")
-                ***REMOVED***
+                }
 
-            ***REMOVED*** else ***REMOVED***
+            } else {
                 updateLoginState(true)
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+            }
+        }
+    }
+}
