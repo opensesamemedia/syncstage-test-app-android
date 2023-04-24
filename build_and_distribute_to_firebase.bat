@@ -28,7 +28,7 @@ for /R app\build\outputs\apk %%f in (*.apk) do (
         set DISTRIBUTION_GROUP=%PRODUCTION_GROUP_ID%
     )
 
-    if not "%DISTRIBUTION_GROUP%"=="" (
+    if not "!DISTRIBUTION_GROUP!"=="" (
         echo Distributing APK %%~nxf to group %DISTRIBUTION_GROUP%...
         firebase appdistribution:distribute "%%~dpnxf" --app %FIREBASE_PROJECT_ID% --groups %DISTRIBUTION_GROUP% --debug
     )
