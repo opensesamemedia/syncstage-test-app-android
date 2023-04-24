@@ -21,12 +21,12 @@ import media.opensesame.syncstagetestappandroid.SyncStageScreen
 
 
 @Composable
-fun ProfileScreen(navController: NavHostController, profileViewModel: ProfileViewModel = hiltViewModel()) ***REMOVED***
+fun ProfileScreen(navController: NavHostController, profileViewModel: ProfileViewModel = hiltViewModel()) {
     val profileUIState by profileViewModel.uiState.collectAsState()
 
-    val onUserNameChange = ***REMOVED*** text : String ->
+    val onUserNameChange = { text : String ->
         profileViewModel.updateUserName(text)
-    ***REMOVED***
+    }
     val focusRequester = FocusRequester()
 
     Box(
@@ -34,47 +34,47 @@ fun ProfileScreen(navController: NavHostController, profileViewModel: ProfileVie
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center
-    ) ***REMOVED***
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ) ***REMOVED***
+        ) {
             Text(text = "This is the name that will be displayed for other users when joining a session.",
                 modifier = Modifier.padding(30.dp), textAlign = TextAlign.Center)
             OutlinedTextField(
                 value = profileUIState.userName,
                 singleLine = true,
                 onValueChange = onUserNameChange,
-                label = ***REMOVED*** Text(text = "Please enter your name")***REMOVED***,
+                label = { Text(text = "Please enter your name")},
                 //isError = profileUIState.userName.isNullOrEmpty(),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
-                    onNext = ***REMOVED*** // on next.
+                    onNext = { // on next.
                         onNextClick(profileUIState.userName, navController, viewModel = profileViewModel)
-                    ***REMOVED***
+                    }
                 ),
                 modifier = Modifier
                     .focusRequester(focusRequester)
                     .padding(bottom = 10.dp)
             )
-            Button(onClick = ***REMOVED***
+            Button(onClick = {
                 onNextClick(profileUIState.userName, navController, viewModel = profileViewModel)
-          ***REMOVED*** enabled = profileUIState.userName.isNotEmpty()) ***REMOVED***
+            }, enabled = profileUIState.userName.isNotEmpty()) {
                 Text(text = "NEXT")
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
+    }
 
-    LaunchedEffect(Unit) ***REMOVED***
+    LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
-fun onNextClick(userName: String, navController: NavHostController, viewModel: ProfileViewModel) ***REMOVED***
-    if (userName.isNotEmpty()) ***REMOVED***
+fun onNextClick(userName: String, navController: NavHostController, viewModel: ProfileViewModel) {
+    if (userName.isNotEmpty()) {
         viewModel.createUserId()
         navController.navigate(SyncStageScreen.CreateJoinSession.name)
-    ***REMOVED***
-***REMOVED***
+    }
+}

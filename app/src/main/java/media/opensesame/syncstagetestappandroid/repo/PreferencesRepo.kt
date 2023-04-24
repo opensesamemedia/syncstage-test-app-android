@@ -5,38 +5,38 @@ import javax.inject.Inject
 
 class PreferencesRepo @Inject constructor(
     private val context: Context
-) ***REMOVED***
+) {
     private val sharedPreferencesKey = "TestApp"
     private val userNameKey = "userName"
     private val userIdKey = "userId"
 
-    fun updateUserName(userName: String) ***REMOVED***
+    fun updateUserName(userName: String) {
         print(userName)
         val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        with(sharedPref.edit()) ***REMOVED***
+        with(sharedPref.edit()) {
             putString(userNameKey, userName)
             apply()
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    fun getUserName(): String ***REMOVED***
+    fun getUserName(): String {
         val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
         val userName = sharedPref.getString(userNameKey, "")
         return userName ?: ""
-    ***REMOVED***
+    }
 
-    fun getUserId(): String ***REMOVED***
+    fun getUserId(): String {
         val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
         val userName = sharedPref.getString(userIdKey, "")
         return userName ?: ""
-    ***REMOVED***
+    }
 
-    fun updateUserId(userId: String) ***REMOVED***
+    fun updateUserId(userId: String) {
         print(userId)
         val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        with(sharedPref.edit()) ***REMOVED***
+        with(sharedPref.edit()) {
             putString(userIdKey, userId)
             apply()
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

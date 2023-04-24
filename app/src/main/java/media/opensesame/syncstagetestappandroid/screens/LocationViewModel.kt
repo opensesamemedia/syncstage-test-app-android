@@ -32,58 +32,58 @@ class LocationViewModel @Inject constructor(
     private val context: WeakReference<Context>,
     private val syncStage: SyncStage,
     private val preferencesRepo: PreferencesRepo
-): ViewModel() ***REMOVED***
+): ViewModel() {
     private val _uiState = MutableStateFlow(ZonesUIState())
     val uiState: StateFlow<ZonesUIState> = _uiState.asStateFlow()
     lateinit var createSessionCallback: (sessionCode: String) -> Unit
 
-    fun updateSelectedZone(value: Zone) ***REMOVED***
-        _uiState.update ***REMOVED***
+    fun updateSelectedZone(value: Zone) {
+        _uiState.update {
             it.copy(selectedZone = value)
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    fun getZones() ***REMOVED***
-        CoroutineScope(Dispatchers.IO).launch ***REMOVED***
+    fun getZones() {
+        CoroutineScope(Dispatchers.IO).launch {
             val result = syncStage.zoneList()
-            if (result.second == SyncStageSDKErrorCode.OK) ***REMOVED***
-                val zones = result.first!!.flatMap ***REMOVED*** region ->
-                    region.zones.map ***REMOVED*** zone ->
-                        Zone(zone.zoneId, "$***REMOVED***region.regionName***REMOVED*** - $***REMOVED***zone.zoneName***REMOVED***")
-                    ***REMOVED***
-                ***REMOVED***
-                CoroutineScope(Dispatchers.Main).launch ***REMOVED***
-                    _uiState.update ***REMOVED***
+            if (result.second == SyncStageSDKErrorCode.OK) {
+                val zones = result.first!!.flatMap { region ->
+                    region.zones.map { zone ->
+                        Zone(zone.zoneId, "${region.regionName} - ${zone.zoneName}")
+                    }
+                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    _uiState.update {
                         it.copy(zones = zones)
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED*** else ***REMOVED***
-                CoroutineScope(Dispatchers.Main).launch ***REMOVED***
-                    context.get()?.let ***REMOVED***
-                        Toast.makeText(it, "Failed to get zones - $***REMOVED***result.second***REMOVED***.", Toast.LENGTH_LONG).show()
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+                    }
+                }
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    context.get()?.let {
+                        Toast.makeText(it, "Failed to get zones - ${result.second}.", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
 
-    fun createNewSession() ***REMOVED***
+    fun createNewSession() {
         val userId = preferencesRepo.getUserId()
-        CoroutineScope(Dispatchers.IO).launch ***REMOVED***
+        CoroutineScope(Dispatchers.IO).launch {
             val result = syncStage.createSession(_uiState.value.selectedZone.zoneId, userId = userId)
-            if (result.second == SyncStageSDKErrorCode.OK) ***REMOVED***
-                result.first?.sessionCode.let ***REMOVED*** sessionCode ->
-                    CoroutineScope(Dispatchers.Main).launch ***REMOVED***
+            if (result.second == SyncStageSDKErrorCode.OK) {
+                result.first?.sessionCode.let { sessionCode ->
+                    CoroutineScope(Dispatchers.Main).launch {
                         createSessionCallback(sessionCode!!)
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED*** else ***REMOVED***
-                CoroutineScope(Dispatchers.Main).launch ***REMOVED***
-                    context.get()?.let ***REMOVED***
-                        Toast.makeText(it, "Failed to create new session - $***REMOVED***result.second***REMOVED***.", Toast.LENGTH_LONG).show()
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+                    }
+                }
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    context.get()?.let {
+                        Toast.makeText(it, "Failed to create new session - ${result.second}.", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+}

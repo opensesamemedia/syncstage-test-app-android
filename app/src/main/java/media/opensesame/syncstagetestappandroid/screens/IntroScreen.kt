@@ -25,43 +25,43 @@ import media.opensesame.syncstagetestappandroid.SyncStageScreen
 
 
 @Composable
-fun IntroScreen(navController: NavHostController, introViewModel: IntroViewModel = hiltViewModel()) ***REMOVED***
+fun IntroScreen(navController: NavHostController, introViewModel: IntroViewModel = hiltViewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center
-    ) ***REMOVED***
+    ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .fillMaxHeight()) ***REMOVED***
+                .fillMaxHeight()) {
             Image(painter = painterResource(id = R.drawable.syncstage), contentDescription = "", modifier = Modifier.size(120.dp))
             Spacer(modifier = Modifier.size(10.dp))
             Text(text = "SyncStage Example Application", fontWeight = FontWeight.Bold, style = TextStyle(fontSize = 17.sp))
             Spacer(modifier = Modifier.size(10.dp))
-            Text(text = " $***REMOVED***introViewModel.getAppVersion()***REMOVED***", fontWeight = FontWeight.Bold, style = TextStyle(fontSize = 17.sp))
+            Text(text = " ${introViewModel.getAppVersion()}", fontWeight = FontWeight.Bold, style = TextStyle(fontSize = 17.sp))
             Text(
-                buildAnnotatedString ***REMOVED***
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) ***REMOVED***
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                         append("SyncStage")
-                    ***REMOVED***
+                    }
                     append(" is a patent-pending voice chat platform that allows you to sing, jam, learn, win together with audio latency lower ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) ***REMOVED***
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                         append("than ever before.")
-                    ***REMOVED***
-              ***REMOVED***
+                    }
+                },
                 modifier = Modifier.padding(30.dp),
                 textAlign = TextAlign.Center
             )
 
-            Button(onClick = ***REMOVED***
+            Button(onClick = {
                 navController.navigate(SyncStageScreen.Access.name)
-            ***REMOVED***) ***REMOVED***
+            }) {
                 Text(text = "START")
-            ***REMOVED***
+            }
 
-        ***REMOVED***
+        }
 
-    ***REMOVED***
-***REMOVED***
+    }
+}

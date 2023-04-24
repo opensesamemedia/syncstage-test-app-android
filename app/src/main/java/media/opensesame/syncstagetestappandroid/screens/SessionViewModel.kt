@@ -54,281 +54,281 @@ class SessionViewModel @Inject constructor(
     private val context: WeakReference<Context>,
     private val syncStage: SyncStage,
     private val preferencesRepo: PreferencesRepo
-): ViewModel(), SyncStageUserDelegate, SyncStageConnectivityDelegate ***REMOVED***
+): ViewModel(), SyncStageUserDelegate, SyncStageConnectivityDelegate {
     private val _uiState = MutableStateFlow(SessionUIState())
     val uiState: StateFlow<SessionUIState> = _uiState.asStateFlow()
     lateinit var sessionLeft: () -> Unit
 
-    private val connectivityManager by lazy ***REMOVED*** context.get()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager ***REMOVED***
-    private val telephonyManager by lazy ***REMOVED*** context.get()?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager ***REMOVED***
+    private val connectivityManager by lazy { context.get()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
+    private val telephonyManager by lazy { context.get()?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager }
     private lateinit var detection5G: Detection5G
     private var networkType: String = ""
 
-    init ***REMOVED***
+    init {
         initWidgetsState()
-    ***REMOVED***
+    }
 
-    private val timer = timer("refresh", period = 5000.toLong(), action = ***REMOVED***
-        _uiState.update ***REMOVED***
+    private val timer = timer("refresh", period = 5000.toLong(), action = {
+        _uiState.update {
             it.copy(
                 date = Date()
             )
-        ***REMOVED***
-    ***REMOVED***)
+        }
+    })
 
     val isMuted: Boolean
-        get() ***REMOVED***
+        get() {
             val connection = uiState.value.connections.firstOrNull()
             return connection?.isMuted ?: false
-        ***REMOVED***
+        }
 
 
     val isDirectMonitorEnabled: Boolean
-        get() ***REMOVED***
+        get() {
             return uiState.value.directMonitorEnabled
-        ***REMOVED***
+        }
 
     val isInternalMicrophoneEnabled: Boolean
-        get() ***REMOVED***
+        get() {
             return uiState.value.internalMicrophoneEnabled
-        ***REMOVED***
+        }
 
     val transmitterIdentifier: String
-        get() ***REMOVED***
+        get() {
             val identifier = uiState.value.session?.transmitter?.identifier
             return identifier ?: ""
-        ***REMOVED***
+        }
 
-    private fun initWidgetsState() ***REMOVED***
-        _uiState.update ***REMOVED*** sessionUIState ->
+    private fun initWidgetsState() {
+        _uiState.update { sessionUIState ->
             sessionUIState.copy(
                 directMonitorVolume = syncStage.getDirectMonitorVolume().toFloat() / 100,
                 directMonitorEnabled = syncStage.getDirectMonitorEnabled(),
                 internalMicrophoneEnabled = syncStage.getInternalMicEnabled(),
             )
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    fun initiate5GDetection() ***REMOVED***
-        context.get()?.let ***REMOVED***
+    fun initiate5GDetection() {
+        context.get()?.let {
             detection5G = Detection5G(
                 ctx = it,
                 connectivityManager = connectivityManager,
-                onNetworkTypeChange = ***REMOVED*** networkTypeName ->
+                onNetworkTypeChange = { networkTypeName ->
                     networkType = networkTypeName
-                    _uiState.update ***REMOVED*** sessionUIState ->
+                    _uiState.update { sessionUIState ->
                         sessionUIState.copy(
                             networkType = networkTypeName
                         )
-                    ***REMOVED***
-              ***REMOVED***
+                    }
+                },
                 telephonyManager = telephonyManager
             )
             detection5G.startListenNetworkType()
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    private fun updateSession(value: Session) ***REMOVED***
+    private fun updateSession(value: Session) {
         val connections: MutableList<ConnectionModel> = mutableListOf()
-        value.transmitter?.let ***REMOVED***
+        value.transmitter?.let {
             connections.add(ConnectionModel(identifier = it.identifier, userId = it.userId, displayName = it.displayName, isMuted = it.isMuted))
-        ***REMOVED***
-        value.receivers.forEach ***REMOVED*** receiver ->
+        }
+        value.receivers.forEach { receiver ->
             connections.add(ConnectionModel(identifier = receiver.identifier,
                 userId = receiver.userId,
                 displayName = receiver.displayName,
                 isMuted = receiver.isMuted))
-        ***REMOVED***
-        _uiState.update ***REMOVED*** sessionUIState ->
+        }
+        _uiState.update { sessionUIState ->
             sessionUIState.copy(
                 connections = connections,
                 session = value
             )
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    private fun updateConnection(identifier: String, update: (ConnectionModel) -> ConnectionModel) ***REMOVED***
-        CoroutineScope(Dispatchers.Main).launch ***REMOVED***
+    private fun updateConnection(identifier: String, update: (ConnectionModel) -> ConnectionModel) {
+        CoroutineScope(Dispatchers.Main).launch {
             val connections = uiState.value.connections.toMutableList()
-            val index = connections.indexOfFirst ***REMOVED*** it.identifier == identifier ***REMOVED***
-            if (index != -1) ***REMOVED***
+            val index = connections.indexOfFirst { it.identifier == identifier }
+            if (index != -1) {
                 connections[index] = update(connections[index])
-                _uiState.update ***REMOVED*** sessionUIState ->
+                _uiState.update { sessionUIState ->
                     sessionUIState.copy(
                         connections = connections
                     )
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+                }
+            }
+        }
+    }
 
-    fun changeReceiverVolume(identifier: String, value: Float) ***REMOVED***
+    fun changeReceiverVolume(identifier: String, value: Float) {
         val result = syncStage.changeReceiverVolume(identifier = identifier, volume = value.toInt())
-        if (result == SyncStageSDKErrorCode.OK) ***REMOVED***
-            updateConnection(identifier) ***REMOVED***
+        if (result == SyncStageSDKErrorCode.OK) {
+            updateConnection(identifier) {
                 it.copy(volume = value)
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
+    }
 
-    fun getReceiverVolume(identifier: String): Int ***REMOVED***
+    fun getReceiverVolume(identifier: String): Int {
         return syncStage.getReceiverVolume(identifier = identifier)
-    ***REMOVED***
+    }
 
-    private fun getDirectMonitorVolume(): Int ***REMOVED***
+    private fun getDirectMonitorVolume(): Int {
         val dmVolume = syncStage.getDirectMonitorVolume()
-        _uiState.update ***REMOVED*** sessionUIState ->
+        _uiState.update { sessionUIState ->
             sessionUIState.copy(
                 directMonitorVolume = (dmVolume/100).toFloat(),
             )
-        ***REMOVED***
+        }
 
         return dmVolume
-    ***REMOVED***
+    }
 
-    fun changeDirectMonitorVolume(volume: Float) ***REMOVED***
+    fun changeDirectMonitorVolume(volume: Float) {
         val result = syncStage.changeDirectMonitorVolume((volume * 100).toInt())
-        if (result == SyncStageSDKErrorCode.OK) ***REMOVED***
-            _uiState.update ***REMOVED*** sessionUIState ->
+        if (result == SyncStageSDKErrorCode.OK) {
+            _uiState.update { sessionUIState ->
                 sessionUIState.copy(
                     directMonitorVolume = volume,
                 )
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
+    }
 
-    fun toggleDirectMonitor(value: Boolean) ***REMOVED***
+    fun toggleDirectMonitor(value: Boolean) {
         val result = syncStage.toggleDirectMonitor(value)
-        if (result == SyncStageSDKErrorCode.OK) ***REMOVED***
-            _uiState.update ***REMOVED***
+        if (result == SyncStageSDKErrorCode.OK) {
+            _uiState.update {
                 it.copy(
                     directMonitorEnabled = value
                 )
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
+    }
 
-    fun toggleInternalMicrophone(value: Boolean) ***REMOVED***
+    fun toggleInternalMicrophone(value: Boolean) {
         val result = syncStage.toggleInternalMic(value)
-        if (result == SyncStageSDKErrorCode.OK) ***REMOVED***
-            _uiState.update ***REMOVED***
+        if (result == SyncStageSDKErrorCode.OK) {
+            _uiState.update {
                 it.copy(
                     internalMicrophoneEnabled = value
                 )
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
+    }
 
-    fun joinSession(sessionCode: String) ***REMOVED***
+    fun joinSession(sessionCode: String) {
         syncStage.userDelegate = this
         syncStage.connectivityDelegate = this
         val displayName = preferencesRepo.getUserName()
         val userId = preferencesRepo.getUserId()
-        CoroutineScope(Dispatchers.IO).launch ***REMOVED***
+        CoroutineScope(Dispatchers.IO).launch {
             val result = syncStage.join(sessionCode = sessionCode, userId = userId, displayName = displayName)
-            if(result.second == SyncStageSDKErrorCode.OK) ***REMOVED***
-                context.get()?.let ***REMOVED***
+            if(result.second == SyncStageSDKErrorCode.OK) {
+                context.get()?.let {
                     sendCommandToService(ACTION_START_SERVICE, it)
-                ***REMOVED***
+                }
                 val session = result.first
-                session?.let ***REMOVED***
-                    CoroutineScope(Dispatchers.Main).launch ***REMOVED***
+                session?.let {
+                    CoroutineScope(Dispatchers.Main).launch {
                         updateSession(it)
-                    ***REMOVED***
-                ***REMOVED***
+                    }
+                }
                 getDirectMonitorVolume()
-            ***REMOVED*** else ***REMOVED***
-                CoroutineScope(Dispatchers.Main).launch ***REMOVED***
-                    context.get()?.let ***REMOVED***
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    context.get()?.let {
                         Toast.makeText(it, "Could not join the session. Please check the session code.", Toast.LENGTH_LONG).show()
-                    ***REMOVED***
+                    }
                     sessionOut()
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+                }
+            }
+        }
+    }
 
-    fun toggleMicrophone(value: Boolean) ***REMOVED***
+    fun toggleMicrophone(value: Boolean) {
         val result = syncStage.toggleMicrophone(value)
-        if (result == SyncStageSDKErrorCode.OK) ***REMOVED***
-            updateConnection(transmitterIdentifier) ***REMOVED*** connection ->
+        if (result == SyncStageSDKErrorCode.OK) {
+            updateConnection(transmitterIdentifier) { connection ->
                 connection.copy(isMuted = value)
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
+    }
 
-    fun leaveSession() ***REMOVED***
+    fun leaveSession() {
         timer.cancel()
-        CoroutineScope(Dispatchers.IO).launch ***REMOVED***
-            context.get()?.let ***REMOVED***
+        CoroutineScope(Dispatchers.IO).launch {
+            context.get()?.let {
                 sendCommandToService(ACTION_STOP_SERVICE, it)
-            ***REMOVED***
+            }
             val result = syncStage.leave()
-            if(result == SyncStageSDKErrorCode.OK) ***REMOVED***
-                CoroutineScope(Dispatchers.Main).launch ***REMOVED***
+            if(result == SyncStageSDKErrorCode.OK) {
+                CoroutineScope(Dispatchers.Main).launch {
                     sessionLeft()
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+                }
+            }
+        }
+    }
 
-    fun getMeasurements(identifier: String): Measurements ***REMOVED***
-        return if(identifier == transmitterIdentifier) ***REMOVED***
+    fun getMeasurements(identifier: String): Measurements {
+        return if(identifier == transmitterIdentifier) {
             syncStage.getTransmitterMeasurements()
-        ***REMOVED*** else ***REMOVED***
+        } else {
             syncStage.getReceiverMeasurements(identifier = identifier)
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    override fun sessionOut() ***REMOVED***
+    override fun sessionOut() {
         sessionLeft()
-    ***REMOVED***
+    }
 
-    override fun userJoined(connection: Connection) ***REMOVED***
-        _uiState.update ***REMOVED***
+    override fun userJoined(connection: Connection) {
+        _uiState.update {
             val connections = it.connections.toMutableList()
             connections.add(ConnectionModel(identifier = connection.identifier, userId = connection.userId, displayName = connection.displayName, isMuted = connection.isMuted))
             it.copy(
                 connections = connections
             )
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    override fun userLeft(identifier: String) ***REMOVED***
-        _uiState.update ***REMOVED*** sessionUIState ->
+    override fun userLeft(identifier: String) {
+        _uiState.update { sessionUIState ->
             val connections = sessionUIState.connections.toMutableList()
-            connections.removeIf ***REMOVED*** connection ->
+            connections.removeIf { connection ->
                 connection.identifier == identifier
-            ***REMOVED***
+            }
             sessionUIState.copy(
                 connections = connections
             )
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    override fun userMuted(identifier: String) ***REMOVED***
-        updateConnection(identifier) ***REMOVED*** connection ->
+    override fun userMuted(identifier: String) {
+        updateConnection(identifier) { connection ->
             connection.copy(isMuted = true)
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    override fun userUnmuted(identifier: String) ***REMOVED***
-        updateConnection(identifier) ***REMOVED*** connection ->
+    override fun userUnmuted(identifier: String) {
+        updateConnection(identifier) { connection ->
             connection.copy(isMuted = false)
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    override fun receiverConnectivityChanged(identifier: String, connected: Boolean) ***REMOVED***
-        updateConnection(identifier) ***REMOVED*** connection ->
+    override fun receiverConnectivityChanged(identifier: String, connected: Boolean) {
+        updateConnection(identifier) { connection ->
             connection.copy(isConnected = connected)
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    override fun transmitterConnectivityChanged(connected: Boolean) ***REMOVED***
-        if(transmitterIdentifier == _uiState.value.connections.firstOrNull()?.identifier) ***REMOVED***
-            updateConnection(transmitterIdentifier) ***REMOVED***
+    override fun transmitterConnectivityChanged(connected: Boolean) {
+        if(transmitterIdentifier == _uiState.value.connections.firstOrNull()?.identifier) {
+            updateConnection(transmitterIdentifier) {
                 it.copy(isConnected = connected)
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+            }
+        }
+    }
+}

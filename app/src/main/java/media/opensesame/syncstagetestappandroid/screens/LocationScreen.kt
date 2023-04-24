@@ -26,31 +26,31 @@ import media.opensesame.syncstagetestappandroid.SyncStageScreen
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 
 @Composable
-fun LocationScreen(navController: NavHostController, zoneViewModel: LocationViewModel = hiltViewModel()) ***REMOVED***
+fun LocationScreen(navController: NavHostController, zoneViewModel: LocationViewModel = hiltViewModel()) {
     val zoneUIState by zoneViewModel.uiState.collectAsState()
 
-    var mTextFieldSize by remember ***REMOVED*** mutableStateOf(Size.Zero) ***REMOVED***
-    var mExpanded by remember ***REMOVED*** mutableStateOf(false) ***REMOVED***
-    var showLoadingIndicator by remember ***REMOVED*** mutableStateOf(false) ***REMOVED***
+    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
+    var mExpanded by remember { mutableStateOf(false) }
+    var showLoadingIndicator by remember { mutableStateOf(false) }
 
-    zoneViewModel.createSessionCallback = ***REMOVED*** sessionCode ->
+    zoneViewModel.createSessionCallback = { sessionCode ->
         showLoadingIndicator = false
         navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=$sessionCode")
-    ***REMOVED***
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center
-    ) ***REMOVED***
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .padding(30.dp)
                 .padding(bottom = 50.dp)
-        ) ***REMOVED***
+        ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = "Session Location",
@@ -66,21 +66,21 @@ fun LocationScreen(navController: NavHostController, zoneViewModel: LocationView
             )
             Box(contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .clickable ***REMOVED***
+                    .clickable {
                         mExpanded = !mExpanded
-                    ***REMOVED***
+                    }
                     .fillMaxWidth()
                     .border(width = 2.dp, color = Color.Blue, shape = RoundedCornerShape(5.dp))
                     .height(60.dp)
-                    .onGloballyPositioned ***REMOVED***
+                    .onGloballyPositioned {
                         mTextFieldSize = it.size.toSize()
-                    ***REMOVED***
-            ) ***REMOVED***
+                    }
+            ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
-                ) ***REMOVED***
+                ) {
                     Text(zoneUIState.selectedZone.ZoneName, modifier = Modifier.padding(start = 10.dp))
                     Spacer(modifier = Modifier.weight(1.0f))
                     val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
@@ -88,42 +88,42 @@ fun LocationScreen(navController: NavHostController, zoneViewModel: LocationView
                         icon, "contentDescription",
                         Modifier.padding(end = 10.dp).size(30.dp, 30.dp)
                     )
-                ***REMOVED***
+                }
                 DropdownMenu(
                     expanded = mExpanded,
-                    onDismissRequest = ***REMOVED*** mExpanded = false ***REMOVED***,
+                    onDismissRequest = { mExpanded = false },
                     modifier = Modifier
-                        .width(with(LocalDensity.current) ***REMOVED***
+                        .width(with(LocalDensity.current) {
                             mTextFieldSize.width.toDp()
-                        ***REMOVED***)
+                        })
                         .fillMaxHeight(0.3f)
-                ) ***REMOVED***
-                    zoneUIState.zones.forEach ***REMOVED*** zone ->
-                        DropdownMenuItem(onClick = ***REMOVED***
+                ) {
+                    zoneUIState.zones.forEach { zone ->
+                        DropdownMenuItem(onClick = {
                             zoneViewModel.updateSelectedZone(zone)
                             mExpanded = false
-                        ***REMOVED***) ***REMOVED***
+                        }) {
                             Text(text = zone.ZoneName)
-                        ***REMOVED***
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
-            Button(onClick = ***REMOVED***
+                        }
+                    }
+                }
+            }
+            Button(onClick = {
                 showLoadingIndicator = true
                 zoneViewModel.createNewSession()
                 //navController.navigate(SyncStageScreen.Session.name)
-          ***REMOVED*** modifier = Modifier.padding(top = 20.dp), enabled = zoneUIState.selectedZone.zoneId.isNotEmpty()) ***REMOVED***
+            }, modifier = Modifier.padding(top = 20.dp), enabled = zoneUIState.selectedZone.zoneId.isNotEmpty()) {
                 Text(text = "START NOW")
-            ***REMOVED***
-        ***REMOVED***
-        if (zoneUIState.zones.isEmpty() || showLoadingIndicator) ***REMOVED***
+            }
+        }
+        if (zoneUIState.zones.isEmpty() || showLoadingIndicator) {
             LoadingIndicator()
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    LaunchedEffect(Unit) ***REMOVED***
-        if (zoneUIState.zones.isEmpty()) ***REMOVED***
+    LaunchedEffect(Unit) {
+        if (zoneUIState.zones.isEmpty()) {
             zoneViewModel.getZones()
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

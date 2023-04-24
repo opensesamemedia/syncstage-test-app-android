@@ -32,12 +32,12 @@ private val LightColorPalette = lightColors(
 fun SyncStageTestAppAndroidTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
-) ***REMOVED***
-    val colors = if (darkTheme) ***REMOVED***
+) {
+    val colors = if (darkTheme) {
         DarkColorPalette
-    ***REMOVED*** else ***REMOVED***
+    } else {
         LightColorPalette
-    ***REMOVED***
+    }
 
     MaterialTheme(
         colors = colors,
@@ -45,4 +45,4 @@ fun SyncStageTestAppAndroidTheme(
         shapes = Shapes,
         content = content
     )
-***REMOVED***
+}

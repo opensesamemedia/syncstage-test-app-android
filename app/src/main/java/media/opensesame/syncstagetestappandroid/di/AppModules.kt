@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModules ***REMOVED***
+class AppModules {
     @Singleton
     @Provides
     fun provideContext(application: Application): WeakReference<Context> = WeakReference(application.applicationContext)
@@ -26,4 +26,4 @@ class AppModules ***REMOVED***
     @Singleton
     @Provides
     fun provideSyncStage(@ApplicationContext context: Context) = SyncStage(context)
-***REMOVED***
+}

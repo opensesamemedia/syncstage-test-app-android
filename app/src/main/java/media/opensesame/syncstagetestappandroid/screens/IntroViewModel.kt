@@ -9,8 +9,8 @@ import media.opensesame.syncstagetestappandroid.BuildConfig
 @HiltViewModel
 class IntroViewModel @Inject constructor(
     private val syncStage: SyncStage
-): ViewModel() ***REMOVED***
-   fun getAppVersion(): String***REMOVED***
+): ViewModel() {
+   fun getAppVersion(): String{
        return BuildConfig.VERSION_NAME
-   ***REMOVED***
-***REMOVED***
+   }
+}

@@ -22,27 +22,27 @@ import media.opensesame.syncstagetestappandroid.SyncStageScreen
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 
 @Composable
-fun CreateJoinSessionScreen(navController: NavHostController, createJoinViewModel: CreateJoinViewModel = hiltViewModel()) ***REMOVED***
+fun CreateJoinSessionScreen(navController: NavHostController, createJoinViewModel: CreateJoinViewModel = hiltViewModel()) {
     val loginUIState by createJoinViewModel.uiState.collectAsState()
-    var isEmptyTextField by remember ***REMOVED*** mutableStateOf(true) ***REMOVED***
-    val onSessionCodeChange = ***REMOVED*** text: String ->
+    var isEmptyTextField by remember { mutableStateOf(true) }
+    val onSessionCodeChange = { text: String ->
         createJoinViewModel.updateSessionCode(text)
         isEmptyTextField = text.isEmpty()
-    ***REMOVED***
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center
-    ) ***REMOVED***
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .padding(30.dp)
                 .padding(bottom = 50.dp)
-        ) ***REMOVED***
+        ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = "Sessions",
@@ -60,44 +60,44 @@ fun CreateJoinSessionScreen(navController: NavHostController, createJoinViewMode
                 value = loginUIState.sessionCode,
                 singleLine = true,
                 onValueChange = onSessionCodeChange,
-                placeholder = ***REMOVED*** Text(text = "XXX-XXX-XXX") ***REMOVED***,
+                placeholder = { Text(text = "XXX-XXX-XXX") },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
-                    onNext = ***REMOVED*** // on next.
-                        if (loginUIState.sessionCode.isNotEmpty()) ***REMOVED***
-                            navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=$***REMOVED***loginUIState.sessionCode***REMOVED***")
-                        ***REMOVED***
-                    ***REMOVED***
+                    onNext = { // on next.
+                        if (loginUIState.sessionCode.isNotEmpty()) {
+                            navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${loginUIState.sessionCode}")
+                        }
+                    }
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 10.dp),
                 enabled = loginUIState.loggedIn
             )
-            Button(onClick = ***REMOVED***
-                if (loginUIState.sessionCode.isNotEmpty()) ***REMOVED***
-                    navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=$***REMOVED***loginUIState.sessionCode***REMOVED***")
-                ***REMOVED***
-          ***REMOVED*** enabled = loginUIState.sessionCode.isNotEmpty() && loginUIState.loggedIn) ***REMOVED***
+            Button(onClick = {
+                if (loginUIState.sessionCode.isNotEmpty()) {
+                    navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${loginUIState.sessionCode}")
+                }
+            }, enabled = loginUIState.sessionCode.isNotEmpty() && loginUIState.loggedIn) {
                 Text(text = "JOIN")
-            ***REMOVED***
+            }
             Text(text = "Or")
-            Button(onClick = ***REMOVED***
+            Button(onClick = {
                 navController.navigate(SyncStageScreen.Location.name)
-          ***REMOVED*** enabled = loginUIState.loggedIn) ***REMOVED***
+            }, enabled = loginUIState.loggedIn) {
                 Text(text = "NEW SESSION")
-            ***REMOVED***
-        ***REMOVED***
-        if (!loginUIState.loggedIn) ***REMOVED***
+            }
+        }
+        if (!loginUIState.loggedIn) {
             LoadingIndicator()
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-    LaunchedEffect(Unit) ***REMOVED***
-        if(!loginUIState.loggedIn) ***REMOVED***
+    LaunchedEffect(Unit) {
+        if(!loginUIState.loggedIn) {
             createJoinViewModel.initiateSyncStage()
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}
