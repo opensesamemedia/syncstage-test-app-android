@@ -25,6 +25,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
 
@@ -40,8 +43,10 @@ fun SessionScreen(
     var showLoadingIndicator by remember { mutableStateOf(false) }
 
     sessionViewModel.sessionLeft = {
-        showLoadingIndicator = false
-        navController.popBackStack()
+        CoroutineScope(Dispatchers.Main).launch {
+            showLoadingIndicator = false
+            navController.popBackStack()
+        }
     }
 
     BackHandler {
