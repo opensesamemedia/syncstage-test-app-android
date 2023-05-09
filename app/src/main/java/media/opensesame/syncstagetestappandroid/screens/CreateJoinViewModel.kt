@@ -74,7 +74,6 @@ class CreateJoinViewModel @Inject constructor(
                                 .show()
                         }
                     }
-                    throw RuntimeException("SyncStage init retries exceeded.")
                 }
 
             } else {
