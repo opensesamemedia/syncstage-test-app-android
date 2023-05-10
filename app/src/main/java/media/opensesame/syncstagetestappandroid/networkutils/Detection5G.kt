@@ -162,7 +162,7 @@ class Detection5G(
                 } catch (e: SecurityException) {
                     Log.e(
                         TAG,
-                        "Could not register telephony callback. Insufficient permissions. ${e.toString()}"
+                        "Could not register telephony callback. Insufficient permissions. $e"
                     )
                 }
             } else {

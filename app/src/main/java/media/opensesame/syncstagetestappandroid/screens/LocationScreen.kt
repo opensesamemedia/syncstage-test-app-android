@@ -6,22 +6,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -61,7 +62,7 @@ fun LocationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 text = "Session Location",
                 textAlign = TextAlign.Left,
-                style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.titleLarge
             )
             Text(
                 text = "Select the closest location for all session participants.",
@@ -76,7 +77,11 @@ fun LocationScreen(
                         mExpanded = !mExpanded
                     }
                     .fillMaxWidth()
-                    .border(width = 2.dp, color = Color.Blue, shape = RoundedCornerShape(5.dp))
+                    .border(
+                        width = 2.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(5.dp)
+                    )
                     .height(60.dp)
                     .onGloballyPositioned {
                         mTextFieldSize = it.size.toSize()
@@ -115,7 +120,10 @@ fun LocationScreen(
                             zoneViewModel.updateSelectedZone(zone)
                             mExpanded = false
                         }) {
-                            Text(text = zone.ZoneName)
+                            Text(
+                                text = zone.ZoneName,
+                                color = MaterialTheme.colorScheme.inverseOnSurface
+                            )
                         }
                     }
                 }

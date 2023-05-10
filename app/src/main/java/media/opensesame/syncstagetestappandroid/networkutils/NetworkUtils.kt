@@ -27,7 +27,7 @@ fun isLocationEnabled(context: Context): Boolean {
         // This is a new method provided in API 28
         val lm: LocationManager =
             context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        lm.isLocationEnabled()
+        lm.isLocationEnabled
     } else {
         // This was deprecated in API 28
         val mode: Int = Settings.Secure.getInt(
