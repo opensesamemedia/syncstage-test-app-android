@@ -27,12 +27,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 
 @Composable
 fun SessionScreen(
@@ -54,6 +61,16 @@ fun SessionScreen(
 
     BackHandler {
         sessionViewModel.leaveSession()
+    }
+
+    LaunchedEffect(key1 = sessionViewModel){
+        sessionViewModel.startForegroundService()
+    }
+
+    DisposableEffect(key1 = sessionViewModel) {
+        onDispose {
+            sessionViewModel.stopForegroundService()
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {

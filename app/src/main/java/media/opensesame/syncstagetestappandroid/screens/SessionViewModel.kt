@@ -4,6 +4,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.telephony.TelephonyManager
 import android.widget.Toast
+import androidx.compose.runtime.remember
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -49,6 +54,7 @@ data class SessionUIState(
     val internalMicrophoneEnabled: Boolean = false
 )
 
+
 @HiltViewModel
 class SessionViewModel @Inject constructor(
     private val context: WeakReference<Context>,
@@ -67,6 +73,8 @@ class SessionViewModel @Inject constructor(
     }
     private lateinit var detection5G: Detection5G
     private var networkType: String = ""
+
+
 
     init {
         initWidgetsState()
@@ -246,9 +254,6 @@ class SessionViewModel @Inject constructor(
                 displayName = displayName
             )
             if (result.second == SyncStageSDKErrorCode.OK) {
-                context.get()?.let {
-                    sendCommandToService(ACTION_START_SERVICE, it)
-                }
                 val session = result.first
                 session?.let {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -283,9 +288,7 @@ class SessionViewModel @Inject constructor(
     fun leaveSession() {
         timer.cancel()
         CoroutineScope(Dispatchers.IO).launch {
-            context.get()?.let {
-                sendCommandToService(ACTION_STOP_SERVICE, it)
-            }
+
             val result = syncStage.leave()
             if (result == SyncStageSDKErrorCode.OK) {
                 CoroutineScope(Dispatchers.Main).launch {
@@ -300,6 +303,18 @@ class SessionViewModel @Inject constructor(
             syncStage.getTransmitterMeasurements()
         } else {
             syncStage.getReceiverMeasurements(identifier = identifier)
+        }
+    }
+
+    fun startForegroundService(){
+        context.get()?.let {
+            sendCommandToService(ACTION_START_SERVICE, it)
+        }
+    }
+
+    fun stopForegroundService(){
+        context.get()?.let {
+            sendCommandToService(ACTION_STOP_SERVICE, it)
         }
     }
 
