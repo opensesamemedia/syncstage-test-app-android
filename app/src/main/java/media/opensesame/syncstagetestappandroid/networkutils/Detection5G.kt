@@ -1,4 +1,4 @@
-package media.opensesame.networkutils
+package media.opensesame.syncstagetestappandroid.networkutils
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,6 +10,8 @@ import android.provider.Settings
 import android.telephony.*
 import android.util.Log
 import androidx.core.content.ContextCompat
+import media.opensesame.networkutils.getNetworkTypeOldAPI
+import media.opensesame.networkutils.isWifiConnected
 
 
 // === 5G listeners based on https://github.com/takusan23/NewRadioAPIChecker

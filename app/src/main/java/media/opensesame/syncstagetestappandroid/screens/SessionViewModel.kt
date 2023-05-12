@@ -4,11 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.telephony.TelephonyManager
 import android.widget.Toast
-import androidx.compose.runtime.remember
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -18,7 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import media.opensesame.networkutils.Detection5G
+import media.opensesame.syncstagetestappandroid.networkutils.Detection5G
 import media.opensesame.syncstagesdk.SyncStage
 import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
 import media.opensesame.syncstagesdk.delegates.SyncStageConnectivityDelegate
