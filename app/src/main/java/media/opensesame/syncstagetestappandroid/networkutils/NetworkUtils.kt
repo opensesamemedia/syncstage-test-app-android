@@ -17,6 +17,10 @@ fun decodeNetworkType(
     context: Context?,
 ): String {
 
+    if (context != null && isWifiConnected(context)){
+        return "WIFI"
+    }
+
     val baseTypeString = when(telephony?.networkType) {
         TelephonyManager.NETWORK_TYPE_CDMA -> "CDMA"
         TelephonyManager.NETWORK_TYPE_1xRTT -> "1xRTT"
