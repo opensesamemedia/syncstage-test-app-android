@@ -2,18 +2,19 @@ package media.opensesame.syncstagetestappandroid.screens
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.os.Build
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyCallback
+import android.telephony.TelephonyDisplayInfo
 import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import media.opensesame.syncstagetestappandroid.networkutils.Detection5G
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
+import media.opensesame.syncstagesdk.LogUtil
 import media.opensesame.syncstagesdk.SyncStage
 import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
 import media.opensesame.syncstagesdk.delegates.SyncStageConnectivityDelegate
@@ -23,10 +24,12 @@ import media.opensesame.syncstagesdk.models.public.Measurements
 import media.opensesame.syncstagesdk.models.public.Session
 import media.opensesame.syncstagetestappandroid.ACTION_START_SERVICE
 import media.opensesame.syncstagetestappandroid.ACTION_STOP_SERVICE
+import media.opensesame.syncstagetestappandroid.networkutils.getNetworkTypeOldAPI
 import media.opensesame.syncstagetestappandroid.repo.PreferencesRepo
 import media.opensesame.syncstagetestappandroid.sendCommandToService
 import java.lang.ref.WeakReference
 import java.util.*
+import java.util.concurrent.Executors
 import javax.inject.Inject
 import kotlin.concurrent.timer
 
@@ -42,7 +45,7 @@ data class ConnectionModel(
 data class SessionUIState(
     val session: Session? = null,
     val connections: MutableList<ConnectionModel> = mutableListOf(),
-    val networkType: String = "",
+    val networkTypeOldApi: String = "",
     val date: Date = Date(),
     val directMonitorEnabled: Boolean = false,
     val directMonitorVolume: Float = 1F,
@@ -52,7 +55,7 @@ data class SessionUIState(
 
 @HiltViewModel
 class SessionViewModel @Inject constructor(
-    private val context: WeakReference<Context>,
+    val context: WeakReference<Context>,
     private val syncStage: SyncStage,
     private val preferencesRepo: PreferencesRepo
 ) : ViewModel(), SyncStageUserDelegate, SyncStageConnectivityDelegate {
@@ -66,13 +69,72 @@ class SessionViewModel @Inject constructor(
     private val telephonyManager by lazy {
         context.get()?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     }
-    private lateinit var detection5G: Detection5G
-    private var networkType: String = ""
+    private var networkTypeOldApiJob: Job? = null
 
+    private fun startNetworkTypeOldApiJob() {
+        if (networkTypeOldApiJob == null && Build.VERSION.SDK_INT < 30) {
+            networkTypeOldApiJob = viewModelScope.launch(Dispatchers.IO) {
+                while (true) {
+                    LogUtil.d("SessionViewModel", "Running networkTypeOldApiJob")
+                    context.get()?.let {
+                        _uiState.update { sessionUIState ->
+                            sessionUIState.copy(
+                                networkTypeOldApi = getNetworkTypeOldAPI(it)
+                            )
+                        }
+                    }
+                    delay(2000)
+                }
+            }
+        }
+    }
+
+    // Based on https://github.com/tdcolvin/NetworkTypeDetector
+    val telephonyType = callbackFlow {
+        // The thread Executor used to run the listener. This governs how threads are created and
+        // reused. Here we use a single thread.
+        val exec = Executors.newSingleThreadExecutor()
+
+        if (Build.VERSION.SDK_INT >= 31) {
+            // SDK >= 31 uses TelephonyManager.registerTelephonyCallback() to listen for
+            // TelephonyDisplayInfo changes.
+            // It does not require any permissions.
+
+            val callback = object : TelephonyCallback(), TelephonyCallback.DisplayInfoListener {
+                override fun onDisplayInfoChanged(telephonyDisplayInfo: TelephonyDisplayInfo) {
+                    trySend(telephonyDisplayInfo)
+                }
+            }
+            telephonyManager.registerTelephonyCallback(exec, callback)
+
+            awaitClose {
+                telephonyManager.unregisterTelephonyCallback(callback)
+                exec.shutdown()
+            }
+        }
+        else {
+            // SDK 30 uses TelephonyManager.listen() to listen for TelephonyDisplayInfo changes.
+            // It requires READ_PHONE_STATE permission.
+
+            @Suppress("OVERRIDE_DEPRECATION")
+            val callback = object : PhoneStateListener(exec) {
+                override fun onDisplayInfoChanged(telephonyDisplayInfo: TelephonyDisplayInfo) {
+                    trySend(telephonyDisplayInfo)
+                }
+            }
+            telephonyManager.listen(callback, PhoneStateListener.LISTEN_DISPLAY_INFO_CHANGED)
+
+            awaitClose {
+                telephonyManager.listen(callback, 0)
+                exec.shutdown()
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
 
     init {
         initWidgetsState()
+        startNetworkTypeOldApiJob()
     }
 
     private val timer = timer("refresh", period = 5000.toLong(), action = {
@@ -113,25 +175,6 @@ class SessionViewModel @Inject constructor(
                 directMonitorEnabled = syncStage.getDirectMonitorEnabled(),
                 internalMicrophoneEnabled = syncStage.getInternalMicEnabled(),
             )
-        }
-    }
-
-    fun initiate5GDetection() {
-        context.get()?.let {
-            detection5G = Detection5G(
-                ctx = it,
-                connectivityManager = connectivityManager,
-                onNetworkTypeChange = { networkTypeName ->
-                    networkType = networkTypeName
-                    _uiState.update { sessionUIState ->
-                        sessionUIState.copy(
-                            networkType = networkTypeName
-                        )
-                    }
-                },
-                telephonyManager = telephonyManager
-            )
-            detection5G.startListenNetworkType()
         }
     }
 

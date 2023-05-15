@@ -1,5 +1,7 @@
 package media.opensesame.syncstagetestappandroid.screens
 
+import android.annotation.SuppressLint
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,20 +29,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import media.opensesame.syncstagetestappandroid.networkutils.decodeNetworkType
 
+@SuppressLint("MissingPermission")
 @Composable
 fun SessionScreen(
     navController: NavHostController,
@@ -51,6 +48,13 @@ fun SessionScreen(
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     var popupControl by remember { mutableStateOf(false) }
     var showLoadingIndicator by remember { mutableStateOf(false) }
+
+    val telephony by sessionViewModel.telephonyType.collectAsState()
+    val networkType: String? =  if (Build.VERSION.SDK_INT >= 30) {
+        decodeNetworkType(telephony, sessionViewModel.context.get())
+    } else {
+        null
+    }
 
     sessionViewModel.sessionLeft = {
         CoroutineScope(Dispatchers.Main).launch {
@@ -96,6 +100,7 @@ fun SessionScreen(
                             .fillMaxWidth()
                             .padding(bottom = 20.dp, top = 20.dp)
                     )
+
                     sessionUIState.connections.let {
                         it.forEach { connectionModel ->
                             val isTransmitter =
@@ -108,9 +113,11 @@ fun SessionScreen(
                             }
                             val measurements =
                                 sessionViewModel.getMeasurements(identifier = connectionModel.identifier)
+
+
                             UserConnection(connectionModel = connectionModel,
                                 measurements = measurements,
-                                networkType = sessionUIState.networkType,
+                                networkType = networkType ?: sessionUIState.networkTypeOldApi,
                                 isTransmitter,
                                 value = value,
                                 onValueChange = { volume ->
@@ -209,7 +216,6 @@ fun SessionScreen(
                 }
                 if (popupControl) {
                     Popup(
-                        //alignment = Alignment.Center,
                         onDismissRequest = { popupControl = false }
                     ) {
                         Column(
@@ -278,7 +284,6 @@ fun SessionScreen(
             sessionViewModel.joinSession(
                 sessionCode = sessionCode,
             )
-            sessionViewModel.initiate5GDetection()
         }
     }
 }
