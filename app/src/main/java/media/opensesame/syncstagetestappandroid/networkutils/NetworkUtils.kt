@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi
 
 val TAG = "NetworkUtils"
 
-
+// Based on https://github.com/tdcolvin/NetworkTypeDetector
 @RequiresApi(Build.VERSION_CODES.R)
 fun decodeNetworkType(
     telephony: TelephonyDisplayInfo?,
