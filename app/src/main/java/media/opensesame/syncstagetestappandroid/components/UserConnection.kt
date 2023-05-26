@@ -2,13 +2,13 @@ package media.opensesame.syncstagetestappandroid.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Slider
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MicOff
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import media.opensesame.syncstagesdk.models.public.Measurements
 import media.opensesame.syncstagetestappandroid.screens.ConnectionModel
+import media.opensesame.syncstagetestappandroid.ui.theme.connected_green
+import media.opensesame.syncstagetestappandroid.ui.theme.disconnected_red
 
 @Composable
 fun UserConnection(
@@ -41,7 +43,7 @@ fun UserConnection(
         Canvas(modifier = Modifier
             .size(30.dp)
             .padding(end = 10.dp), onDraw = {
-            drawCircle(color = if (connectionModel.isConnected) Color.Green else Color.Red)
+            drawCircle(color = if (connectionModel.isConnected) connected_green else disconnected_red)
         })
 
         if (!isTransmitter) {
@@ -123,30 +125,30 @@ fun UserConnection(
 
 fun colorForJitter(value: Int): Color {
     return if (value < 5) {
-        Color.Green
+        connected_green
     } else if (value == 5) {
         Color.Yellow
     } else {
-        Color.Red
+        disconnected_red
     }
 }
 
 fun colorForPing(value: Int): Color {
     return if (value < 25) {
-        Color.Green
+        connected_green
     } else if (value in 25..34) {
         Color.Yellow
     } else {
-        Color.Red
+        disconnected_red
     }
 }
 
 fun colorForQuality(value: Int): Color {
     return if (value >= 80) {
-        Color.Green
+        connected_green
     } else if (value in 50..79) {
         Color.Yellow
     } else {
-        Color.Red
+        disconnected_red
     }
 }

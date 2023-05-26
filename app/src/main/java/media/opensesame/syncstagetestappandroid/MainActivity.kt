@@ -5,17 +5,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.material3.TopAppBarDefaults.largeTopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,7 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import media.opensesame.syncstagetestappandroid.screens.*
-import media.opensesame.syncstagetestappandroid.ui.theme.SyncStageTestAppAndroidTheme
+import media.opensesame.syncstagetestappandroid.ui.theme.AppTheme
 
 enum class SyncStageScreen(@StringRes val title: Int) {
     Intro(title = R.string.intro),
@@ -39,7 +45,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SyncStageTestAppAndroidTheme {
+            AppTheme(darkTheme = true, dynamicColor = false) {
                 SyncStageApp()
             }
         }
@@ -51,6 +57,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SyncStageAppBar(
     currentScreen: SyncStageScreen,
@@ -58,16 +65,19 @@ fun SyncStageAppBar(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (canNavigateBack) {
-        TopAppBar(
-            title = {
-                Text(
-                    stringResource(currentScreen.title),
-                    modifier = Modifier.fillMaxWidth()
+
+    CenterAlignedTopAppBar(
+        title = {
+            Image(
+                painter = painterResource(id = R.drawable.ss_logo_text),
+                contentDescription = "",
+                modifier = Modifier.height(40.dp),
+
                 )
-            },
-            modifier = modifier.fillMaxWidth(),
-            navigationIcon = {
+        },
+        modifier = modifier.fillMaxWidth(),
+        navigationIcon = {
+            if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -75,26 +85,18 @@ fun SyncStageAppBar(
                     )
                 }
             }
+        },
+        colors = largeTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
         )
-    } else {
-        TopAppBar(
-            title = {
-                Text(
-                    stringResource(currentScreen.title),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            },
-            modifier = modifier.fillMaxWidth()
-        )
-    }
+    )
+
 }
 
 class CustomNavController(context: Context) : NavController(context) {
-    override fun popBackStack(): Boolean {
-        return super.popBackStack()
-    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SyncStageApp(
     modifier: Modifier = Modifier
@@ -105,9 +107,8 @@ fun SyncStageApp(
         backStackEntry?.destination?.route?.substringBefore("?") ?: SyncStageScreen.Intro.name
     )
     // A surface container using the 'background' color from the theme
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+    Surface(modifier = Modifier.fillMaxSize()) {
         Scaffold(
-            //topBar = { TopAppBar(title = { Text(modifier = Modifier.fillMaxWidth(), text = "SyncStage", textAlign = TextAlign.Center) }) },
             topBar = {
                 SyncStageAppBar(
                     currentScreen = currentScreen,
@@ -119,49 +120,65 @@ fun SyncStageApp(
                 )
             },
             content = { innerPadding ->
+                val boxSize = with(LocalDensity.current) { 300.dp.toPx() }
                 //val uiState by viewModel.uiState.collectAsState()
-
-                NavHost(
-                    navController = navController,
-                    startDestination = SyncStageScreen.Intro.name,
-                    modifier = modifier.padding(innerPadding)
-                ) {
-                    composable(route = SyncStageScreen.Intro.name) {
-                        IntroScreen(navController = navController)
-                    }
-
-                    composable(route = SyncStageScreen.Access.name) {
-                        MicrophoneAccessScreen(navController = navController)
-                    }
-
-                    composable(route = SyncStageScreen.Profile.name) {
-                        ProfileScreen(navController = navController)
-                    }
-
-                    composable(route = SyncStageScreen.CreateJoinSession.name) {
-                        CreateJoinSessionScreen(navController = navController)
-                    }
-
-                    composable(route = SyncStageScreen.Location.name) {
-                        LocationScreen(navController = navController)
-                    }
-
-                    composable(route = SyncStageScreen.Session.name + "?sessionCode={sessionCode}") {
-                        val sessionCode = it.arguments?.getString("sessionCode")
-                        sessionCode?.let { sessionCode ->
-                            SessionScreen(navController = navController, sessionCode)
+                Box(
+                    Modifier.background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.tertiaryContainer,
+                                MaterialTheme.colorScheme.inverseOnSurface
+                            ),
+                            start = Offset(boxSize / 2, 0.4f),
+                            end = Offset(0f, boxSize)
+                        )
+                    )
+                )
+                {
+                    NavHost(
+                        navController = navController,
+                        startDestination = SyncStageScreen.Intro.name,
+                        modifier = modifier.padding(innerPadding)
+                    ) {
+                        composable(route = SyncStageScreen.Intro.name) {
+                            IntroScreen(navController = navController)
                         }
+
+                        composable(route = SyncStageScreen.Access.name) {
+                            MicrophoneAccessScreen(navController = navController)
+                        }
+
+                        composable(route = SyncStageScreen.Profile.name) {
+                            ProfileScreen(navController = navController)
+                        }
+
+                        composable(route = SyncStageScreen.CreateJoinSession.name) {
+                            CreateJoinSessionScreen(navController = navController)
+                        }
+
+                        composable(route = SyncStageScreen.Location.name) {
+                            LocationScreen(navController = navController)
+                        }
+
+                        composable(route = SyncStageScreen.Session.name + "?sessionCode={sessionCode}") {
+                            val sessionCode = it.arguments?.getString("sessionCode")
+                            sessionCode?.let { sessionCode ->
+                                SessionScreen(navController = navController, sessionCode)
+                            }
+                        }
+
+                        /*composable(NavRoutes.Welcome.route + "/?{userName}") {
+                            val userName = it.arguments?.getString("userName")
+                            Welcome(navController = navController, userName)
+                        }
+
+                        composable(NavRoutes.Profile.route) {
+                            Profile()
+                        }*/
                     }
 
-                    /*composable(NavRoutes.Welcome.route + "/?{userName}") {
-                        val userName = it.arguments?.getString("userName")
-                        Welcome(navController = navController, userName)
-                    }
-
-                    composable(NavRoutes.Profile.route) {
-                        Profile()
-                    }*/
                 }
+
             }
         )
     }
@@ -171,7 +188,7 @@ fun SyncStageApp(
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    SyncStageTestAppAndroidTheme {
+    AppTheme {
 
     }
 }
