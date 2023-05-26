@@ -4,20 +4,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import media.opensesame.syncstagetestappandroid.R
@@ -49,14 +48,12 @@ fun IntroScreen(
             Spacer(modifier = Modifier.size(10.dp))
             Text(
                 text = "SyncStage Example Application",
-                fontWeight = FontWeight.Bold,
-                style = TextStyle(fontSize = 17.sp)
+                style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.size(10.dp))
             Text(
                 text = " ${introViewModel.getAppVersion()}",
-                fontWeight = FontWeight.Bold,
-                style = TextStyle(fontSize = 17.sp)
+                style = MaterialTheme.typography.labelMedium
             )
             Text(
                 buildAnnotatedString {
