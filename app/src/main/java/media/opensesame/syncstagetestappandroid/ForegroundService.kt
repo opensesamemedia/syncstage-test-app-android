@@ -53,10 +53,6 @@ class ForegroundService : LifecycleService() {
 
     }
 
-    override fun onCreate() {
-        super.onCreate()
-    }
-
     private fun getNotificationChannelId(): String {
         val notificationChannelId = "${NOTIFICATION_CHANNEL_ID_PREFIX}_$notificationId"
         Log.d(TAG, "Notification channel id: $notificationChannelId")

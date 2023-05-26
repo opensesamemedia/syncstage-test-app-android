@@ -5,23 +5,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import media.opensesame.syncstagetestappandroid.SyncStageScreen
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateJoinSessionScreen(
     navController: NavHostController,
@@ -51,7 +47,7 @@ fun CreateJoinSessionScreen(
                 modifier = Modifier.fillMaxWidth(),
                 text = "Sessions",
                 textAlign = TextAlign.Left,
-                style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.titleLarge
             )
             Text(
                 text = "Enter a code to join an existing session or create a new one.",
