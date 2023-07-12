@@ -98,7 +98,7 @@ fun UserConnection(
                     color = colorForPing(measurements.networkDelayMs)
                 )
             ) {
-                append("${if (measurements.networkDelayMs != 0) measurements.networkDelayMs else '-'} ms")
+                append("${if (measurements.networkDelayMs != 0 && measurements.networkDelayMs != -1) measurements.networkDelayMs else '-'} ms")
             }
         }, modifier = Modifier.weight(0.33f))
         Text(buildAnnotatedString {
@@ -112,7 +112,7 @@ fun UserConnection(
                     color = colorForJitter(measurements.networkJitterMs)
                 )
             ) {
-                append("${if (measurements.networkJitterMs != 0) measurements.networkJitterMs else '-'} ms")
+                append("${if (measurements.networkJitterMs != 0 && measurements.networkJitterMs != -1) measurements.networkJitterMs else '-'} ms")
             }
         }, modifier = Modifier.weight(0.33f))
     }
