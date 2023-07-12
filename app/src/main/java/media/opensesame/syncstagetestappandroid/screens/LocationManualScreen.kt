@@ -72,7 +72,7 @@ fun LocationManualScreen(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Session Location",
+                text = "Location",
                 textAlign = TextAlign.Left,
                 style = MaterialTheme.typography.titleLarge
             )
@@ -146,7 +146,7 @@ fun LocationManualScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(onClick = {
-                    navController.navigate(SyncStageScreen.LocationManual.name)
+                    navController.navigate(SyncStageScreen.Location.name)
                 }) {
                     Text(text = "Previous")
                 }
