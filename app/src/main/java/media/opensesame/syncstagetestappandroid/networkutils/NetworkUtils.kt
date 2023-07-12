@@ -17,11 +17,11 @@ fun decodeNetworkType(
     context: Context?,
 ): String {
 
-    if (context != null && isWifiConnected(context)){
+    if (context != null && isWifiConnected(context)) {
         return "WIFI"
     }
 
-    val baseTypeString = when(telephony?.networkType) {
+    val baseTypeString = when (telephony?.networkType) {
         TelephonyManager.NETWORK_TYPE_CDMA -> "CDMA"
         TelephonyManager.NETWORK_TYPE_1xRTT -> "1xRTT"
         TelephonyManager.NETWORK_TYPE_EDGE -> "EDGE"
@@ -42,15 +42,15 @@ fun decodeNetworkType(
         TelephonyManager.NETWORK_TYPE_TD_SCDMA -> "TD_SCDMA"
         TelephonyManager.NETWORK_TYPE_UMTS -> "UMTS"
         else -> {
-            if(context != null){
+            if (context != null) {
                 getNetworkTypeOldAPI(context)
-            }else {
+            } else {
                 "Unknown"
             }
         }
     }
 
-    val overrideString = when(telephony?.overrideNetworkType) {
+    val overrideString = when (telephony?.overrideNetworkType) {
         TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA -> "5G non-standalone"
         TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_ADVANCED -> "5G standalone (advanced)"
         TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_LTE_ADVANCED_PRO -> "LTE Advanced Pro"

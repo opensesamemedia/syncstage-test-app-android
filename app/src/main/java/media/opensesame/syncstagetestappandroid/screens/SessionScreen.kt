@@ -50,7 +50,7 @@ fun SessionScreen(
     var showLoadingIndicator by remember { mutableStateOf(false) }
 
     val telephony by sessionViewModel.telephonyType.collectAsState()
-    val networkType: String? =  if (Build.VERSION.SDK_INT >= 30) {
+    val networkType: String? = if (Build.VERSION.SDK_INT >= 30) {
         decodeNetworkType(telephony, sessionViewModel.context.get())
     } else {
         null
@@ -67,7 +67,7 @@ fun SessionScreen(
         sessionViewModel.leaveSession()
     }
 
-    LaunchedEffect(key1 = sessionViewModel){
+    LaunchedEffect(key1 = sessionViewModel) {
         sessionViewModel.startForegroundService()
     }
 
