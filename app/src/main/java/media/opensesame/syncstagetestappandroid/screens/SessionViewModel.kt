@@ -111,8 +111,7 @@ class SessionViewModel @Inject constructor(
                 telephonyManager.unregisterTelephonyCallback(callback)
                 exec.shutdown()
             }
-        }
-        else {
+        } else {
             // SDK 30 uses TelephonyManager.listen() to listen for TelephonyDisplayInfo changes.
             // It requires READ_PHONE_STATE permission.
 
@@ -289,7 +288,9 @@ class SessionViewModel @Inject constructor(
             val result = syncStage.join(
                 sessionCode = sessionCode,
                 userId = userId,
-                displayName = displayName
+                displayName = displayName,
+                zoneId = preferencesRepo.getZoneId(),
+                studioServerId = preferencesRepo.getStudioServerId(),
             )
             if (result.second == SyncStageSDKErrorCode.OK) {
                 val session = result.first
@@ -344,13 +345,13 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun startForegroundService(){
+    fun startForegroundService() {
         context.get()?.let {
             sendCommandToService(ACTION_START_SERVICE, it)
         }
     }
 
-    fun stopForegroundService(){
+    fun stopForegroundService() {
         context.get()?.let {
             sendCommandToService(ACTION_STOP_SERVICE, it)
         }

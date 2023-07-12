@@ -36,6 +36,7 @@ class ForegroundService : LifecycleService() {
                 ACTION_START_SERVICE -> {
                     startForegroundService()
                 }
+
                 ACTION_STOP_SERVICE -> {
                     Log.d(TAG, "Stopped service")
                     stopForeground(STOP_FOREGROUND_REMOVE)

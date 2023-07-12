@@ -9,6 +9,8 @@ class PreferencesRepo @Inject constructor(
     private val sharedPreferencesKey = "TestApp"
     private val userNameKey = "userName"
     private val userIdKey = "userId"
+    private val zoneIdKey = "zoneId"
+    private val studioServerIdKey = "studioServerId"
 
     fun updateUserName(userName: String) {
         print(userName)
@@ -38,5 +40,35 @@ class PreferencesRepo @Inject constructor(
             putString(userIdKey, userId)
             apply()
         }
+    }
+
+    fun updateZoneId(zoneId: String) {
+        print(zoneId)
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString(zoneIdKey, zoneId)
+            apply()
+        }
+    }
+
+    fun getZoneId(): String {
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        val zoneId = sharedPref.getString(zoneIdKey, "")
+        return zoneId ?: ""
+    }
+
+    fun updateStudioServerId(studioServerId: String) {
+        print(studioServerId)
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString(studioServerIdKey, studioServerId)
+            apply()
+        }
+    }
+
+    fun getStudioServerId(): String {
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        val studioServerId = sharedPref.getString(studioServerIdKey, "")
+        return studioServerId ?: ""
     }
 }

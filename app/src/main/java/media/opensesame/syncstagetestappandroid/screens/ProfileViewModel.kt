@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import media.opensesame.syncstagetestappandroid.data.ProfileUIState
 import media.opensesame.syncstagetestappandroid.repo.PreferencesRepo
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel

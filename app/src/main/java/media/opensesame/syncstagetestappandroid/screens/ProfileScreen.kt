@@ -90,6 +90,6 @@ fun ProfileScreen(
 fun onNextClick(userName: String, navController: NavHostController, viewModel: ProfileViewModel) {
     if (userName.isNotEmpty()) {
         viewModel.createUserId()
-        navController.navigate(SyncStageScreen.CreateJoinSession.name)
+        navController.navigate(SyncStageScreen.Location.name)
     }
 }

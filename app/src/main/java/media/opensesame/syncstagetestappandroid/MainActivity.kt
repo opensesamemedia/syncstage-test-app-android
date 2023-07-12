@@ -37,6 +37,8 @@ enum class SyncStageScreen(@StringRes val title: Int) {
     Profile(title = R.string.profile),
     CreateJoinSession(title = R.string.create_Join_Session),
     Location(title = R.string.location),
+    LocationLatencies(title = R.string.location),
+    LocationManual(title = R.string.location),
     Session(title = R.string.session),
 }
 
@@ -158,6 +160,14 @@ fun SyncStageApp(
 
                         composable(route = SyncStageScreen.Location.name) {
                             LocationScreen(navController = navController)
+                        }
+
+                        composable(route = SyncStageScreen.LocationManual.name) {
+                            LocationManualScreen(navController = navController)
+                        }
+
+                        composable(route = SyncStageScreen.LocationLatencies.name) {
+                            LocationLatenciesScreen(navController = navController)
                         }
 
                         composable(route = SyncStageScreen.Session.name + "?sessionCode={sessionCode}") {

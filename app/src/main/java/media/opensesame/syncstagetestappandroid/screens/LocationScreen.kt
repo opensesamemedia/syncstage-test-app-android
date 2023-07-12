@@ -1,49 +1,39 @@
 package media.opensesame.syncstagetestappandroid.screens
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import media.opensesame.syncstagetestappandroid.SyncStageScreen
-import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 
 @Composable
 fun LocationScreen(
     navController: NavHostController,
-    zoneViewModel: LocationViewModel = hiltViewModel()
+    locationViewModel: LocationViewModel = hiltViewModel()
 ) {
-    val zoneUIState by zoneViewModel.uiState.collectAsState()
 
-    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
-    var mExpanded by remember { mutableStateOf(false) }
-    var showLoadingIndicator by remember { mutableStateOf(false) }
+    val loactionUIState by locationViewModel.uiState.collectAsState()
 
-    zoneViewModel.createSessionCallback = { sessionCode ->
-        showLoadingIndicator = false
-        navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=$sessionCode")
-    }
 
     Box(
         modifier = Modifier
@@ -60,94 +50,59 @@ fun LocationScreen(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Session Location",
+                text = "Location",
                 textAlign = TextAlign.Left,
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = "Select the closest location for all session participants.",
+                text = "By default, SyncStage selects the best Studio Server for your session based on measurements.",
                 textAlign = TextAlign.Left,
                 modifier = Modifier
                     .padding(bottom = 20.dp)
                     .fillMaxWidth()
             )
-            Box(contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .clickable {
-                        mExpanded = !mExpanded
-                    }
-                    .fillMaxWidth()
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(5.dp)
-                    )
-                    .height(60.dp)
-                    .onGloballyPositioned {
-                        mTextFieldSize = it.size.toSize()
-                    }
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        zoneUIState.selectedZone.ZoneName,
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
-                    Spacer(modifier = Modifier.weight(1.0f))
-                    val icon =
-                        if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-                    Icon(
-                        icon, "contentDescription",
-                        Modifier
-                            .padding(end = 10.dp)
-                            .size(30.dp, 30.dp)
-                    )
-                }
-                DropdownMenu(
-                    expanded = mExpanded,
-                    onDismissRequest = { mExpanded = false },
-                    modifier = Modifier
-                        .width(with(LocalDensity.current) {
-                            mTextFieldSize.width.toDp()
-                        })
-                        .fillMaxHeight(0.3f)
-                ) {
-                    zoneUIState.zones.forEach { zone ->
-                        DropdownMenuItem(onClick = {
-                            zoneViewModel.updateSelectedZone(zone)
-                            mExpanded = false
-                        }) {
-                            Text(
-                                text = zone.ZoneName,
-                                color = MaterialTheme.colorScheme.inverseOnSurface
-                            )
-                        }
-                    }
-                }
-            }
-            Button(
-                onClick = {
-                    showLoadingIndicator = true
-                    zoneViewModel.createNewSession()
-                    //navController.navigate(SyncStageScreen.Session.name)
-                },
-                modifier = Modifier.padding(top = 20.dp),
-                enabled = zoneUIState.selectedZone.zoneId.isNotEmpty()
-            ) {
-                Text(text = "START NOW")
-            }
-        }
-        if (zoneUIState.zones.isEmpty() || showLoadingIndicator) {
-            LoadingIndicator()
-        }
-    }
 
-    LaunchedEffect(Unit) {
-        if (zoneUIState.zones.isEmpty()) {
-            zoneViewModel.getZones()
+            Row(
+                modifier = Modifier.padding(end = 20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Automated selection.",
+                    textAlign = TextAlign.Left,
+                    modifier = Modifier
+                        .padding(bottom = 20.dp)
+                        .fillMaxWidth()
+                )
+                Switch(
+                    checked = loactionUIState.autoSelection,
+                    onCheckedChange = { switchOn_ ->
+                        locationViewModel.updateAutoSelection(switchOn_)
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(100.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = {
+                    navController.navigate(SyncStageScreen.Profile.name)
+                }) {
+                    Text(text = "Previous")
+                }
+
+                Button(onClick = {
+                    if (loactionUIState.autoSelection) {
+                        navController.navigate(SyncStageScreen.LocationLatencies.name)
+                    } else {
+                        navController.navigate(SyncStageScreen.LocationManual.name)
+                    }
+                }) {
+                    Text(text = "Next")
+                }
+            }
         }
+
     }
 }

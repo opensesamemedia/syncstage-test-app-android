@@ -23,11 +23,18 @@ fun CreateJoinSessionScreen(
     navController: NavHostController,
     createJoinViewModel: CreateJoinViewModel = hiltViewModel()
 ) {
-    val loginUIState by createJoinViewModel.uiState.collectAsState()
+    val createJoinUIState by createJoinViewModel.uiState.collectAsState()
+    var showLoadingIndicator by remember { mutableStateOf(false) }
+
     var isEmptyTextField by remember { mutableStateOf(true) }
     val onSessionCodeChange = { text: String ->
         createJoinViewModel.updateSessionCode(text)
         isEmptyTextField = text.isEmpty()
+    }
+
+    createJoinViewModel.createSessionCallback = { sessionCode ->
+        showLoadingIndicator = false
+        navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=$sessionCode")
     }
 
     Box(
@@ -57,7 +64,7 @@ fun CreateJoinSessionScreen(
                 textAlign = TextAlign.Left
             )
             OutlinedTextField(
-                value = loginUIState.sessionCode,
+                value = createJoinUIState.sessionCode,
                 singleLine = true,
                 onValueChange = onSessionCodeChange,
                 placeholder = { Text(text = "XXX-XXX-XXX") },
@@ -66,38 +73,35 @@ fun CreateJoinSessionScreen(
                 ),
                 keyboardActions = KeyboardActions(
                     onNext = { // on next.
-                        if (loginUIState.sessionCode.isNotEmpty()) {
-                            navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${loginUIState.sessionCode}")
+                        if (createJoinUIState.sessionCode.isNotEmpty()) {
+                            navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${createJoinUIState.sessionCode}")
                         }
                     }
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 10.dp),
-                enabled = loginUIState.loggedIn
             )
             Button(onClick = {
-                if (loginUIState.sessionCode.isNotEmpty()) {
-                    navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${loginUIState.sessionCode}")
+                if (createJoinUIState.sessionCode.isNotEmpty()) {
+                    navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${createJoinUIState.sessionCode}")
                 }
-            }, enabled = loginUIState.sessionCode.isNotEmpty() && loginUIState.loggedIn) {
+            }, enabled = createJoinUIState.sessionCode.isNotEmpty()) {
                 Text(text = "JOIN")
             }
             Text(text = "Or")
             Button(onClick = {
-                navController.navigate(SyncStageScreen.Location.name)
-            }, enabled = loginUIState.loggedIn) {
+                showLoadingIndicator = true
+                createJoinViewModel.createNewSession()
+            }) {
                 Text(text = "NEW SESSION")
             }
         }
-        if (!loginUIState.loggedIn) {
-            LoadingIndicator()
-        }
+
+    }
+    if (showLoadingIndicator) {
+        LoadingIndicator()
     }
 
-    LaunchedEffect(Unit) {
-        if (!loginUIState.loggedIn) {
-            createJoinViewModel.initiateSyncStage()
-        }
-    }
+
 }
