@@ -28,8 +28,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import media.opensesame.syncstagetestappandroid.screens.*
 import media.opensesame.syncstagetestappandroid.ui.theme.AppTheme
+import media.opensesame.syncstagesdk.SyncStage
 
 enum class SyncStageScreen(@StringRes val title: Int) {
     Intro(title = R.string.intro),
@@ -44,6 +46,8 @@ enum class SyncStageScreen(@StringRes val title: Int) {
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var syncStage: SyncStage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -54,7 +58,10 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
-        sendCommandToService(ACTION_STOP_SERVICE, this)
+        if (isFinishing) {
+            syncStage.stop()
+            sendCommandToService(ACTION_STOP_SERVICE, this)
+        }
         super.onDestroy()
     }
 }
