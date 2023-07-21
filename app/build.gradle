@@ -3,8 +3,10 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
+
+//    // TO BE UNCOMMENTED FOR CRASHLYTICS
+//    id 'com.google.gms.google-services'
+//    id 'com.google.firebase.crashlytics'
 }
 
 ext {
@@ -108,11 +110,6 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -127,10 +124,10 @@ dependencies {
     developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
     stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
 
-    // TO BE UNCOMMENTED FOR CRASHLYTICS
-    implementation platform('com.google.firebase:firebase-bom:31.2.2')
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+//    // TO BE UNCOMMENTED FOR CRASHLYTICS
+//    implementation platform('com.google.firebase:firebase-bom:31.2.2')
+//    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+//    implementation 'com.google.firebase:firebase-analytics-ktx'
 
 
     implementation 'androidx.core:core-ktx:1.7.0'
