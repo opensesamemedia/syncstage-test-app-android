@@ -97,9 +97,8 @@ android {
                 archivesBaseName = "$applicationId-${getVersionName('production')}"
             }
         }
-
         master {
-            dimension "master"
+            dimension "environment"
             versionName getVersionName("master")
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("master")}\""
             defaultConfig {
