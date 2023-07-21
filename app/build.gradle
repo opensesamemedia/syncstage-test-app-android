@@ -8,7 +8,7 @@ plugins {
 }
 
 ext {
-    sdkVersion = "0.3.6-rc.6"
+    sdkVersion = "0.4.0"
 }
 
 def getVersionName = { String flavorName ->
@@ -31,7 +31,7 @@ def getVersionName = { String flavorName ->
     }
     def commitHash = commitHashStdout.toString().trim()
 
-    return flavorName == "production" ? "$baseVersionName-$commitHash-sdk$sdkVersion" : "$baseVersionName-$commitHash-sdk$sdkVersion-$flavorName"
+    return flavorName == "master" ? "$baseVersionName-$commitHash-sdk$sdkVersion" : "$baseVersionName-$commitHash-sdk$sdkVersion-$flavorName"
 }
 
 android {
@@ -81,22 +81,31 @@ android {
                 archivesBaseName = "$applicationId-${getVersionName('development')}"
             }
         }
-//        staging {
-//            dimension "environment"
-//            versionName getVersionName("staging")
-//            buildConfigField "String", "VERSION_NAME", "\"${getVersionName("staging")}\""
-//            defaultConfig {
-//                archivesBaseName = "$applicationId-${getVersionName('staging')}"
-//            }
-//        }
-//        production {
-//            dimension "environment"
-//            versionName getVersionName("production")
-//            buildConfigField "String", "VERSION_NAME", "\"${getVersionName("production")}\""
-//            defaultConfig {
-//                archivesBaseName = "$applicationId-${getVersionName('production')}"
-//            }
-//        }
+        staging {
+            dimension "environment"
+            versionName getVersionName("staging")
+            buildConfigField "String", "VERSION_NAME", "\"${getVersionName("staging")}\""
+            defaultConfig {
+                archivesBaseName = "$applicationId-${getVersionName('staging')}"
+            }
+        }
+        production {
+            dimension "environment"
+            versionName getVersionName("production")
+            buildConfigField "String", "VERSION_NAME", "\"${getVersionName("production")}\""
+            defaultConfig {
+                archivesBaseName = "$applicationId-${getVersionName('production')}"
+            }
+        }
+
+        master {
+            dimension "master"
+            versionName getVersionName("master")
+            buildConfigField "String", "VERSION_NAME", "\"${getVersionName("master")}\""
+            defaultConfig {
+                archivesBaseName = "$applicationId-${getVersionName('master')}"
+            }
+        }
     }
 
     buildTypes {
@@ -114,13 +123,17 @@ android {
 
 
 dependencies {
-//    productionImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
+    masterImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
+    productionImplementation "media.opensesame:syncstagesdk:${sdkVersion}-production"
     developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
-//    stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
+    stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
 
+    // TO BE UNCOMMENTED FOR CRASHLYTICS
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-service:2.4.1'
