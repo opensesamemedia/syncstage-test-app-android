@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -134,7 +135,9 @@ fun LocationScreen(
                     zoneViewModel.createNewSession()
                     //navController.navigate(SyncStageScreen.Session.name)
                 },
-                modifier = Modifier.padding(top = 20.dp),
+                modifier = Modifier
+                            .testTag("start_now_btn")
+                            .padding(top = 20.dp),
                 enabled = zoneUIState.selectedZone.zoneId.isNotEmpty()
             ) {
                 Text(text = "START NOW")

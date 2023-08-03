@@ -10,6 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -53,7 +55,8 @@ fun IntroScreen(
             Spacer(modifier = Modifier.size(10.dp))
             Text(
                 text = " ${introViewModel.getAppVersion()}",
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.testTag("app_version")
             )
             Text(
                 buildAnnotatedString {
@@ -69,7 +72,9 @@ fun IntroScreen(
                 textAlign = TextAlign.Center
             )
 
-            Button(onClick = {
+            Button(
+                modifier = Modifier.testTag("start_btn"),
+                    onClick = {
                 navController.navigate(SyncStageScreen.Access.name)
             }) {
                 Text(text = "START")

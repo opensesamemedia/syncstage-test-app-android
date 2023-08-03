@@ -8,7 +8,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -17,19 +22,19 @@ import androidx.navigation.NavHostController
 import media.opensesame.syncstagetestappandroid.SyncStageScreen
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun CreateJoinSessionScreen(
     navController: NavHostController,
     createJoinViewModel: CreateJoinViewModel = hiltViewModel()
 ) {
+
     val loginUIState by createJoinViewModel.uiState.collectAsState()
     var isEmptyTextField by remember { mutableStateOf(true) }
     val onSessionCodeChange = { text: String ->
         createJoinViewModel.updateSessionCode(text)
         isEmptyTextField = text.isEmpty()
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -73,20 +78,24 @@ fun CreateJoinSessionScreen(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp),
+                    .padding(bottom = 10.dp)
+                    .testTag("session_code"),
                 enabled = loginUIState.loggedIn
             )
             Button(onClick = {
                 if (loginUIState.sessionCode.isNotEmpty()) {
                     navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${loginUIState.sessionCode}")
                 }
-            }, enabled = loginUIState.sessionCode.isNotEmpty() && loginUIState.loggedIn) {
+            }, enabled = loginUIState.sessionCode.isNotEmpty() && loginUIState.loggedIn,
+                modifier = Modifier.testTag("join_btn"),
+                ) {
                 Text(text = "JOIN")
             }
             Text(text = "Or")
             Button(onClick = {
                 navController.navigate(SyncStageScreen.Location.name)
-            }, enabled = loginUIState.loggedIn) {
+            }, enabled = loginUIState.loggedIn,
+                modifier = Modifier.testTag("new_session_btn"),) {
                 Text(text = "NEW SESSION")
             }
         }

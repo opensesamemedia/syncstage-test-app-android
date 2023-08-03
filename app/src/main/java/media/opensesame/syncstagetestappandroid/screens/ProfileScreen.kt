@@ -17,6 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -73,8 +76,10 @@ fun ProfileScreen(
                 modifier = Modifier
                     .focusRequester(focusRequester)
                     .padding(bottom = 10.dp)
+                    .testTag("username_input")
             )
-            Button(onClick = {
+            Button(modifier = Modifier.testTag("next_btn"),
+                onClick = {
                 onNextClick(profileUIState.userName, navController, viewModel = profileViewModel)
             }, enabled = profileUIState.userName.isNotEmpty()) {
                 Text(text = "NEXT")
