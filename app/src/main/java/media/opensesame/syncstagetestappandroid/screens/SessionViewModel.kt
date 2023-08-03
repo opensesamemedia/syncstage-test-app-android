@@ -305,7 +305,9 @@ class SessionViewModel @Inject constructor(
                         Toast.makeText(
                             it,
                             "Could not join the session. Please check the session code.",
-                            Toast.LENGTH_LONG
+                            Toast.LENGTH_LONG,
+
+
                         ).show()
                     }
                     sessionOut()
