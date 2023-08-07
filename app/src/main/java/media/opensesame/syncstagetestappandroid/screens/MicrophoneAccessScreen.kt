@@ -30,7 +30,6 @@ fun MicrophoneAccessScreen(navController: NavHostController) {
         android.Manifest.permission.ACCESS_WIFI_STATE,
         android.Manifest.permission.READ_PHONE_STATE,
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
-        android.Manifest.permission.ACCESS_FINE_LOCATION,
     )
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         permissions.add(android.Manifest.permission.POST_NOTIFICATIONS)

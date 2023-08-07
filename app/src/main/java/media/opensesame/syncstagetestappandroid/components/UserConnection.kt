@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import media.opensesame.syncstagesdk.models.public.Measurements
+import media.opensesame.syncstagesdk.models.public.NetworkMeasurements
 import media.opensesame.syncstagetestappandroid.screens.ConnectionModel
 import media.opensesame.syncstagetestappandroid.ui.theme.connected_green
 import media.opensesame.syncstagetestappandroid.ui.theme.disconnected_red
@@ -32,7 +32,7 @@ import media.opensesame.syncstagetestappandroid.ui.theme.disconnected_red
 @Composable
 fun UserConnection(
     connectionModel: ConnectionModel,
-    measurements: Measurements,
+    measurements: NetworkMeasurements,
     networkType: String,
     isTransmitter: Boolean,
     value: Float,
