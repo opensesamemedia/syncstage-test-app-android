@@ -7,6 +7,7 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyCallback
 import android.telephony.TelephonyDisplayInfo
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,13 +15,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import media.opensesame.syncstagesdk.LogUtil
 import media.opensesame.syncstagesdk.SyncStage
 import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
 import media.opensesame.syncstagesdk.delegates.SyncStageConnectivityDelegate
 import media.opensesame.syncstagesdk.delegates.SyncStageUserDelegate
 import media.opensesame.syncstagesdk.models.public.Connection
-import media.opensesame.syncstagesdk.models.public.Measurements
+import media.opensesame.syncstagesdk.models.public.NetworkMeasurements
 import media.opensesame.syncstagesdk.models.public.Session
 import media.opensesame.syncstagetestappandroid.ACTION_START_SERVICE
 import media.opensesame.syncstagetestappandroid.ACTION_STOP_SERVICE
@@ -75,7 +75,7 @@ class SessionViewModel @Inject constructor(
         if (networkTypeOldApiJob == null && Build.VERSION.SDK_INT < 30) {
             networkTypeOldApiJob = viewModelScope.launch(Dispatchers.IO) {
                 while (true) {
-                    LogUtil.d("SessionViewModel", "Running networkTypeOldApiJob")
+                    Log.d("SessionViewModel", "Running networkTypeOldApiJob")
                     context.get()?.let {
                         _uiState.update { sessionUIState ->
                             sessionUIState.copy(
@@ -337,7 +337,7 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun getMeasurements(identifier: String): Measurements {
+    fun getMeasurements(identifier: String): NetworkMeasurements {
         return if (identifier == transmitterIdentifier) {
             syncStage.getTransmitterMeasurements()
         } else {
