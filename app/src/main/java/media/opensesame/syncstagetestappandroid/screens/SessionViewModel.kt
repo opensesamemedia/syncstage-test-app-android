@@ -20,11 +20,11 @@ import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
 import media.opensesame.syncstagesdk.delegates.SyncStageConnectivityDelegate
 import media.opensesame.syncstagesdk.delegates.SyncStageUserDelegate
 import media.opensesame.syncstagesdk.models.public.Connection
-import media.opensesame.syncstagesdk.models.public.NetworkMeasurements
+import media.opensesame.syncstagesdk.models.public.Measurements
 import media.opensesame.syncstagesdk.models.public.Session
+import media.opensesame.syncstagesdk.utils.getNetworkTypeOldAPI
 import media.opensesame.syncstagetestappandroid.ACTION_START_SERVICE
 import media.opensesame.syncstagetestappandroid.ACTION_STOP_SERVICE
-import media.opensesame.syncstagetestappandroid.networkutils.getNetworkTypeOldAPI
 import media.opensesame.syncstagetestappandroid.repo.PreferencesRepo
 import media.opensesame.syncstagetestappandroid.sendCommandToService
 import java.lang.ref.WeakReference
@@ -327,17 +327,15 @@ class SessionViewModel @Inject constructor(
     fun leaveSession() {
         timer.cancel()
         CoroutineScope(Dispatchers.IO).launch {
+            syncStage.leave()
+        }
 
-            val result = syncStage.leave()
-            if (result == SyncStageSDKErrorCode.OK) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    sessionLeft()
-                }
-            }
+        CoroutineScope(Dispatchers.Main).launch {
+            sessionLeft()
         }
     }
 
-    fun getMeasurements(identifier: String): NetworkMeasurements {
+    fun getMeasurements(identifier: String): Measurements {
         return if (identifier == transmitterIdentifier) {
             syncStage.getTransmitterMeasurements()
         } else {
