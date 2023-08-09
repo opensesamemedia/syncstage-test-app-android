@@ -33,9 +33,9 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import media.opensesame.syncstagesdk.utils.decodeNetworkType
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
-import media.opensesame.syncstagetestappandroid.networkutils.decodeNetworkType
 
 @SuppressLint("MissingPermission")
 @Composable
