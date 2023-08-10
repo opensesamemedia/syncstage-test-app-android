@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 import media.opensesame.syncstagesdk.utils.decodeNetworkType
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
+import media.opensesame.syncstagetestappandroid.ui.theme.DarkColorScheme
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -170,10 +171,12 @@ fun SessionScreen(
                     }
                     Row(
                         modifier = Modifier
+                            .background(DarkColorScheme.onSurface)
                             .fillMaxWidth()
                             .height(45.dp),
+
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         Button(
                             onClick = {
@@ -210,7 +213,7 @@ fun SessionScreen(
                                 .fillMaxHeight(),
                             shape = RectangleShape
                         ) {
-                            Icon(Icons.Filled.Menu, "contentDescription")
+                            Icon(Icons.Filled.MoreVert, "contentDescription")
                         }
                     }
                 }
