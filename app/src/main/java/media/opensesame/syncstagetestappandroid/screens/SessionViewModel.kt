@@ -328,9 +328,6 @@ class SessionViewModel @Inject constructor(
         timer.cancel()
         CoroutineScope(Dispatchers.IO).launch {
             syncStage.leave()
-        }
-
-        CoroutineScope(Dispatchers.Main).launch {
             sessionLeft()
         }
     }
