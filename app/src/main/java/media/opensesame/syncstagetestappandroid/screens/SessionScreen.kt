@@ -3,13 +3,16 @@ package media.opensesame.syncstagetestappandroid.screens
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,6 +40,10 @@ import media.opensesame.syncstagesdk.utils.decodeNetworkType
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
 import media.opensesame.syncstagetestappandroid.ui.theme.DarkColorScheme
+import media.opensesame.syncstagetestappandroid.ui.theme.LightColorScheme
+import media.opensesame.syncstagetestappandroid.ui.theme.connected_green
+import media.opensesame.syncstagetestappandroid.ui.theme.disconnected_red
+import media.opensesame.syncstagetestappandroid.ui.theme.recording_red
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -135,7 +142,7 @@ fun SessionScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(158.dp),
+                    .wrapContentHeight(),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -169,16 +176,35 @@ fun SessionScreen(
                         )
                         Text(text = "COPY JOINING CODE")
                     }
+                    if (sessionUIState.isRecording){
+                        Row(
+                            modifier = Modifier
+                                .background(LightColorScheme.outline)
+                                .fillMaxWidth()
+                                .height(45.dp),
+
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            Canvas(modifier = Modifier
+                                .size(30.dp)
+                                .padding(end = 10.dp), onDraw = {
+                                drawCircle(color = recording_red)
+                            })
+                            Text(text = "Recording")
+                        }
+                    }
+
                     Row(
                         modifier = Modifier
-                            .background(DarkColorScheme.onSurface)
                             .fillMaxWidth()
-                            .height(45.dp),
+                            .height(45.dp)
+                            .background(color=DarkColorScheme.background),
 
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
                     ) {
-                        Button(
+                        IconButton(
                             onClick = {
                                 showLoadingIndicator = true
                                 sessionViewModel.leaveSession()
@@ -186,17 +212,15 @@ fun SessionScreen(
                             modifier = Modifier
                                 .weight(33.3f)
                                 .fillMaxHeight(),
-                            shape = RectangleShape
                         ) {
                             Icon(Icons.Filled.CallEnd, "contentDescription")
                         }
-                        Button(
+                        IconButton(
                             onClick = {
                                 sessionViewModel.toggleMicrophone(!sessionViewModel.isMuted)
                             }, modifier = Modifier
                                 .weight(33.3f)
                                 .fillMaxHeight(),
-                            shape = RectangleShape
                         ) {
                             val icon = if (sessionViewModel.isMuted) {
                                 Icons.Filled.MicOff
@@ -205,13 +229,12 @@ fun SessionScreen(
                             }
                             Icon(icon, "Mute")
                         }
-                        Button(
+                        IconButton(
                             onClick = {
                                 popupControl = true
                             }, modifier = Modifier
                                 .weight(33.3f)
                                 .fillMaxHeight(),
-                            shape = RectangleShape
                         ) {
                             Icon(Icons.Filled.MoreVert, "contentDescription")
                         }
@@ -229,49 +252,108 @@ fun SessionScreen(
                                 .padding(20.dp)
                         ) {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = "Direct Monitor",
-                                    modifier = Modifier.padding(end = 20.dp)
+                                    text = "Settings",
+                                    style = MaterialTheme.typography.titleLarge,
                                 )
+                                IconButton(onClick = {
+                                    popupControl = false
+                                }) {
+                                    Icon(Icons.Outlined.Close, "Close setting")
+                                }
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column() {
+                                    Text(
+                                        text = "Direct Monitor",
+                                        style = MaterialTheme.typography.titleLarge,
+                                    )
+                                    Text(
+                                        text = "Listen to the input signal.",
+                                    )
+                                }
+
                                 Switch(
+                                    modifier = Modifier.padding(start=10.dp, end=10.dp),
                                     checked = sessionViewModel.isDirectMonitorEnabled,
                                     onCheckedChange = {
                                         sessionViewModel.toggleDirectMonitor(it)
                                     })
                             }
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                Text(
-                                    text = "Internal Microphone",
-                                    modifier = Modifier.padding(end = 20.dp)
-                                )
-                                Switch(
-                                    checked = sessionViewModel.isInternalMicrophoneEnabled,
-                                    onCheckedChange = {
-                                        sessionViewModel.toggleInternalMicrophone(it)
-                                    })
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
                                     text = "Direct Monitor volume",
-                                    modifier = Modifier.padding(end = 20.dp)
                                 )
                                 Slider(value = sessionUIState.directMonitorVolume, onValueChange = {
                                     sessionViewModel.changeDirectMonitorVolume(it)
                                 }, Modifier.width(100.dp))
                             }
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column(){
+                                    Text(
+                                        text = "Internal Microphone",
+                                        style = MaterialTheme.typography.titleLarge,
+                                    )
+                                    Text(
+                                        text = "Use the device's built-in microphone.",
+                                    )
+                                }
+
+                                Switch(
+                                    modifier = Modifier.padding(start=10.dp, end=10.dp),
+                                    checked = sessionViewModel.isInternalMicrophoneEnabled,
+                                    onCheckedChange = {
+                                        sessionViewModel.toggleInternalMicrophone(it)
+                                    })
+                            }
+
                             Text(text = "Note: A headphone required to enable the direct monitor feature.")
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp, top=12.dp),
+                            ) {
+                                Text(
+                                    text = "Recording",
+                                    style = MaterialTheme.typography.titleLarge,
+                                    )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.fillMaxWidth()
+                                ){
+                                    Button(
+                                        onClick = {
+                                            if(sessionUIState.isRecording){
+                                                sessionViewModel.stopRecording()
+                                            }else{
+                                                sessionViewModel.startRecording()
+                                            }
+                                        },
+                                        enabled = !sessionUIState.recordingRequestPending,
+                                    ) {
+                                        if(sessionUIState.isRecording){
+                                            Text(text="Stop recording")
+                                        }else{
+                                            Text(text="Start recording")
+                                        }
+                                    }
+                            }}
+                            Spacer(modifier = Modifier.height(32.dp))
                         }
                     }
                 }
