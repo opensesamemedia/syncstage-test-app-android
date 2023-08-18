@@ -10,7 +10,7 @@ plugins {
 }
 
 ext {
-    sdkVersion = "0.4.0"
+    sdkVersion = "0.4.1"
 }
 
 def getVersionName = { String flavorName ->
