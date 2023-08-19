@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
@@ -41,8 +39,6 @@ import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
 import media.opensesame.syncstagetestappandroid.ui.theme.DarkColorScheme
 import media.opensesame.syncstagetestappandroid.ui.theme.LightColorScheme
-import media.opensesame.syncstagetestappandroid.ui.theme.connected_green
-import media.opensesame.syncstagetestappandroid.ui.theme.disconnected_red
 import media.opensesame.syncstagetestappandroid.ui.theme.recording_red
 
 @SuppressLint("MissingPermission")
@@ -176,7 +172,7 @@ fun SessionScreen(
                         )
                         Text(text = "COPY JOINING CODE")
                     }
-                    if (sessionUIState.isRecording){
+                    if (sessionUIState.isRecording) {
                         Row(
                             modifier = Modifier
                                 .background(LightColorScheme.outline)
@@ -197,9 +193,10 @@ fun SessionScreen(
 
                     Row(
                         modifier = Modifier
+                            .background(DarkColorScheme.onSurface)
                             .fillMaxWidth()
                             .height(45.dp)
-                            .background(color=DarkColorScheme.background),
+                            .background(color = DarkColorScheme.background),
 
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
@@ -218,7 +215,8 @@ fun SessionScreen(
                         IconButton(
                             onClick = {
                                 sessionViewModel.toggleMicrophone(!sessionViewModel.isMuted)
-                            }, modifier = Modifier
+                            },
+                            modifier = Modifier
                                 .weight(33.3f)
                                 .fillMaxHeight(),
                         ) {
@@ -232,7 +230,8 @@ fun SessionScreen(
                         IconButton(
                             onClick = {
                                 popupControl = true
-                            }, modifier = Modifier
+                            },
+                            modifier = Modifier
                                 .weight(33.3f)
                                 .fillMaxHeight(),
                         ) {
@@ -252,7 +251,9 @@ fun SessionScreen(
                                 .padding(20.dp)
                         ) {
                             Row(
-                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
@@ -267,11 +268,13 @@ fun SessionScreen(
                                 }
                             }
                             Row(
-                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Column() {
+                                Column {
                                     Text(
                                         text = "Direct Monitor",
                                         style = MaterialTheme.typography.titleLarge,
@@ -282,14 +285,16 @@ fun SessionScreen(
                                 }
 
                                 Switch(
-                                    modifier = Modifier.padding(start=10.dp, end=10.dp),
+                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp),
                                     checked = sessionViewModel.isDirectMonitorEnabled,
                                     onCheckedChange = {
                                         sessionViewModel.toggleDirectMonitor(it)
                                     })
                             }
                             Row(
-                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
@@ -301,11 +306,13 @@ fun SessionScreen(
                                 }, Modifier.width(100.dp))
                             }
                             Row(
-                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Column(){
+                                Column {
                                     Text(
                                         text = "Internal Microphone",
                                         style = MaterialTheme.typography.titleLarge,
@@ -316,7 +323,7 @@ fun SessionScreen(
                                 }
 
                                 Switch(
-                                    modifier = Modifier.padding(start=10.dp, end=10.dp),
+                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp),
                                     checked = sessionViewModel.isInternalMicrophoneEnabled,
                                     onCheckedChange = {
                                         sessionViewModel.toggleInternalMicrophone(it)
@@ -325,34 +332,37 @@ fun SessionScreen(
 
                             Text(text = "Note: A headphone required to enable the direct monitor feature.")
                             Column(
-                                modifier = Modifier.fillMaxWidth().padding(bottom=12.dp, top=12.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 12.dp, top = 12.dp),
                             ) {
                                 Text(
                                     text = "Recording",
                                     style = MaterialTheme.typography.titleLarge,
-                                    )
+                                )
                                 Spacer(modifier = Modifier.height(12.dp))
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.fillMaxWidth()
-                                ){
+                                ) {
                                     Button(
                                         onClick = {
-                                            if(sessionUIState.isRecording){
+                                            if (sessionUIState.isRecording) {
                                                 sessionViewModel.stopRecording()
-                                            }else{
+                                            } else {
                                                 sessionViewModel.startRecording()
                                             }
                                         },
                                         enabled = !sessionUIState.recordingRequestPending,
                                     ) {
-                                        if(sessionUIState.isRecording){
-                                            Text(text="Stop recording")
-                                        }else{
-                                            Text(text="Start recording")
+                                        if (sessionUIState.isRecording) {
+                                            Text(text = "Stop recording")
+                                        } else {
+                                            Text(text = "Start recording")
                                         }
                                     }
-                            }}
+                                }
+                            }
                             Spacer(modifier = Modifier.height(32.dp))
                         }
                     }

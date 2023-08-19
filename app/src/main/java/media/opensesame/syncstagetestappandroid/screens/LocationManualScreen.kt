@@ -105,7 +105,7 @@ fun LocationManualScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = locationManualUIState.selectedServerInstance?.zoneName ?: "",
+                        text = locationManualUIState.selectedServerInstance.zoneName,
                         modifier = Modifier.padding(start = 10.dp)
                     )
                     Spacer(modifier = Modifier.weight(1.0f))

@@ -28,10 +28,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import media.opensesame.syncstagesdk.SyncStage
 import media.opensesame.syncstagetestappandroid.screens.*
 import media.opensesame.syncstagetestappandroid.ui.theme.AppTheme
-import media.opensesame.syncstagesdk.SyncStage
+import javax.inject.Inject
 
 enum class SyncStageScreen(@StringRes val title: Int) {
     Intro(title = R.string.intro),
@@ -102,8 +102,7 @@ fun SyncStageAppBar(
 
 }
 
-class CustomNavController(context: Context) : NavController(context) {
-}
+class CustomNavController(context: Context) : NavController(context)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

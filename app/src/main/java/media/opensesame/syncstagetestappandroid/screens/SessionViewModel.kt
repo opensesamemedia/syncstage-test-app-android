@@ -318,7 +318,7 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun startRecording(){
+    fun startRecording() {
         _uiState.update {
             it.copy(
                 recordingRequestPending = true
@@ -334,7 +334,7 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun stopRecording(){
+    fun stopRecording() {
         _uiState.update {
             it.copy(
                 recordingRequestPending = true
