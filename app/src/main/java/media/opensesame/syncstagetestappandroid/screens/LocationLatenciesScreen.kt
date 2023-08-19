@@ -54,7 +54,7 @@ fun LocationLatenciesScreen(
                 .padding(bottom = 50.dp)
                 .fillMaxSize()
         ) {
-            Column() {
+            Column {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Location",

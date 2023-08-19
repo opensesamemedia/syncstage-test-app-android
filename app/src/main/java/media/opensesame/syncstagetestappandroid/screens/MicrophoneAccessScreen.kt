@@ -38,7 +38,8 @@ fun MicrophoneAccessScreen(navController: NavHostController) {
     val permissionsState = rememberMultiplePermissionsState(permissions = permissions)
 
     // We allow no location permission
-    val allRequiredPermissionsGranted = permissionsState.revokedPermissions.isEmpty() || (permissionsState.revokedPermissions.size == 1 && permissionsState.revokedPermissions[0].permission == android.Manifest.permission.ACCESS_COARSE_LOCATION)
+    val allRequiredPermissionsGranted =
+        permissionsState.revokedPermissions.isEmpty() || (permissionsState.revokedPermissions.size == 1 && permissionsState.revokedPermissions[0].permission == android.Manifest.permission.ACCESS_COARSE_LOCATION)
 
     Box(
         modifier = Modifier
