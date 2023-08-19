@@ -65,5 +65,6 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 val connected_green = Color(0xFF44b700)
 val disconnected_red = Color(0xFF93000A)
+val recording_red = Color(0xFF93000A)
 
 val seed = Color(0xFF36DBFD)

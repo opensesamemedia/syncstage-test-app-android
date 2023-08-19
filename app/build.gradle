@@ -10,7 +10,7 @@ plugins {
 }
 
 ext {
-    sdkVersion = "0.4.1"
+    sdkVersion = "0.5.0"
 }
 
 def getVersionName = { String flavorName ->
@@ -123,7 +123,7 @@ dependencies {
     productionImplementation "media.opensesame:syncstagesdk:${sdkVersion}-production"
     developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
     stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
-
+//
 //    // TO BE UNCOMMENTED FOR CRASHLYTICS
 //    implementation platform('com.google.firebase:firebase-bom:31.2.2')
 //    implementation 'com.google.firebase:firebase-crashlytics-ktx'

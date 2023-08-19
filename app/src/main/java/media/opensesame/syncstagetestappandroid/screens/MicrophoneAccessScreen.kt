@@ -37,6 +37,9 @@ fun MicrophoneAccessScreen(navController: NavHostController) {
 
     val permissionsState = rememberMultiplePermissionsState(permissions = permissions)
 
+    // We allow no location permission
+    val allRequiredPermissionsGranted = permissionsState.revokedPermissions.isEmpty() || (permissionsState.revokedPermissions.size == 1 && permissionsState.revokedPermissions[0].permission == android.Manifest.permission.ACCESS_COARSE_LOCATION)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -58,14 +61,14 @@ fun MicrophoneAccessScreen(navController: NavHostController) {
                 modifier = Modifier.padding(30.dp), textAlign = TextAlign.Center
             )
             Button(onClick = {
-                if (permissionsState.allPermissionsGranted) {
+                if (allRequiredPermissionsGranted) {
                     navController.navigate(SyncStageScreen.Profile.name)
                 } else {
                     permissionsState.launchMultiplePermissionRequest()
                 }
             }) {
                 val title =
-                    if (permissionsState.allPermissionsGranted) "NEXT" else "ALLOW ACCESS"
+                    if (allRequiredPermissionsGranted) "NEXT" else "ALLOW ACCESS"
                 Text(text = title)
             }
         }
