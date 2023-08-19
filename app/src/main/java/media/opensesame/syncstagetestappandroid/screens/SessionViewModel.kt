@@ -49,7 +49,9 @@ data class SessionUIState(
     val date: Date = Date(),
     val directMonitorEnabled: Boolean = false,
     val directMonitorVolume: Float = 1F,
-    val internalMicrophoneEnabled: Boolean = false
+    val internalMicrophoneEnabled: Boolean = false,
+    val isRecording: Boolean = false,
+    val recordingRequestPending: Boolean = false,
 )
 
 
@@ -202,7 +204,8 @@ class SessionViewModel @Inject constructor(
         _uiState.update { sessionUIState ->
             sessionUIState.copy(
                 connections = connections,
-                session = value
+                session = value,
+                isRecording = value.isRecording
             )
         }
     }
@@ -315,6 +318,38 @@ class SessionViewModel @Inject constructor(
         }
     }
 
+    fun startRecording(){
+        _uiState.update {
+            it.copy(
+                recordingRequestPending = true
+            )
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = syncStage.startRecording()
+            _uiState.update {
+                it.copy(
+                    recordingRequestPending = false
+                )
+            }
+        }
+    }
+
+    fun stopRecording(){
+        _uiState.update {
+            it.copy(
+                recordingRequestPending = true
+            )
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = syncStage.stopRecording()
+            _uiState.update {
+                it.copy(
+                    recordingRequestPending = false
+                )
+            }
+        }
+    }
+
     fun toggleMicrophone(value: Boolean) {
         val result = syncStage.toggleMicrophone(value)
         if (result == SyncStageSDKErrorCode.OK) {
@@ -354,6 +389,22 @@ class SessionViewModel @Inject constructor(
 
     override fun sessionOut() {
         sessionLeft()
+    }
+
+    override fun sessionRecordingStarted() {
+        _uiState.update {
+            it.copy(
+                isRecording = true
+            )
+        }
+    }
+
+    override fun sessionRecordingStopped() {
+        _uiState.update {
+            it.copy(
+                isRecording = false
+            )
+        }
     }
 
     override fun userJoined(connection: Connection) {
