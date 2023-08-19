@@ -197,7 +197,6 @@ fun SessionScreen(
                             .fillMaxWidth()
                             .height(45.dp)
                             .background(color = DarkColorScheme.background),
-
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
                     ) {
