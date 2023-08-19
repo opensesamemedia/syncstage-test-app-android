@@ -45,6 +45,7 @@ import media.opensesame.syncstagetestappandroid.ui.theme.connected_green
 import media.opensesame.syncstagetestappandroid.ui.theme.disconnected_red
 import media.opensesame.syncstagetestappandroid.ui.theme.recording_red
 
+
 @SuppressLint("MissingPermission")
 @Composable
 fun SessionScreen(
@@ -197,6 +198,7 @@ fun SessionScreen(
 
                     Row(
                         modifier = Modifier
+                            .background(DarkColorScheme.onSurface)
                             .fillMaxWidth()
                             .height(45.dp)
                             .background(color=DarkColorScheme.background),
