@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -163,10 +164,11 @@ fun SessionScreen(
                             .fillMaxWidth()
                             .padding(start = 30.dp)
                             .padding(bottom = 15.dp)
+                            .testTag("session_code_2")
                     )
                     Button(onClick = {
                         clipboardManager.setText(AnnotatedString(sessionCode))
-                    }, modifier = Modifier.padding(bottom = 10.dp)) {
+                    }, modifier = Modifier.padding(bottom = 10.dp).testTag("copy_joining_code_btn")) {
                         Icon(
                             Icons.Filled.FileCopy, "contentDescription",
                         )
@@ -207,7 +209,8 @@ fun SessionScreen(
                             },
                             modifier = Modifier
                                 .weight(33.3f)
-                                .fillMaxHeight(),
+                                .fillMaxHeight()
+                                .testTag("end_call_btn"),
                         ) {
                             Icon(Icons.Filled.CallEnd, "contentDescription")
                         }
@@ -217,7 +220,9 @@ fun SessionScreen(
                             },
                             modifier = Modifier
                                 .weight(33.3f)
-                                .fillMaxHeight(),
+                                .fillMaxHeight()
+                                .testTag("mute_btn"),
+
                         ) {
                             val icon = if (sessionViewModel.isMuted) {
                                 Icons.Filled.MicOff
@@ -232,7 +237,8 @@ fun SessionScreen(
                             },
                             modifier = Modifier
                                 .weight(33.3f)
-                                .fillMaxHeight(),
+                                .fillMaxHeight()
+                                .testTag("options_btn"),
                         ) {
                             Icon(Icons.Filled.MoreVert, "contentDescription")
                         }
