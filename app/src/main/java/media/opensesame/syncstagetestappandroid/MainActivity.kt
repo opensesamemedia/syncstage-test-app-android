@@ -14,12 +14,15 @@ import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBarDefaults.largeTopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -105,7 +108,7 @@ fun SyncStageAppBar(
 class CustomNavController(context: Context) : NavController(context) {
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SyncStageApp(
     modifier: Modifier = Modifier
@@ -148,6 +151,9 @@ fun SyncStageApp(
                         navController = navController,
                         startDestination = SyncStageScreen.Intro.name,
                         modifier = modifier.padding(innerPadding)
+                            .semantics {
+                                testTagsAsResourceId = true
+                            }
                     ) {
                         composable(route = SyncStageScreen.Intro.name) {
                             IntroScreen(navController = navController)
