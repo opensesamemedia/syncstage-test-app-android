@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -61,7 +62,8 @@ fun MicrophoneAccessScreen(navController: NavHostController) {
                 text = "Please enable phone call management access so you can adjust the volume level in the session and use a speaker without experiencing an unpleasant echo.",
                 modifier = Modifier.padding(30.dp), textAlign = TextAlign.Center
             )
-            Button(onClick = {
+            Button(modifier = Modifier.testTag("next_allow_access_btn"),
+                onClick = {
                 if (allRequiredPermissionsGranted) {
                     navController.navigate(SyncStageScreen.Profile.name)
                 } else {
