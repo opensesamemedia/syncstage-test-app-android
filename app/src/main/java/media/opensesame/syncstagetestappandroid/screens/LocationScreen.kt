@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -92,7 +93,8 @@ fun LocationScreen(
                     Text(text = "Previous")
                 }
 
-                Button(onClick = {
+                Button(modifier = Modifier.testTag("location_next_btn"),
+                    onClick = {
                     if (loactionUIState.autoSelection) {
                         navController.navigate(SyncStageScreen.LocationLatencies.name)
                     } else {
