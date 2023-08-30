@@ -105,29 +105,37 @@ fun SessionScreen(
                             .fillMaxWidth()
                             .padding(bottom = 20.dp, top = 20.dp)
                     )
+                    sessionUIState.transmitterConnection?.let {
+                        UserConnection(connectionModel = it,
+                            measurements = sessionViewModel.getMeasurements(identifier = it.identifier),
+                            networkType = networkType ?: sessionUIState.networkTypeOldApi,
+                            true,
+                            value = 0.0f,
+                            onValueChange = { volume ->
+                                sessionViewModel.changeReceiverVolume(
+                                    it.identifier,
+                                    volume
+                                )
+                            }
+                        )
+                    }
+
 
                     sessionUIState.connections.let {
-                        it.forEach { connectionModel ->
-                            val isTransmitter =
-                                sessionViewModel.transmitterIdentifier == connectionModel.identifier
-                            var value = 0.0f
-                            if (!isTransmitter) {
-                                value =
-                                    sessionViewModel.getReceiverVolume(identifier = connectionModel.identifier)
+                        it.forEach { (identifier, connectionModel) ->
+                            val value = sessionViewModel.getReceiverVolume(identifier = identifier)
                                         .toFloat()
-                            }
-                            val measurements =
-                                sessionViewModel.getMeasurements(identifier = connectionModel.identifier)
+
 
 
                             UserConnection(connectionModel = connectionModel,
-                                measurements = measurements,
+                                measurements = sessionViewModel.getMeasurements(identifier = identifier),
                                 networkType = networkType ?: sessionUIState.networkTypeOldApi,
-                                isTransmitter,
+                                false,
                                 value = value,
                                 onValueChange = { volume ->
                                     sessionViewModel.changeReceiverVolume(
-                                        connectionModel.identifier,
+                                        identifier,
                                         volume
                                     )
                                 }
