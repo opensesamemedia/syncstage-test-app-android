@@ -10,7 +10,7 @@ plugins {
 }
 
 ext {
-    sdkVersion = "0.5.0"
+    sdkVersion = "0.5.1-rc1"
 }
 
 def getVersionName = { String flavorName ->
@@ -50,8 +50,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-
-        defaultPublishConfig "production"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -91,14 +89,6 @@ android {
                 archivesBaseName = "$applicationId-${getVersionName('staging')}"
             }
         }
-        production {
-            dimension "environment"
-            versionName getVersionName("production")
-            buildConfigField "String", "VERSION_NAME", "\"${getVersionName("production")}\""
-            defaultConfig {
-                archivesBaseName = "$applicationId-${getVersionName('production')}"
-            }
-        }
         master {
             dimension "environment"
             versionName getVersionName("master")
@@ -120,7 +110,6 @@ android {
 
 dependencies {
     masterImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
-    productionImplementation "media.opensesame:syncstagesdk:${sdkVersion}-production"
     developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
     stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
 //
