@@ -164,12 +164,6 @@ class SessionViewModel @Inject constructor(
             return uiState.value.internalMicrophoneEnabled
         }
 
-    val transmitterIdentifier: String
-        get() {
-            val identifier = uiState.value.session?.transmitter?.identifier
-            return identifier ?: ""
-        }
-
     private fun initWidgetsState() {
         _uiState.update { sessionUIState ->
             sessionUIState.copy(
@@ -375,7 +369,7 @@ class SessionViewModel @Inject constructor(
     }
 
     fun getMeasurements(identifier: String): Measurements {
-        return if (identifier == transmitterIdentifier) {
+        return if (identifier == uiState.value.session?.transmitter?.identifier) {
             syncStage.getTransmitterMeasurements()
         } else {
             syncStage.getReceiverMeasurements(identifier = identifier)
@@ -458,10 +452,12 @@ class SessionViewModel @Inject constructor(
     }
 
     override fun transmitterConnectivityChanged(connected: Boolean) {
-        if (transmitterIdentifier == _uiState.value.transmitterConnection?.identifier) {
-            updateConnection(transmitterIdentifier) {
-                it.copy(isConnected = connected)
-            }
+        _uiState.update {
+            val transmitterConnection = it.transmitterConnection
+            transmitterConnection?.isConnected = connected
+            it.copy(
+                transmitterConnection = transmitterConnection
+            )
         }
     }
 }
