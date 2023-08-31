@@ -50,8 +50,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-
-        defaultPublishConfig "production"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
