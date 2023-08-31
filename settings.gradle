@@ -36,7 +36,7 @@ if (propsFile.isFile()) {
 }
 rootProject.name = "SyncStageTestAppAndroid"
 include ':app'
-if(sourcesBuild) {
+if(Boolean.parseBoolean(sourcesBuild)) {
     println 'Using SyncStageSDK built from sources!'
     includeBuild '..'
 } else {
