@@ -45,7 +45,7 @@ data class ConnectionModel(
 data class SessionUIState(
     val session: Session? = null,
     val transmitterConnection: ConnectionModel? = null,
-    val connections: HashMap<String, ConnectionModel> = HashMap(),
+    val connections: MutableMap<String, ConnectionModel> = mutableMapOf(),
     val networkTypeOldApi: String = "",
     val date: Date = Date(),
     val directMonitorEnabled: Boolean = false,
@@ -149,8 +149,7 @@ class SessionViewModel @Inject constructor(
 
     val isMuted: Boolean
         get() {
-            val connection = uiState.value.transmitterConnection
-            return connection?.isMuted ?: false
+            return uiState.value.transmitterConnection?.isMuted ?: false
         }
 
 
@@ -176,7 +175,7 @@ class SessionViewModel @Inject constructor(
 
     private fun updateSession(value: Session) {
         var transmitterConnection: ConnectionModel? = null
-        val connections: HashMap<String, ConnectionModel> = HashMap()
+        val connections: MutableMap<String, ConnectionModel> = mutableMapOf()
 
         value.transmitter?.let {
             transmitterConnection =
@@ -208,7 +207,7 @@ class SessionViewModel @Inject constructor(
 
     private fun updateConnection(identifier: String, update: (ConnectionModel) -> ConnectionModel) {
         CoroutineScope(Dispatchers.Main).launch {
-            val connections = uiState.value.connections
+            val connections = uiState.value.connections.toMutableMap()
             val connection = connections[identifier]
             if (connection != null) {
                 connections[connection.identifier] = update(connection)
@@ -350,7 +349,7 @@ class SessionViewModel @Inject constructor(
         val result = syncStage.toggleMicrophone(value)
         if (result == SyncStageSDKErrorCode.OK) {
             _uiState.update {
-                val transmitterConnection = it.transmitterConnection
+                val transmitterConnection = it.transmitterConnection?.copy()
                 transmitterConnection?.isMuted = value
                 it.copy(
                     transmitterConnection = transmitterConnection
@@ -410,7 +409,7 @@ class SessionViewModel @Inject constructor(
 
     override fun userJoined(connection: Connection) {
         _uiState.update {
-            val connections = it.connections
+            val connections = it.connections.toMutableMap()
             connections[connection.identifier] = ConnectionModel(
                 identifier = connection.identifier,
                 userId = connection.userId,
@@ -425,7 +424,7 @@ class SessionViewModel @Inject constructor(
 
     override fun userLeft(identifier: String) {
         _uiState.update {
-            val connections = it.connections
+            val connections = it.connections.toMutableMap()
             connections.remove(identifier)
             it.copy(
                 connections = connections
@@ -453,7 +452,7 @@ class SessionViewModel @Inject constructor(
 
     override fun transmitterConnectivityChanged(connected: Boolean) {
         _uiState.update {
-            val transmitterConnection = it.transmitterConnection
+            val transmitterConnection = it.transmitterConnection?.copy()
             transmitterConnection?.isConnected = connected
             it.copy(
                 transmitterConnection = transmitterConnection

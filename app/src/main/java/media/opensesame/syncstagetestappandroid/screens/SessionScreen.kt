@@ -106,30 +106,24 @@ fun SessionScreen(
                             .padding(bottom = 20.dp, top = 20.dp)
                     )
                     sessionUIState.transmitterConnection?.let {
+                        val measurements = sessionViewModel.getMeasurements(identifier = it.identifier)
                         UserConnection(connectionModel = it,
-                            measurements = sessionViewModel.getMeasurements(identifier = it.identifier),
+                            measurements = measurements,
                             networkType = networkType ?: sessionUIState.networkTypeOldApi,
                             true,
                             value = 0.0f,
-                            onValueChange = { volume ->
-                                sessionViewModel.changeReceiverVolume(
-                                    it.identifier,
-                                    volume
-                                )
-                            }
+                            onValueChange = {  }
                         )
                     }
-
 
                     sessionUIState.connections.let {
                         it.forEach { (identifier, connectionModel) ->
                             val value = sessionViewModel.getReceiverVolume(identifier = identifier)
                                         .toFloat()
-
-
+                            val measurements = sessionViewModel.getMeasurements(identifier = identifier)
 
                             UserConnection(connectionModel = connectionModel,
-                                measurements = sessionViewModel.getMeasurements(identifier = identifier),
+                                measurements = measurements,
                                 networkType = networkType ?: sessionUIState.networkTypeOldApi,
                                 false,
                                 value = value,
