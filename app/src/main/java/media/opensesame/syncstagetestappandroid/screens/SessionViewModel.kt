@@ -45,7 +45,7 @@ data class ConnectionModel(
 data class SessionUIState(
     val session: Session? = null,
     val transmitterConnection: ConnectionModel? = null,
-    val connections: MutableMap<String, ConnectionModel> = mutableMapOf(),
+    val connections: HashMap<String, ConnectionModel> = HashMap(),
     val networkTypeOldApi: String = "",
     val date: Date = Date(),
     val directMonitorEnabled: Boolean = false,
@@ -165,8 +165,8 @@ class SessionViewModel @Inject constructor(
         }
 
     private fun initWidgetsState() {
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
+        _uiState.update {
+            it.copy(
                 directMonitorVolume = syncStage.getDirectMonitorVolume().toFloat() / 100,
                 directMonitorEnabled = syncStage.getDirectMonitorEnabled(),
                 internalMicrophoneEnabled = syncStage.getInternalMicEnabled(),
@@ -176,7 +176,7 @@ class SessionViewModel @Inject constructor(
 
     private fun updateSession(value: Session) {
         var transmitterConnection: ConnectionModel? = null
-        val connections: MutableMap<String, ConnectionModel> = mutableMapOf()
+        val connections: HashMap<String, ConnectionModel> = HashMap()
 
         value.transmitter?.let {
             transmitterConnection =
@@ -196,8 +196,8 @@ class SessionViewModel @Inject constructor(
                 isMuted = receiver.isMuted
             )
         }
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
+        _uiState.update {
+            it.copy(
                 transmitterConnection = transmitterConnection,
                 connections = connections,
                 session = value,
@@ -212,8 +212,8 @@ class SessionViewModel @Inject constructor(
             val connection = connections[identifier]
             if (connection != null) {
                 connections[connection.identifier] = update(connection)
-                _uiState.update { sessionUIState ->
-                    sessionUIState.copy(
+                _uiState.update {
+                    it.copy(
                         connections = connections
                     )
                 }
@@ -236,8 +236,8 @@ class SessionViewModel @Inject constructor(
 
     private fun getDirectMonitorVolume(): Int {
         val dmVolume = syncStage.getDirectMonitorVolume()
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
+        _uiState.update {
+            it.copy(
                 directMonitorVolume = (dmVolume / 100).toFloat(),
             )
         }
@@ -248,8 +248,8 @@ class SessionViewModel @Inject constructor(
     fun changeDirectMonitorVolume(volume: Float) {
         val result = syncStage.changeDirectMonitorVolume((volume * 100).toInt())
         if (result == SyncStageSDKErrorCode.OK) {
-            _uiState.update { sessionUIState ->
-                sessionUIState.copy(
+            _uiState.update {
+                it.copy(
                     directMonitorVolume = volume,
                 )
             }
