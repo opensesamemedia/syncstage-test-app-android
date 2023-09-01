@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +48,8 @@ fun UserConnection(
     ) {
         Canvas(modifier = Modifier
             .size(30.dp)
-            .padding(end = 10.dp), onDraw = {
+            .padding(end = 10.dp)
+            .testTag("connection_circle"), onDraw = {
             drawCircle(color = if (connectionModel.isConnected) connected_green else disconnected_red)
         })
 
@@ -86,7 +88,7 @@ fun UserConnection(
             ) {
                 append("${measurements.quality} %")
             }
-        }, modifier = Modifier.weight(0.33f))
+        }, modifier = Modifier.weight(0.33f).testTag("call_quality"))
         Text(buildAnnotatedString {
             withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Ping: ")
@@ -100,7 +102,7 @@ fun UserConnection(
             ) {
                 append("${if (measurements.networkDelayMs != 0 && measurements.networkDelayMs != -1) measurements.networkDelayMs else '-'} ms")
             }
-        }, modifier = Modifier.weight(0.33f))
+        }, modifier = Modifier.weight(0.33f).testTag("call_ping"))
         Text(buildAnnotatedString {
             withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Jitter: ")
@@ -114,7 +116,7 @@ fun UserConnection(
             ) {
                 append("${if (measurements.networkJitterMs != 0 && measurements.networkJitterMs != -1) measurements.networkJitterMs else '-'} ms")
             }
-        }, modifier = Modifier.weight(0.33f))
+        }, modifier = Modifier.weight(0.33f).testTag("call_jitter"))
     }
     if (isTransmitter) {
         Row(
@@ -122,7 +124,7 @@ fun UserConnection(
                 .fillMaxWidth()
                 .padding(bottom = 10.dp)
         ) {
-            Text(text = "Network type: $networkType")
+            Text(text = "Network type: $networkType", modifier = Modifier.testTag("network_type"))
         }
     }
     Divider(color = Color.Gray)

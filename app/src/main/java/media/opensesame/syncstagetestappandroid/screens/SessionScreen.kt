@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -104,29 +105,31 @@ fun SessionScreen(
                             .fillMaxWidth()
                             .padding(bottom = 20.dp, top = 20.dp)
                     )
+                    sessionUIState.transmitterConnection?.let {
+                        val measurements = sessionViewModel.getMeasurements(identifier = it.identifier)
+                        UserConnection(connectionModel = it,
+                            measurements = measurements,
+                            networkType = networkType ?: sessionUIState.networkTypeOldApi,
+                            true,
+                            value = 0.0f,
+                            onValueChange = {  }
+                        )
+                    }
 
                     sessionUIState.connections.let {
-                        it.forEach { connectionModel ->
-                            val isTransmitter =
-                                sessionViewModel.transmitterIdentifier == connectionModel.identifier
-                            var value = 0.0f
-                            if (!isTransmitter) {
-                                value =
-                                    sessionViewModel.getReceiverVolume(identifier = connectionModel.identifier)
+                        it.forEach { (identifier, connectionModel) ->
+                            val value = sessionViewModel.getReceiverVolume(identifier = identifier)
                                         .toFloat()
-                            }
-                            val measurements =
-                                sessionViewModel.getMeasurements(identifier = connectionModel.identifier)
-
+                            val measurements = sessionViewModel.getMeasurements(identifier = identifier)
 
                             UserConnection(connectionModel = connectionModel,
                                 measurements = measurements,
                                 networkType = networkType ?: sessionUIState.networkTypeOldApi,
-                                isTransmitter,
+                                false,
                                 value = value,
                                 onValueChange = { volume ->
                                     sessionViewModel.changeReceiverVolume(
-                                        connectionModel.identifier,
+                                        identifier,
                                         volume
                                     )
                                 }
@@ -163,10 +166,11 @@ fun SessionScreen(
                             .fillMaxWidth()
                             .padding(start = 30.dp)
                             .padding(bottom = 15.dp)
+                            .testTag("session_code_2")
                     )
                     Button(onClick = {
                         clipboardManager.setText(AnnotatedString(sessionCode))
-                    }, modifier = Modifier.padding(bottom = 10.dp)) {
+                    }, modifier = Modifier.padding(bottom = 10.dp).testTag("copy_joining_code_btn")) {
                         Icon(
                             Icons.Filled.FileCopy, "contentDescription",
                         )
@@ -207,7 +211,8 @@ fun SessionScreen(
                             },
                             modifier = Modifier
                                 .weight(33.3f)
-                                .fillMaxHeight(),
+                                .fillMaxHeight()
+                                .testTag("end_call_btn"),
                         ) {
                             Icon(Icons.Filled.CallEnd, "contentDescription")
                         }
@@ -217,7 +222,9 @@ fun SessionScreen(
                             },
                             modifier = Modifier
                                 .weight(33.3f)
-                                .fillMaxHeight(),
+                                .fillMaxHeight()
+                                .testTag("mute_btn"),
+
                         ) {
                             val icon = if (sessionViewModel.isMuted) {
                                 Icons.Filled.MicOff
@@ -232,7 +239,8 @@ fun SessionScreen(
                             },
                             modifier = Modifier
                                 .weight(33.3f)
-                                .fillMaxHeight(),
+                                .fillMaxHeight()
+                                .testTag("options_btn"),
                         ) {
                             Icon(Icons.Filled.MoreVert, "contentDescription")
                         }
