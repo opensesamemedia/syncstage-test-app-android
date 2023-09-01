@@ -44,7 +44,8 @@ data class ConnectionModel(
 
 data class SessionUIState(
     val session: Session? = null,
-    val connections: MutableList<ConnectionModel> = mutableListOf(),
+    val transmitterConnection: ConnectionModel? = null,
+    val connections: MutableMap<String, ConnectionModel> = mutableMapOf(),
     val networkTypeOldApi: String = "",
     val date: Date = Date(),
     val directMonitorEnabled: Boolean = false,
@@ -148,8 +149,7 @@ class SessionViewModel @Inject constructor(
 
     val isMuted: Boolean
         get() {
-            val connection = uiState.value.connections.firstOrNull()
-            return connection?.isMuted ?: false
+            return uiState.value.transmitterConnection?.isMuted ?: false
         }
 
 
@@ -163,15 +163,9 @@ class SessionViewModel @Inject constructor(
             return uiState.value.internalMicrophoneEnabled
         }
 
-    val transmitterIdentifier: String
-        get() {
-            val identifier = uiState.value.session?.transmitter?.identifier
-            return identifier ?: ""
-        }
-
     private fun initWidgetsState() {
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
+        _uiState.update {
+            it.copy(
                 directMonitorVolume = syncStage.getDirectMonitorVolume().toFloat() / 100,
                 directMonitorEnabled = syncStage.getDirectMonitorEnabled(),
                 internalMicrophoneEnabled = syncStage.getInternalMicEnabled(),
@@ -180,29 +174,30 @@ class SessionViewModel @Inject constructor(
     }
 
     private fun updateSession(value: Session) {
-        val connections: MutableList<ConnectionModel> = mutableListOf()
+        var transmitterConnection: ConnectionModel? = null
+        val connections: MutableMap<String, ConnectionModel> = mutableMapOf()
+
         value.transmitter?.let {
-            connections.add(
+            transmitterConnection =
                 ConnectionModel(
                     identifier = it.identifier,
                     userId = it.userId,
                     displayName = it.displayName,
                     isMuted = it.isMuted
                 )
-            )
+
         }
         value.receivers.forEach { receiver ->
-            connections.add(
-                ConnectionModel(
-                    identifier = receiver.identifier,
-                    userId = receiver.userId,
-                    displayName = receiver.displayName,
-                    isMuted = receiver.isMuted
-                )
+            connections[receiver.identifier] = ConnectionModel(
+                identifier = receiver.identifier,
+                userId = receiver.userId,
+                displayName = receiver.displayName,
+                isMuted = receiver.isMuted
             )
         }
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
+        _uiState.update {
+            it.copy(
+                transmitterConnection = transmitterConnection,
                 connections = connections,
                 session = value,
                 isRecording = value.isRecording
@@ -212,12 +207,12 @@ class SessionViewModel @Inject constructor(
 
     private fun updateConnection(identifier: String, update: (ConnectionModel) -> ConnectionModel) {
         CoroutineScope(Dispatchers.Main).launch {
-            val connections = uiState.value.connections.toMutableList()
-            val index = connections.indexOfFirst { it.identifier == identifier }
-            if (index != -1) {
-                connections[index] = update(connections[index])
-                _uiState.update { sessionUIState ->
-                    sessionUIState.copy(
+            val connections = uiState.value.connections.toMutableMap()
+            val connection = connections[identifier]
+            if (connection != null) {
+                connections[connection.identifier] = update(connection)
+                _uiState.update {
+                    it.copy(
                         connections = connections
                     )
                 }
@@ -240,8 +235,8 @@ class SessionViewModel @Inject constructor(
 
     private fun getDirectMonitorVolume(): Int {
         val dmVolume = syncStage.getDirectMonitorVolume()
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
+        _uiState.update {
+            it.copy(
                 directMonitorVolume = (dmVolume / 100).toFloat(),
             )
         }
@@ -252,8 +247,8 @@ class SessionViewModel @Inject constructor(
     fun changeDirectMonitorVolume(volume: Float) {
         val result = syncStage.changeDirectMonitorVolume((volume * 100).toInt())
         if (result == SyncStageSDKErrorCode.OK) {
-            _uiState.update { sessionUIState ->
-                sessionUIState.copy(
+            _uiState.update {
+                it.copy(
                     directMonitorVolume = volume,
                 )
             }
@@ -353,9 +348,14 @@ class SessionViewModel @Inject constructor(
     fun toggleMicrophone(value: Boolean) {
         val result = syncStage.toggleMicrophone(value)
         if (result == SyncStageSDKErrorCode.OK) {
-            updateConnection(transmitterIdentifier) { connection ->
-                connection.copy(isMuted = value)
+            _uiState.update {
+                val transmitterConnection = it.transmitterConnection?.copy()
+                transmitterConnection?.isMuted = value
+                it.copy(
+                    transmitterConnection = transmitterConnection
+                )
             }
+
         }
     }
 
@@ -368,7 +368,7 @@ class SessionViewModel @Inject constructor(
     }
 
     fun getMeasurements(identifier: String): Measurements {
-        return if (identifier == transmitterIdentifier) {
+        return if (identifier == uiState.value.session?.transmitter?.identifier) {
             syncStage.getTransmitterMeasurements()
         } else {
             syncStage.getReceiverMeasurements(identifier = identifier)
@@ -409,14 +409,12 @@ class SessionViewModel @Inject constructor(
 
     override fun userJoined(connection: Connection) {
         _uiState.update {
-            val connections = it.connections.toMutableList()
-            connections.add(
-                ConnectionModel(
-                    identifier = connection.identifier,
-                    userId = connection.userId,
-                    displayName = connection.displayName,
-                    isMuted = connection.isMuted
-                )
+            val connections = it.connections.toMutableMap()
+            connections[connection.identifier] = ConnectionModel(
+                identifier = connection.identifier,
+                userId = connection.userId,
+                displayName = connection.displayName,
+                isMuted = connection.isMuted
             )
             it.copy(
                 connections = connections
@@ -425,12 +423,10 @@ class SessionViewModel @Inject constructor(
     }
 
     override fun userLeft(identifier: String) {
-        _uiState.update { sessionUIState ->
-            val connections = sessionUIState.connections.toMutableList()
-            connections.removeIf { connection ->
-                connection.identifier == identifier
-            }
-            sessionUIState.copy(
+        _uiState.update {
+            val connections = it.connections.toMutableMap()
+            connections.remove(identifier)
+            it.copy(
                 connections = connections
             )
         }
@@ -455,10 +451,12 @@ class SessionViewModel @Inject constructor(
     }
 
     override fun transmitterConnectivityChanged(connected: Boolean) {
-        if (transmitterIdentifier == _uiState.value.connections.firstOrNull()?.identifier) {
-            updateConnection(transmitterIdentifier) {
-                it.copy(isConnected = connected)
-            }
+        _uiState.update {
+            val transmitterConnection = it.transmitterConnection?.copy()
+            transmitterConnection?.isConnected = connected
+            it.copy(
+                transmitterConnection = transmitterConnection
+            )
         }
     }
 }

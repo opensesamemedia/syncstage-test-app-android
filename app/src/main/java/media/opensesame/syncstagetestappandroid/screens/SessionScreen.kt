@@ -105,29 +105,31 @@ fun SessionScreen(
                             .fillMaxWidth()
                             .padding(bottom = 20.dp, top = 20.dp)
                     )
+                    sessionUIState.transmitterConnection?.let {
+                        val measurements = sessionViewModel.getMeasurements(identifier = it.identifier)
+                        UserConnection(connectionModel = it,
+                            measurements = measurements,
+                            networkType = networkType ?: sessionUIState.networkTypeOldApi,
+                            true,
+                            value = 0.0f,
+                            onValueChange = {  }
+                        )
+                    }
 
                     sessionUIState.connections.let {
-                        it.forEach { connectionModel ->
-                            val isTransmitter =
-                                sessionViewModel.transmitterIdentifier == connectionModel.identifier
-                            var value = 0.0f
-                            if (!isTransmitter) {
-                                value =
-                                    sessionViewModel.getReceiverVolume(identifier = connectionModel.identifier)
+                        it.forEach { (identifier, connectionModel) ->
+                            val value = sessionViewModel.getReceiverVolume(identifier = identifier)
                                         .toFloat()
-                            }
-                            val measurements =
-                                sessionViewModel.getMeasurements(identifier = connectionModel.identifier)
-
+                            val measurements = sessionViewModel.getMeasurements(identifier = identifier)
 
                             UserConnection(connectionModel = connectionModel,
                                 measurements = measurements,
                                 networkType = networkType ?: sessionUIState.networkTypeOldApi,
-                                isTransmitter,
+                                false,
                                 value = value,
                                 onValueChange = { volume ->
                                     sessionViewModel.changeReceiverVolume(
-                                        connectionModel.identifier,
+                                        identifier,
                                         volume
                                     )
                                 }
