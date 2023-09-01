@@ -26,7 +26,7 @@ dependencyResolutionManagement {
 
 //If SDK sources are available end enabled build SDK from sources
 def props = new Properties()
-def sourcesBuild=false
+def sourcesBuild='false'
 File propsFile = file("$rootDir/../extra.properties")
 if (propsFile.isFile()) {
     propsFile.withInputStream { props.load(it) }
