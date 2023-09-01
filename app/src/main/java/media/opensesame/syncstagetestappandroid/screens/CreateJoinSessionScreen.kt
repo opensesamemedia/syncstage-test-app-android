@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -80,9 +81,11 @@ fun CreateJoinSessionScreen(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp),
-            )
-            Button(onClick = {
+                    .padding(bottom = 10.dp)
+                    .testTag("session_code"),
+                )
+            Button(modifier = Modifier.testTag("join_btn"),
+                onClick = {
                 if (createJoinUIState.sessionCode.isNotEmpty()) {
                     navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${createJoinUIState.sessionCode}")
                 }
@@ -90,7 +93,8 @@ fun CreateJoinSessionScreen(
                 Text(text = "JOIN")
             }
             Text(text = "Or")
-            Button(onClick = {
+            Button(modifier = Modifier.testTag("new_session_btn"),
+                onClick = {
                 showLoadingIndicator = true
                 createJoinViewModel.createNewSession()
             }) {
