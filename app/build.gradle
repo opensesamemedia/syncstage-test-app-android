@@ -14,24 +14,42 @@ ext {
 }
 
 def getVersionName = { String flavorName ->
-    exec {
+    def fetchOut = new ByteArrayOutputStream()
+    def fetchOutErr = new ByteArrayOutputStream()
+    try {
+      exec {
         commandLine 'git', 'fetch', '--all', '--tags'
+        standardOutput = fetchOut
+        errorOutput = fetchOutErr
+      }
+    } catch (Exception e) {
+      logger.warn("Git fetch warning " + e.message + fetchOutErr.toString().trim().replace("error", "warning"))
     }
 
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'describe', '--tags', '--abbrev=0', '--always'
-        standardOutput = stdout
+    def baseVersionName = "undefined"
+    try {
+      def stdout = new ByteArrayOutputStream()
+      exec {
+          commandLine 'git', 'describe', '--tags', '--abbrev=0', '--always'
+          standardOutput = stdout
+      }
+
+      baseVersionName = stdout.toString().trim()
+    } catch (Exception e) {
+      println(e.message)
     }
 
-    def baseVersionName = stdout.toString().trim()
-
-    def commitHashStdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-parse', '--short', 'HEAD'
-        standardOutput = commitHashStdout
+    def commitHash = "undefined"
+    try {
+      def commitHashStdout = new ByteArrayOutputStream()
+      exec {
+          commandLine 'git', 'rev-parse', '--short', 'HEAD'
+          standardOutput = commitHashStdout
+      }
+      commitHash = commitHashStdout.toString().trim()
+    } catch (Exception e) {
+      println(e.message)
     }
-    def commitHash = commitHashStdout.toString().trim()
 
     return flavorName == "master" ? "$baseVersionName-$commitHash-sdk$sdkVersion" : "$baseVersionName-$commitHash-sdk$sdkVersion-$flavorName"
 }
