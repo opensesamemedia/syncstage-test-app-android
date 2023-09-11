@@ -7,7 +7,7 @@ pluginManagement {
 }
 
 def githubProperties = new Properties()
-githubProperties.load(new FileInputStream("github.properties"))  // Set env variable GPR_USER & GPR_API_KEY if not adding a properties file
+githubProperties.load(new FileInputStream("$rootDir/github.properties"))  // Set env variable GPR_USER & GPR_API_KEY if not adding a properties file
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -23,5 +23,22 @@ dependencyResolutionManagement {
         }
     }
 }
+
+//If SDK sources are available end enabled build SDK from sources
+def props = new Properties()
+def sourcesBuild='false'
+File propsFile = file("$rootDir/../extra.properties")
+if (propsFile.isFile()) {
+    propsFile.withInputStream { props.load(it) }
+    if (props!=null && props.containsKey('sourcesBuild')) {
+        sourcesBuild=props['sourcesBuild']
+    }
+}
 rootProject.name = "SyncStageTestAppAndroid"
 include ':app'
+if(Boolean.parseBoolean(sourcesBuild)) {
+    println 'Using SyncStageSDK built from sources!'
+    includeBuild '..'
+} else {
+    println 'Using SyncStageSDK package from repository.'
+}
