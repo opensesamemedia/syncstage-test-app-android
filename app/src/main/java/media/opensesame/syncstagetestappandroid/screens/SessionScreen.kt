@@ -5,6 +5,8 @@ import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,9 +19,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -29,18 +34,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Popup
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import media.opensesame.syncstagesdk.LatencyOptimizationLevel
 import media.opensesame.syncstagesdk.utils.decodeNetworkType
 import media.opensesame.syncstagetestappandroid.components.LoadingIndicator
 import media.opensesame.syncstagetestappandroid.components.UserConnection
 import media.opensesame.syncstagetestappandroid.ui.theme.DarkColorScheme
 import media.opensesame.syncstagetestappandroid.ui.theme.LightColorScheme
 import media.opensesame.syncstagetestappandroid.ui.theme.recording_red
+import androidx.compose.material.DropdownMenuItem
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -53,6 +61,9 @@ fun SessionScreen(
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     var popupControl by remember { mutableStateOf(false) }
     var showLoadingIndicator by remember { mutableStateOf(false) }
+    var optimizationDropdownExpanded by remember { mutableStateOf(false) }
+    var optimizationDropdownTextFieldSize by remember { mutableStateOf(Size.Zero) }
+
 
     val telephony by sessionViewModel.telephonyType.collectAsState()
     val networkType: String? = if (Build.VERSION.SDK_INT >= 30) {
@@ -338,6 +349,74 @@ fun SessionScreen(
                             }
 
                             Text(text = "Note: A headphone required to enable the direct monitor feature.")
+
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 12.dp, top = 12.dp),
+                            ) {
+                                Text(
+                                    text = "Optimization level",
+                                    style = MaterialTheme.typography.titleLarge,
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Box(contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .clickable {
+                                            optimizationDropdownExpanded = !optimizationDropdownExpanded
+                                        }
+                                        .fillMaxWidth()
+                                        .border(
+                                            width = 2.dp,
+                                            color = MaterialTheme.colorScheme.primary,
+                                            shape = RoundedCornerShape(5.dp)
+                                        )
+                                        .height(60.dp)
+                                        .onGloballyPositioned {
+                                            optimizationDropdownTextFieldSize = it.size.toSize()
+                                        }
+                                ) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Center
+                                    ) {
+                                        Text(
+                                            text = sessionUIState.optimizationLevel?.name ?: "",
+                                            modifier = Modifier.padding(start = 10.dp)
+                                        )
+                                        Spacer(modifier = Modifier.weight(1.0f))
+                                        val icon =
+                                            if (optimizationDropdownExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
+                                        Icon(
+                                            icon, "contentDescription",
+                                            Modifier
+                                                .padding(end = 10.dp)
+                                                .size(30.dp, 30.dp)
+                                        )
+                                    }
+                                    DropdownMenu(
+                                        expanded = optimizationDropdownExpanded,
+                                        onDismissRequest = { optimizationDropdownExpanded = false },
+                                        modifier = Modifier
+                                            .width(with(LocalDensity.current) {
+                                                optimizationDropdownTextFieldSize.width.toDp()
+                                            })
+                                            .fillMaxHeight(0.3f)
+                                    ) {
+                                        for (enumValue in LatencyOptimizationLevel.values()) {
+                                            DropdownMenuItem(onClick = {
+                                                sessionViewModel.setLatencyOptimizationLevel(enumValue)
+                                                optimizationDropdownExpanded = false
+                                            }) {
+                                                Text(
+                                                    text = enumValue.name,
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
