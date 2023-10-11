@@ -95,6 +95,7 @@ android {
             dimension "environment"
             versionName getVersionName("development")
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("development")}\""
+            buildConfigField "String", "API_URL", "\"https://f55pesypsd.execute-api.us-east-1.amazonaws.com/dev/\""
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('development')}"
             }
@@ -103,6 +104,7 @@ android {
             dimension "environment"
             versionName getVersionName("staging")
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("staging")}\""
+            buildConfigField "String", "API_URL", "\"https://3bty5ooqg7.execute-api.us-east-1.amazonaws.com/staging/\""
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('staging')}"
             }
@@ -110,6 +112,7 @@ android {
         master {
             dimension "environment"
             versionName getVersionName("master")
+            buildConfigField "String", "API_URL", "\"https://api.sync-stage.com/\""
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("master")}\""
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('master')}"
@@ -158,6 +161,11 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+
+    // HTTP requests for provisioning dependencies:
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
 }
 
 // Allow references to generated code

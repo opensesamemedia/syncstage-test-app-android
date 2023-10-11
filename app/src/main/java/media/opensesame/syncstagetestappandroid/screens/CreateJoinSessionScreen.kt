@@ -83,21 +83,22 @@ fun CreateJoinSessionScreen(
                     .fillMaxWidth()
                     .padding(bottom = 10.dp)
                     .testTag("session_code"),
-                )
+            )
             Button(modifier = Modifier.testTag("join_btn"),
                 onClick = {
-                if (createJoinUIState.sessionCode.isNotEmpty()) {
-                    navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${createJoinUIState.sessionCode}")
-                }
-            }, enabled = createJoinUIState.sessionCode.isNotEmpty()) {
+                    if (createJoinUIState.sessionCode.isNotEmpty()) {
+                        navController.navigate(route = SyncStageScreen.Session.name + "?sessionCode=${createJoinUIState.sessionCode}")
+                    }
+                }, enabled = createJoinUIState.sessionCode.isNotEmpty()
+            ) {
                 Text(text = "JOIN")
             }
             Text(text = "Or")
             Button(modifier = Modifier.testTag("new_session_btn"),
                 onClick = {
-                showLoadingIndicator = true
-                createJoinViewModel.createNewSession()
-            }) {
+                    showLoadingIndicator = true
+                    createJoinViewModel.createNewSession()
+                }) {
                 Text(text = "NEW SESSION")
             }
         }

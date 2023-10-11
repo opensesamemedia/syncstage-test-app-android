@@ -11,6 +11,7 @@ class PreferencesRepo @Inject constructor(
     private val userIdKey = "userId"
     private val zoneIdKey = "zoneId"
     private val studioServerIdKey = "studioServerId"
+    private val syncStageSecretKey = "syncStageSecret"
 
     fun updateUserName(userName: String) {
         print(userName)
@@ -70,5 +71,18 @@ class PreferencesRepo @Inject constructor(
         val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
         val studioServerId = sharedPref.getString(studioServerIdKey, "")
         return studioServerId ?: ""
+    }
+
+    fun updateSyncStageSecret(syncStageSecret: String) {
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString(syncStageSecretKey, syncStageSecret)
+            apply()
+        }
+    }
+
+    fun getSyncStageSecret(): String? {
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        return sharedPref.getString(syncStageSecretKey, null)
     }
 }

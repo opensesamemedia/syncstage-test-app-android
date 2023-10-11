@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Close
@@ -48,7 +49,6 @@ import media.opensesame.syncstagetestappandroid.components.UserConnection
 import media.opensesame.syncstagetestappandroid.ui.theme.DarkColorScheme
 import media.opensesame.syncstagetestappandroid.ui.theme.LightColorScheme
 import media.opensesame.syncstagetestappandroid.ui.theme.recording_red
-import androidx.compose.material.DropdownMenuItem
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -117,21 +117,23 @@ fun SessionScreen(
                             .padding(bottom = 20.dp, top = 20.dp)
                     )
                     sessionUIState.transmitterConnection?.let {
-                        val measurements = sessionViewModel.getMeasurements(identifier = it.identifier)
+                        val measurements =
+                            sessionViewModel.getMeasurements(identifier = it.identifier)
                         UserConnection(connectionModel = it,
                             measurements = measurements,
                             networkType = networkType ?: sessionUIState.networkTypeOldApi,
                             true,
                             value = 0.0f,
-                            onValueChange = {  }
+                            onValueChange = { }
                         )
                     }
 
                     sessionUIState.connections.let {
                         it.forEach { (identifier, connectionModel) ->
                             val value = sessionViewModel.getReceiverVolume(identifier = identifier)
-                                        .toFloat()
-                            val measurements = sessionViewModel.getMeasurements(identifier = identifier)
+                                .toFloat()
+                            val measurements =
+                                sessionViewModel.getMeasurements(identifier = identifier)
 
                             UserConnection(connectionModel = connectionModel,
                                 measurements = measurements,
@@ -179,9 +181,14 @@ fun SessionScreen(
                             .padding(bottom = 15.dp)
                             .testTag("session_code_2")
                     )
-                    Button(onClick = {
-                        clipboardManager.setText(AnnotatedString(sessionCode))
-                    }, modifier = Modifier.padding(bottom = 10.dp).testTag("copy_joining_code_btn")) {
+                    Button(
+                        onClick = {
+                            clipboardManager.setText(AnnotatedString(sessionCode))
+                        },
+                        modifier = Modifier
+                            .padding(bottom = 10.dp)
+                            .testTag("copy_joining_code_btn")
+                    ) {
                         Icon(
                             Icons.Filled.FileCopy, "contentDescription",
                         )
@@ -236,7 +243,7 @@ fun SessionScreen(
                                 .fillMaxHeight()
                                 .testTag("mute_btn"),
 
-                        ) {
+                            ) {
                             val icon = if (sessionViewModel.isMuted) {
                                 Icons.Filled.MicOff
                             } else {
@@ -363,7 +370,8 @@ fun SessionScreen(
                                 Box(contentAlignment = Alignment.Center,
                                     modifier = Modifier
                                         .clickable {
-                                            optimizationDropdownExpanded = !optimizationDropdownExpanded
+                                            optimizationDropdownExpanded =
+                                                !optimizationDropdownExpanded
                                         }
                                         .fillMaxWidth()
                                         .border(
@@ -406,7 +414,9 @@ fun SessionScreen(
                                     ) {
                                         for (enumValue in LatencyOptimizationLevel.values()) {
                                             DropdownMenuItem(onClick = {
-                                                sessionViewModel.setLatencyOptimizationLevel(enumValue)
+                                                sessionViewModel.setLatencyOptimizationLevel(
+                                                    enumValue
+                                                )
                                                 optimizationDropdownExpanded = false
                                             }) {
                                                 Text(

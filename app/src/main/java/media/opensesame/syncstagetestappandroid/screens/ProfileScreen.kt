@@ -81,7 +81,7 @@ fun ProfileScreen(
                 onClick = {
                 onNextClick(profileUIState.userName, navController, viewModel = profileViewModel)
             }, enabled = profileUIState.userName.isNotEmpty()) {
-                Text(text = "NEXT")
+                Text(text = "Next")
             }
         }
     }

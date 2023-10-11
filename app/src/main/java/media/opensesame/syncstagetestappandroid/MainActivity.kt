@@ -38,6 +38,9 @@ import javax.inject.Inject
 
 enum class SyncStageScreen(@StringRes val title: Int) {
     Intro(title = R.string.intro),
+    Welcome(title = R.string.welcome),
+    HowToGetACode(title = R.string.how_to_get_a_code),
+    Provisioning(title = R.string.provisioning),
     Access(title = R.string.access),
     Profile(title = R.string.profile),
     CreateJoinSession(title = R.string.create_Join_Session),
@@ -149,7 +152,8 @@ fun SyncStageApp(
                     NavHost(
                         navController = navController,
                         startDestination = SyncStageScreen.Intro.name,
-                        modifier = modifier.padding(innerPadding)
+                        modifier = modifier
+                            .padding(innerPadding)
                             .semantics {
                                 testTagsAsResourceId = true
                             }
@@ -157,7 +161,15 @@ fun SyncStageApp(
                         composable(route = SyncStageScreen.Intro.name) {
                             IntroScreen(navController = navController)
                         }
-
+                        composable(route = SyncStageScreen.Welcome.name) {
+                            WelcomeScreen(navController = navController)
+                        }
+                        composable(route = SyncStageScreen.HowToGetACode.name) {
+                            HowToGetACodeScreen(navController = navController)
+                        }
+                        composable(route = SyncStageScreen.Provisioning.name) {
+                            ProvisioningScreen(navController = navController)
+                        }
                         composable(route = SyncStageScreen.Access.name) {
                             MicrophoneAccessScreen(navController = navController)
                         }
