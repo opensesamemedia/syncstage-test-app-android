@@ -25,6 +25,7 @@ import media.opensesame.syncstagetestappandroid.SyncStageScreen
 fun MicrophoneAccessScreen(navController: NavHostController) {
     val permissions = mutableListOf(
         android.Manifest.permission.RECORD_AUDIO,
+        android.Manifest.permission.CAMERA,
         android.Manifest.permission.INTERNET,
         android.Manifest.permission.MODIFY_AUDIO_SETTINGS,
         android.Manifest.permission.ACCESS_NETWORK_STATE,
@@ -41,6 +42,10 @@ fun MicrophoneAccessScreen(navController: NavHostController) {
     // We allow no location permission
     val allRequiredPermissionsGranted =
         permissionsState.revokedPermissions.isEmpty() || (permissionsState.revokedPermissions.size == 1 && permissionsState.revokedPermissions[0].permission == android.Manifest.permission.ACCESS_COARSE_LOCATION)
+
+    if (allRequiredPermissionsGranted){
+        navController.navigate(SyncStageScreen.Profile.name)
+    }
 
     Box(
         modifier = Modifier

@@ -390,7 +390,7 @@ fun SessionScreen(
                                         horizontalArrangement = Arrangement.Center
                                     ) {
                                         Text(
-                                            text = sessionUIState.optimizationLevel?.name ?: "",
+                                            text = LatencyOptimizationLevel.getCustomStringForEnum(sessionUIState.optimizationLevel),
                                             modifier = Modifier.padding(start = 10.dp)
                                         )
                                         Spacer(modifier = Modifier.weight(1.0f))
@@ -420,7 +420,7 @@ fun SessionScreen(
                                                 optimizationDropdownExpanded = false
                                             }) {
                                                 Text(
-                                                    text = enumValue.name,
+                                                    text = LatencyOptimizationLevel.getCustomStringForEnum(enumValue),
                                                 )
                                             }
                                         }
