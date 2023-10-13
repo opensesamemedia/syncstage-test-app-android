@@ -37,6 +37,7 @@ class IntroViewModel @Inject constructor(
     val uiState: StateFlow<LoginUIState> = _uiState.asStateFlow()
     private var initRetries = 0
 
+
     fun getAppVersion(): String {
         return BuildConfig.VERSION_NAME
     }

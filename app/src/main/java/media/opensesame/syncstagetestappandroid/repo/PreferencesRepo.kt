@@ -85,4 +85,12 @@ class PreferencesRepo @Inject constructor(
         val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
         return sharedPref.getString(syncStageSecretKey, null)
     }
+
+    fun removeSyncStageSecret() {
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove(syncStageSecretKey)
+            apply()
+        }
+    }
 }

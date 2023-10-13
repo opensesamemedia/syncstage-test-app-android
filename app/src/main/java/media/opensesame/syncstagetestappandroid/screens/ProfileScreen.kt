@@ -23,6 +23,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import media.opensesame.syncstagetestappandroid.SyncStageScreen
 
 
@@ -38,6 +41,11 @@ fun ProfileScreen(
         profileViewModel.updateUserName(text)
     }
     val focusRequester = FocusRequester()
+
+    profileViewModel.onLogout = {
+        CoroutineScope(Dispatchers.Main).launch {
+            navController.navigate(SyncStageScreen.Intro.name)
+        }}
 
     Box(
         modifier = Modifier
@@ -82,6 +90,13 @@ fun ProfileScreen(
                 onNextClick(profileUIState.userName, navController, viewModel = profileViewModel)
             }, enabled = profileUIState.userName.isNotEmpty()) {
                 Text(text = "Next")
+            }
+
+            Button(modifier = Modifier.testTag("logout_btn"),
+                onClick = {
+                    profileViewModel.logout()
+                }) {
+                Text(text = "Log out")
             }
         }
     }
