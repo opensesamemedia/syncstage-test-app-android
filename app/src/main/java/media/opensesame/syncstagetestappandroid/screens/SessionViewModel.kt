@@ -364,11 +364,11 @@ class SessionViewModel @Inject constructor(
 
     fun setLatencyOptimizationLevel(value: LatencyOptimizationLevel) {
         syncStage.changeLatencyOptimizationLevel(value)
-            _uiState.update {
-                it.copy(
-                    optimizationLevel = value
-                )
-            }
+        _uiState.update {
+            it.copy(
+                optimizationLevel = value
+            )
+        }
     }
 
     fun leaveSession() {

@@ -64,14 +64,14 @@ fun MicrophoneAccessScreen(navController: NavHostController) {
             )
             Button(modifier = Modifier.testTag("next_allow_access_btn"),
                 onClick = {
-                if (allRequiredPermissionsGranted) {
-                    navController.navigate(SyncStageScreen.Profile.name)
-                } else {
-                    permissionsState.launchMultiplePermissionRequest()
-                }
-            }) {
+                    if (allRequiredPermissionsGranted) {
+                        navController.navigate(SyncStageScreen.Profile.name)
+                    } else {
+                        permissionsState.launchMultiplePermissionRequest()
+                    }
+                }) {
                 val title =
-                    if (allRequiredPermissionsGranted) "NEXT" else "ALLOW ACCESS"
+                    if (allRequiredPermissionsGranted) "Next" else "Allow access"
                 Text(text = title)
             }
         }
