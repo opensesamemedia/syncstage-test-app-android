@@ -1,5 +1,6 @@
 package media.opensesame.syncstagetestappandroid.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -43,9 +44,12 @@ fun ProfileScreen(
     val focusRequester = FocusRequester()
 
     profileViewModel.onLogout = {
+        Log.d("ProfileScreen", "onLogout")
         CoroutineScope(Dispatchers.Main).launch {
-            navController.navigate(SyncStageScreen.Intro.name)
-        }}
+                navController.navigate(SyncStageScreen.Intro.name)
+            }
+    }
+
 
     Box(
         modifier = Modifier

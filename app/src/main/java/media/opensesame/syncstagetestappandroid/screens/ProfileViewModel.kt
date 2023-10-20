@@ -26,6 +26,8 @@ class ProfileViewModel @Inject constructor(
         prefRepo.updateUserName(userName)
     }
 
+    // In production use userId should be provided for a logged in user
+
     fun createUserId() {
         val userId = prefRepo.getUserId()
         if (userId.isEmpty()) {

@@ -90,6 +90,7 @@ class ProvisioningViewModel @Inject constructor(
                             })
                             prefRepo.updateSyncStageSecret(responseBodyString)
                             stopPolling()
+                            return
                         }
                     }
 
