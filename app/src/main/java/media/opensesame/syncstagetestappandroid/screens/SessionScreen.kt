@@ -49,6 +49,7 @@ import media.opensesame.syncstagetestappandroid.components.UserConnection
 import media.opensesame.syncstagetestappandroid.ui.theme.DarkColorScheme
 import media.opensesame.syncstagetestappandroid.ui.theme.LightColorScheme
 import media.opensesame.syncstagetestappandroid.ui.theme.recording_red
+import androidx.compose.material.DropdownMenuItem
 
 @SuppressLint("MissingPermission")
 @Composable
