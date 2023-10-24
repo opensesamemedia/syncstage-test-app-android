@@ -4,13 +4,13 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
 
-    // // TO BE UNCOMMENTED FOR CRASHLYTICS
-    // id 'com.google.gms.google-services'
-    // id 'com.google.firebase.crashlytics'
+//     // TO BE UNCOMMENTED FOR CRASHLYTICS
+//     id 'com.google.gms.google-services'
+//     id 'com.google.firebase.crashlytics'
 }
 
 ext {
-    sdkVersion = "0.5.1"
+    sdkVersion = "0.5.2"
 }
 
 def getVersionName = { String flavorName ->

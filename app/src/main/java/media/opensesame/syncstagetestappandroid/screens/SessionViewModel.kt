@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import media.opensesame.syncstagesdk.LatencyOptimizationLevel
 import media.opensesame.syncstagesdk.SyncStage
 import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
 import media.opensesame.syncstagesdk.delegates.SyncStageConnectivityDelegate
@@ -53,6 +54,7 @@ data class SessionUIState(
     val internalMicrophoneEnabled: Boolean = false,
     val isRecording: Boolean = false,
     val recordingRequestPending: Boolean = false,
+    val optimizationLevel: LatencyOptimizationLevel? = null
 )
 
 
@@ -169,6 +171,7 @@ class SessionViewModel @Inject constructor(
                 directMonitorVolume = syncStage.getDirectMonitorVolume().toFloat() / 100,
                 directMonitorEnabled = syncStage.getDirectMonitorEnabled(),
                 internalMicrophoneEnabled = syncStage.getInternalMicEnabled(),
+                optimizationLevel = syncStage.getLatencyOptimizationLevel(),
             )
         }
     }
@@ -357,6 +360,15 @@ class SessionViewModel @Inject constructor(
             }
 
         }
+    }
+
+    fun setLatencyOptimizationLevel(value: LatencyOptimizationLevel) {
+        syncStage.changeLatencyOptimizationLevel(value)
+            _uiState.update {
+                it.copy(
+                    optimizationLevel = value
+                )
+            }
     }
 
     fun leaveSession() {
