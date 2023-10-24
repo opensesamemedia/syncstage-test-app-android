@@ -13,10 +13,10 @@ for /R app\build\outputs\apk %%f in (*.apk) do (
         start "Distributing APK" cmd /c firebase appdistribution:distribute "%%~dpnxf" --app %FIREBASE_PROJECT_ID% --groups development-testers
     )
 
-REM      echo "%%~nf" | findstr /R /C:"staging" >NUL
-REM      IF !ERRORLEVEL! EQU 0 (
-REM          start "Distributing APK" cmd /c firebase appdistribution:distribute "%%~dpnxf" --app %FIREBASE_PROJECT_ID% --groups staging-testers
-REM      )
+REM         echo "%%~nf" | findstr /R /C:"staging" >NUL
+REM         IF !ERRORLEVEL! EQU 0 (
+REM             start "Distributing APK" cmd /c firebase appdistribution:distribute "%%~dpnxf" --app %FIREBASE_PROJECT_ID% --groups staging-testers
+REM         )
 
 REM      echo "%%~nf" | findstr /R /C:"master" > NUL
 REM       IF !ERRORLEVEL! EQU 0 (

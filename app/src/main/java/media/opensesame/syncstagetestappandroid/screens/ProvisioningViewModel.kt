@@ -1,6 +1,7 @@
 package media.opensesame.syncstagetestappandroid.screens
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import media.opensesame.syncstagesdk.SyncStage
 import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
+import media.opensesame.syncstagesdk.utils.getLocalIpAddress
 import media.opensesame.syncstagetestappandroid.data.ProvisioningUIState
 import media.opensesame.syncstagetestappandroid.model.GetSyncStageSecretRequest
 import media.opensesame.syncstagetestappandroid.model.GetSyncStageSecretResponse
@@ -45,6 +47,7 @@ class ProvisioningViewModel @Inject constructor(
     private val timeoutMillis = 300000L // 5 minutes
 
     lateinit var onSyncStageProvisioned: () -> Unit
+
 
 
     fun updateProvisioningInProgress(inProgress: Boolean){
@@ -117,9 +120,9 @@ class ProvisioningViewModel @Inject constructor(
             RequestProvisioningRequest(
                 provisioningCode = uiState.value.provisioningCode,
                 operatingSystem = "Android",
-                ipAddress = "TODO",
+                ipAddress = getLocalIpAddress(),
                 sdkVersion = syncStage.getSDKVersion(),
-                model = "TODO"
+                model = "${Build.MODEL} ${Build.MANUFACTURER}"
             )
         )
         client.enqueue(object : Callback<RequestProvisioningResponse> {
@@ -147,7 +150,7 @@ class ProvisioningViewModel @Inject constructor(
             }
         })
     }
-    private fun displayToast(inputMessage: String) {
+    public fun displayToast(inputMessage: String) {
         CoroutineScope(Dispatchers.Main).launch {
             context.get()?.let {
                 Toast.makeText(
