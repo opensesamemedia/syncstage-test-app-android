@@ -13,7 +13,7 @@ plugins {
 
 def getVersionName = { String flavorName ->
     def appVersion = "$System.env.APP_VERSION"
-    def commitSha = "$System.env.$GITHUB_SHA"
+    def commitSha = "$System.env.GITHUB_SHA"
 
     if (appVersion != null && !appVersion.isEmpty()) {
         return flavorName == "master" ? appVersion : "$appVersion-$flavorName"
