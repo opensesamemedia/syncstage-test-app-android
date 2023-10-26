@@ -14,6 +14,16 @@ ext {
 }
 
 def getVersionName = { String flavorName ->
+    def appVersion = "$System.env.APP_VERSION"
+
+    if (appVersion != null && !appVersion.isEmpty()) {
+        return flavorName == "master" ? appVersion : "$appVersion-$flavorName"
+
+    } else {
+        // Do something when APP_VERSION is empty or not set
+        println "APP_VERSION is empty or not set"
+    }
+
     def fetchOut = new ByteArrayOutputStream()
     def fetchOutErr = new ByteArrayOutputStream()
     try {
@@ -51,7 +61,7 @@ def getVersionName = { String flavorName ->
       println(e.message)
     }
 
-    return flavorName == "master" ? "$baseVersionName-$commitHash-sdk$sdkVersion" : "$baseVersionName-$commitHash-sdk$sdkVersion-$flavorName"
+    return flavorName == "master" ? "$baseVersionName-$commitHash" : "$baseVersionName-$commitHash-$flavorName"
 }
 
 android {

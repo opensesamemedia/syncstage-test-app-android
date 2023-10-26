@@ -42,6 +42,11 @@ class IntroViewModel @Inject constructor(
         return BuildConfig.VERSION_NAME
     }
 
+    fun getSdkVersion(): String {
+        return syncStage.getSDKVersion()
+    }
+
+
     private fun updateLoginResult(value: Boolean) {
         _uiState.update {
             it.copy(loginResult = value)
