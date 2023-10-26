@@ -73,11 +73,6 @@ fun IntroScreen(
                 modifier = Modifier.testTag("app_version")
             )
             Text(
-                text = "SDK: ${introViewModel.getSdkVersion()}",
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.testTag("sdk_version")
-            )
-            Text(
                 buildAnnotatedString {
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                         append("SyncStage")
