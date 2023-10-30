@@ -10,6 +10,20 @@ plugins {
 }
 
 
+String getGitHash() {
+    // git hash
+    def command = Runtime.getRuntime().exec("git rev-parse --short HEAD")
+    def result = command.waitFor()
+    if (result != 0) {
+        throw new IOException("Command 'getGitHash()' exited with " + result)
+    }
+
+    String gitCommitHash = command.inputStream.text.trim()
+
+    println("getGitHash() : " + gitCommitHash)
+
+    return gitCommitHash
+}
 
 def getVersionName = { String flavorName ->
     def appVersion = "$System.env.APP_VERSION"
@@ -18,10 +32,10 @@ def getVersionName = { String flavorName ->
     if (appVersion != null && !appVersion.isEmpty()) {
         return flavorName == "master" ? appVersion : "$appVersion-$flavorName"
 
-    } else {
-        // Do something when APP_VERSION is empty or not set
-        println "APP_VERSION is empty or not set"
+    }  else if (commitSha != null && !commitSha.isEmpty()) {
         return flavorName == "master" ? commitSha : "$commitSha-$flavorName"
+    } else {
+        return getGitHash()
     }
 }
 
@@ -101,13 +115,14 @@ android {
 
 // Used when built from package, not sources
 ext {
-    sdkVersion = "0.5.2"
+    sdkVersion = "0.6.0-rc1-pipeline2"
 }
 
 dependencies {
-    masterImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
-    developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
-    stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
+    implementation "media.opensesame:syncstagesdk:${sdkVersion}"
+//    masterImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
+//    developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
+//    stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
 
 
     // TO BE UNCOMMENTED FOR CRASHLYTICS
