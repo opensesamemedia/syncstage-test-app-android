@@ -18,10 +18,34 @@ def getVersionName = { String flavorName ->
     if (appVersion != null && !appVersion.isEmpty()) {
         return flavorName == "master" ? appVersion : "$appVersion-$flavorName"
 
-    } else {
-        // Do something when APP_VERSION is empty or not set
-        println "APP_VERSION is empty or not set"
+    } else if (commitSha != null && !commitSha.isEmpty()){
         return flavorName == "master" ? commitSha : "$commitSha-$flavorName"
+    }else{
+        try {
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'describe', '--tags', '--abbrev=0', '--always'
+                standardOutput = stdout
+            }
+
+            baseVersionName = stdout.toString().trim()
+        } catch (Exception e) {
+            println(e.message)
+        }
+
+        def commitHash = "undefined"
+        try {
+            def commitHashStdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'rev-parse', '--short', 'HEAD'
+                standardOutput = commitHashStdout
+            }
+            commitHash = commitHashStdout.toString().trim()
+        } catch (Exception e) {
+            println(e.message)
+        }
+
+        return flavorName == "master" ? "$baseVersionName-$commitHash-sdk$sdkVersion" : "$baseVersionName-$commitHash-sdk$sdkVersion-$flavorName"
     }
 }
 
@@ -101,13 +125,13 @@ android {
 
 // Used when built from package, not sources
 ext {
-    sdkVersion = "0.5.2"
+    sdkVersion = "0.6.0-rc2"
 }
 
 dependencies {
-    masterImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
+//    masterImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
     developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
-    stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
+//    stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
 
 
     // TO BE UNCOMMENTED FOR CRASHLYTICS
