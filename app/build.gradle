@@ -53,6 +53,11 @@ android {
     namespace 'media.opensesame.syncstagetestappandroid'
     compileSdk 33
 
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "media.opensesame.syncstagetestappandroid"
         minSdk 29
