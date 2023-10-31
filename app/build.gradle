@@ -129,9 +129,9 @@ ext {
 }
 
 dependencies {
-//    masterImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
+    masterImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
     developmentImplementation "media.opensesame:syncstagesdk:${sdkVersion}-development"
-//    stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
+    stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
 
 
     // TO BE UNCOMMENTED FOR CRASHLYTICS
