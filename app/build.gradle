@@ -4,59 +4,59 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
 
-//     // TO BE UNCOMMENTED FOR CRASHLYTICS
-//     id 'com.google.gms.google-services'
-//     id 'com.google.firebase.crashlytics'
+     // TO BE UNCOMMENTED FOR CRASHLYTICS
+     id 'com.google.gms.google-services'
+     id 'com.google.firebase.crashlytics'
 }
 
-ext {
-    sdkVersion = "0.5.2"
-}
+
 
 def getVersionName = { String flavorName ->
-    def fetchOut = new ByteArrayOutputStream()
-    def fetchOutErr = new ByteArrayOutputStream()
-    try {
-      exec {
-        commandLine 'git', 'fetch', '--all', '--tags'
-        standardOutput = fetchOut
-        errorOutput = fetchOutErr
-      }
-    } catch (Exception e) {
-      logger.warn("Git fetch warning " + e.message + fetchOutErr.toString().trim().replace("error", "warning"))
+    def appVersion = "$System.env.APP_VERSION"
+    def commitSha = "$System.env.GITHUB_SHA"
+
+    if (appVersion != null && !appVersion.isEmpty()) {
+        return flavorName == "master" ? appVersion : "$appVersion-$flavorName"
+
+    } else if (commitSha != null && !commitSha.isEmpty()){
+        return flavorName == "master" ? commitSha : "$commitSha-$flavorName"
+    }else{
+        try {
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'describe', '--tags', '--abbrev=0', '--always'
+                standardOutput = stdout
+            }
+
+            baseVersionName = stdout.toString().trim()
+        } catch (Exception e) {
+            println(e.message)
+        }
+
+        def commitHash = "undefined"
+        try {
+            def commitHashStdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'rev-parse', '--short', 'HEAD'
+                standardOutput = commitHashStdout
+            }
+            commitHash = commitHashStdout.toString().trim()
+        } catch (Exception e) {
+            println(e.message)
+        }
+
+        return flavorName == "master" ? "$baseVersionName-$commitHash-sdk$sdkVersion" : "$baseVersionName-$commitHash-sdk$sdkVersion-$flavorName"
     }
-
-    def baseVersionName = "undefined"
-    try {
-      def stdout = new ByteArrayOutputStream()
-      exec {
-          commandLine 'git', 'describe', '--tags', '--abbrev=0', '--always'
-          standardOutput = stdout
-      }
-
-      baseVersionName = stdout.toString().trim()
-    } catch (Exception e) {
-      println(e.message)
-    }
-
-    def commitHash = "undefined"
-    try {
-      def commitHashStdout = new ByteArrayOutputStream()
-      exec {
-          commandLine 'git', 'rev-parse', '--short', 'HEAD'
-          standardOutput = commitHashStdout
-      }
-      commitHash = commitHashStdout.toString().trim()
-    } catch (Exception e) {
-      println(e.message)
-    }
-
-    return flavorName == "master" ? "$baseVersionName-$commitHash-sdk$sdkVersion" : "$baseVersionName-$commitHash-sdk$sdkVersion-$flavorName"
 }
 
 android {
     namespace 'media.opensesame.syncstagetestappandroid'
     compileSdk 33
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 
     defaultConfig {
         applicationId "media.opensesame.syncstagetestappandroid"
@@ -95,6 +95,7 @@ android {
             dimension "environment"
             versionName getVersionName("development")
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("development")}\""
+            buildConfigField "String", "API_URL", "\"https://f55pesypsd.execute-api.us-east-1.amazonaws.com/dev/\""
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('development')}"
             }
@@ -103,6 +104,7 @@ android {
             dimension "environment"
             versionName getVersionName("staging")
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("staging")}\""
+            buildConfigField "String", "API_URL", "\"https://3bty5ooqg7.execute-api.us-east-1.amazonaws.com/staging/\""
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('staging')}"
             }
@@ -110,6 +112,7 @@ android {
         master {
             dimension "environment"
             versionName getVersionName("master")
+            buildConfigField "String", "API_URL", "\"https://api.sync-stage.com/\""
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("master")}\""
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('master')}"
@@ -125,6 +128,10 @@ android {
     }
 }
 
+// Used when built from package, not sources
+ext {
+    sdkVersion = "0.6.0"
+}
 
 dependencies {
     masterImplementation "media.opensesame:syncstagesdk:${sdkVersion}"
@@ -132,10 +139,10 @@ dependencies {
     stagingImplementation "media.opensesame:syncstagesdk:${sdkVersion}-staging"
 
 
-//    // TO BE UNCOMMENTED FOR CRASHLYTICS
-//    implementation platform('com.google.firebase:firebase-bom:31.2.2')
-//    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-//    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // TO BE UNCOMMENTED FOR CRASHLYTICS
+    implementation platform('com.google.firebase:firebase-bom:31.2.2')
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -158,6 +165,20 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+
+    // HTTP requests for provisioning dependencies:
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+
+    // CameraX
+    implementation "androidx.camera:camera-camera2:1.0.2"
+    implementation "androidx.camera:camera-lifecycle:1.0.2"
+    implementation "androidx.camera:camera-view:1.0.0-alpha31"
+
+    // Zxing
+    implementation 'com.google.zxing:core:3.3.3'
+
 }
 
 // Allow references to generated code

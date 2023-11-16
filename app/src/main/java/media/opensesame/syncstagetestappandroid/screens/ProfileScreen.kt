@@ -1,5 +1,6 @@
 package media.opensesame.syncstagetestappandroid.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,6 +24,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import media.opensesame.syncstagetestappandroid.SyncStageScreen
 
 
@@ -38,6 +42,14 @@ fun ProfileScreen(
         profileViewModel.updateUserName(text)
     }
     val focusRequester = FocusRequester()
+
+    profileViewModel.onLogout = {
+        Log.d("ProfileScreen", "onLogout")
+        CoroutineScope(Dispatchers.Main).launch {
+                navController.navigate(SyncStageScreen.Intro.name)
+            }
+    }
+
 
     Box(
         modifier = Modifier
@@ -81,7 +93,14 @@ fun ProfileScreen(
                 onClick = {
                 onNextClick(profileUIState.userName, navController, viewModel = profileViewModel)
             }, enabled = profileUIState.userName.isNotEmpty()) {
-                Text(text = "NEXT")
+                Text(text = "Next")
+            }
+
+            Button(modifier = Modifier.testTag("logout_btn"),
+                onClick = {
+                    profileViewModel.logout()
+                }) {
+                Text(text = "Log out")
             }
         }
     }

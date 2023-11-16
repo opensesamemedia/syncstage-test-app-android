@@ -88,7 +88,9 @@ fun UserConnection(
             ) {
                 append("${measurements.quality} %")
             }
-        }, modifier = Modifier.weight(0.33f).testTag("call_quality"))
+        }, modifier = Modifier
+            .weight(0.33f)
+            .testTag("call_quality"))
         Text(buildAnnotatedString {
             withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Ping: ")
@@ -102,7 +104,9 @@ fun UserConnection(
             ) {
                 append("${if (measurements.networkDelayMs != 0 && measurements.networkDelayMs != -1) measurements.networkDelayMs else '-'} ms")
             }
-        }, modifier = Modifier.weight(0.33f).testTag("call_ping"))
+        }, modifier = Modifier
+            .weight(0.33f)
+            .testTag("call_ping"))
         Text(buildAnnotatedString {
             withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp)) {
                 append("Jitter: ")
@@ -116,7 +120,9 @@ fun UserConnection(
             ) {
                 append("${if (measurements.networkJitterMs != 0 && measurements.networkJitterMs != -1) measurements.networkJitterMs else '-'} ms")
             }
-        }, modifier = Modifier.weight(0.33f).testTag("call_jitter"))
+        }, modifier = Modifier
+            .weight(0.33f)
+            .testTag("call_jitter"))
     }
     if (isTransmitter) {
         Row(

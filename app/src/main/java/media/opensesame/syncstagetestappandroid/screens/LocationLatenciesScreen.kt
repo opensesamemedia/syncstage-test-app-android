@@ -21,8 +21,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -106,7 +106,8 @@ fun LocationLatenciesScreen(
                     Text(text = "Previous")
                 }
 
-                Button(modifier = Modifier.testTag("location_latencies_next_btn"),
+                Button(
+                    modifier = Modifier.testTag("location_latencies_next_btn"),
                     onClick = {
                         navController.navigate(SyncStageScreen.CreateJoinSession.name)
                     },

@@ -95,12 +95,12 @@ fun LocationScreen(
 
                 Button(modifier = Modifier.testTag("location_next_btn"),
                     onClick = {
-                    if (loactionUIState.autoSelection) {
-                        navController.navigate(SyncStageScreen.LocationLatencies.name)
-                    } else {
-                        navController.navigate(SyncStageScreen.LocationManual.name)
-                    }
-                }) {
+                        if (loactionUIState.autoSelection) {
+                            navController.navigate(SyncStageScreen.LocationLatencies.name)
+                        } else {
+                            navController.navigate(SyncStageScreen.LocationManual.name)
+                        }
+                    }) {
                     Text(text = "Next")
                 }
             }
