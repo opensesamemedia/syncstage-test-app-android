@@ -130,7 +130,7 @@ android {
 
 // Used when built from package, not sources
 ext {
-    sdkVersion = "0.6.0-rc2"
+    sdkVersion = "0.6.0"
 }
 
 dependencies {
