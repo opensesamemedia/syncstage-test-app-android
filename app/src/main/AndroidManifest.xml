@@ -50,4 +50,7 @@
     <!--    WORKING IN THE BACKGROUND -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--  Network slicing  -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 </manifest>
