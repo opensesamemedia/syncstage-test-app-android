@@ -39,7 +39,7 @@ data class ConnectionModel(
     val userId: String = "",
     val displayName: String? = "",
     var isMuted: Boolean = false,
-    var isConnected: Boolean = true,
+    var isConnected: Boolean = false,
     var volume: Float = 90.0f
 )
 
