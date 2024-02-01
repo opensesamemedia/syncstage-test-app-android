@@ -99,6 +99,7 @@ android {
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('development')}"
             }
+            applicationIdSuffix ".development"
         }
         staging {
             dimension "environment"
@@ -108,6 +109,7 @@ android {
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('staging')}"
             }
+            applicationIdSuffix ".staging"
         }
         master {
             dimension "environment"
@@ -117,6 +119,7 @@ android {
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('master')}"
             }
+            applicationIdSuffix ".staging"
         }
     }
     signingConfigs {
