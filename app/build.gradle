@@ -119,7 +119,6 @@ android {
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('master')}"
             }
-            applicationIdSuffix ".staging"
         }
     }
     signingConfigs {
