@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import media.opensesame.syncstagetestappandroid.data.ProfileUIState
 import media.opensesame.syncstagetestappandroid.repo.PreferencesRepo
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,6 +17,7 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileUIState(userName = prefRepo.getUserName()))
     val uiState: StateFlow<ProfileUIState> = _uiState.asStateFlow()
+    lateinit var onLogout: () -> Unit
 
     fun updateUserName(userName: String) {
         _uiState.update {
@@ -25,11 +26,18 @@ class ProfileViewModel @Inject constructor(
         prefRepo.updateUserName(userName)
     }
 
+    // In production use userId should be provided for a logged in user
+
     fun createUserId() {
         val userId = prefRepo.getUserId()
         if (userId.isEmpty()) {
             val uuid = UUID.randomUUID().toString()
             prefRepo.updateUserId(uuid)
         }
+    }
+
+    fun logout(){
+        prefRepo.removeSyncStageSecret()
+        onLogout()
     }
 }

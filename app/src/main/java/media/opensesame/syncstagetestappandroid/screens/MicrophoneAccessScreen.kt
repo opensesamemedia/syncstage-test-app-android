@@ -4,14 +4,15 @@ import android.os.Build
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -24,6 +25,7 @@ import media.opensesame.syncstagetestappandroid.SyncStageScreen
 fun MicrophoneAccessScreen(navController: NavHostController) {
     val permissions = mutableListOf(
         android.Manifest.permission.RECORD_AUDIO,
+        android.Manifest.permission.CAMERA,
         android.Manifest.permission.INTERNET,
         android.Manifest.permission.MODIFY_AUDIO_SETTINGS,
         android.Manifest.permission.ACCESS_NETWORK_STATE,
@@ -36,6 +38,14 @@ fun MicrophoneAccessScreen(navController: NavHostController) {
     }
 
     val permissionsState = rememberMultiplePermissionsState(permissions = permissions)
+
+    // We allow no location permission
+    val allRequiredPermissionsGranted =
+        permissionsState.revokedPermissions.isEmpty() || (permissionsState.revokedPermissions.size == 1 && permissionsState.revokedPermissions[0].permission == android.Manifest.permission.ACCESS_COARSE_LOCATION)
+
+//    if (allRequiredPermissionsGranted){
+//        navController.navigate(SyncStageScreen.Profile.name)
+//    }
 
     Box(
         modifier = Modifier
@@ -57,15 +67,16 @@ fun MicrophoneAccessScreen(navController: NavHostController) {
                 text = "Please enable phone call management access so you can adjust the volume level in the session and use a speaker without experiencing an unpleasant echo.",
                 modifier = Modifier.padding(30.dp), textAlign = TextAlign.Center
             )
-            Button(onClick = {
-                if (permissionsState.allPermissionsGranted) {
-                    navController.navigate(SyncStageScreen.Profile.name)
-                } else {
-                    permissionsState.launchMultiplePermissionRequest()
-                }
-            }) {
+            Button(modifier = Modifier.testTag("next_allow_access_btn"),
+                onClick = {
+                    if (allRequiredPermissionsGranted) {
+                        navController.navigate(SyncStageScreen.Profile.name)
+                    } else {
+                        permissionsState.launchMultiplePermissionRequest()
+                    }
+                }) {
                 val title =
-                    if (permissionsState.allPermissionsGranted) "NEXT" else "ALLOW ACCESS"
+                    if (allRequiredPermissionsGranted) "Next" else "Allow access"
                 Text(text = title)
             }
         }

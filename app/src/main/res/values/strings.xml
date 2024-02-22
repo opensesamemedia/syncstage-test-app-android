@@ -7,4 +7,9 @@
     <string name="location">SyncStage</string>
     <string name="session">SyncStage</string>
     <string name="back_button">Back</string>
+    <string name="welcome">Welcome</string>
+    <string name="how_to_get_a_code">HowToGetACode?</string>
+    <string name="provisioning">Provisioning</string>
+    <string name="qr_button">QR button</string>
+    <string name="close_qr_code_camera">Close qr code camera</string>
 </resources>

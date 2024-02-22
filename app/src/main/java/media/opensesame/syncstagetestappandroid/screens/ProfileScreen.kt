@@ -1,13 +1,15 @@
 package media.opensesame.syncstagetestappandroid.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,14 +18,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import media.opensesame.syncstagetestappandroid.SyncStageScreen
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     navController: NavHostController,
@@ -35,6 +42,14 @@ fun ProfileScreen(
         profileViewModel.updateUserName(text)
     }
     val focusRequester = FocusRequester()
+
+    profileViewModel.onLogout = {
+        Log.d("ProfileScreen", "onLogout")
+        CoroutineScope(Dispatchers.Main).launch {
+                navController.navigate(SyncStageScreen.Intro.name)
+            }
+    }
+
 
     Box(
         modifier = Modifier
@@ -71,11 +86,21 @@ fun ProfileScreen(
                 modifier = Modifier
                     .focusRequester(focusRequester)
                     .padding(bottom = 10.dp)
+                    .testTag("username_input")
+
             )
-            Button(onClick = {
+            Button(modifier = Modifier.testTag("next_btn"),
+                onClick = {
                 onNextClick(profileUIState.userName, navController, viewModel = profileViewModel)
             }, enabled = profileUIState.userName.isNotEmpty()) {
-                Text(text = "NEXT")
+                Text(text = "Next")
+            }
+
+            Button(modifier = Modifier.testTag("logout_btn"),
+                onClick = {
+                    profileViewModel.logout()
+                }) {
+                Text(text = "Log out")
             }
         }
     }
@@ -88,6 +113,6 @@ fun ProfileScreen(
 fun onNextClick(userName: String, navController: NavHostController, viewModel: ProfileViewModel) {
     if (userName.isNotEmpty()) {
         viewModel.createUserId()
-        navController.navigate(SyncStageScreen.CreateJoinSession.name)
+        navController.navigate(SyncStageScreen.Location.name)
     }
 }

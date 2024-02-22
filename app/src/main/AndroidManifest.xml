@@ -32,15 +32,25 @@
             android:name=".ForegroundService"
             android:foregroundServiceType="microphone" />
     </application>
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+
+    <!--  QR CODE  -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- SDK analytics metadata -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!--    WORKING IN THE BACKGROUND -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--  Network slicing  -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 </manifest>

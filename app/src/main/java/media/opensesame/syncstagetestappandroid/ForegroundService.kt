@@ -36,6 +36,7 @@ class ForegroundService : LifecycleService() {
                 ACTION_START_SERVICE -> {
                     startForegroundService()
                 }
+
                 ACTION_STOP_SERVICE -> {
                     Log.d(TAG, "Stopped service")
                     stopForeground(STOP_FOREGROUND_REMOVE)
@@ -51,10 +52,6 @@ class ForegroundService : LifecycleService() {
         wakeLock?.release()
         wakeLock = null
 
-    }
-
-    override fun onCreate() {
-        super.onCreate()
     }
 
     private fun getNotificationChannelId(): String {

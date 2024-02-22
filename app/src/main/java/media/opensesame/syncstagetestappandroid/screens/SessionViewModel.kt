@@ -1,19 +1,20 @@
 package media.opensesame.syncstagetestappandroid.screens
 
 import android.content.Context
-import android.net.ConnectivityManager
+import android.os.Build
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyCallback
+import android.telephony.TelephonyDisplayInfo
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import media.opensesame.networkutils.Detection5G
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
+import media.opensesame.syncstagesdk.LatencyOptimizationLevel
 import media.opensesame.syncstagesdk.SyncStage
 import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
 import media.opensesame.syncstagesdk.delegates.SyncStageConnectivityDelegate
@@ -21,12 +22,14 @@ import media.opensesame.syncstagesdk.delegates.SyncStageUserDelegate
 import media.opensesame.syncstagesdk.models.public.Connection
 import media.opensesame.syncstagesdk.models.public.Measurements
 import media.opensesame.syncstagesdk.models.public.Session
+import media.opensesame.syncstagesdk.utils.getNetworkTypeOldAPI
 import media.opensesame.syncstagetestappandroid.ACTION_START_SERVICE
 import media.opensesame.syncstagetestappandroid.ACTION_STOP_SERVICE
 import media.opensesame.syncstagetestappandroid.repo.PreferencesRepo
 import media.opensesame.syncstagetestappandroid.sendCommandToService
 import java.lang.ref.WeakReference
 import java.util.*
+import java.util.concurrent.Executors
 import javax.inject.Inject
 import kotlin.concurrent.timer
 
@@ -35,23 +38,28 @@ data class ConnectionModel(
     val userId: String = "",
     val displayName: String? = "",
     var isMuted: Boolean = false,
-    var isConnected: Boolean = true,
+    var isConnected: Boolean = false,
     var volume: Float = 90.0f
 )
 
 data class SessionUIState(
     val session: Session? = null,
-    val connections: MutableList<ConnectionModel> = mutableListOf(),
-    val networkType: String = "",
+    val transmitterConnection: ConnectionModel? = null,
+    val connections: MutableMap<String, ConnectionModel> = mutableMapOf(),
+    val networkTypeOldApi: String = "",
     val date: Date = Date(),
     val directMonitorEnabled: Boolean = false,
     val directMonitorVolume: Float = 1F,
-    val internalMicrophoneEnabled: Boolean = false
+    val internalMicrophoneEnabled: Boolean = false,
+    val isRecording: Boolean = false,
+    val recordingRequestPending: Boolean = false,
+    val optimizationLevel: LatencyOptimizationLevel? = null
 )
+
 
 @HiltViewModel
 class SessionViewModel @Inject constructor(
-    private val context: WeakReference<Context>,
+    val context: WeakReference<Context>,
     private val syncStage: SyncStage,
     private val preferencesRepo: PreferencesRepo
 ) : ViewModel(), SyncStageUserDelegate, SyncStageConnectivityDelegate {
@@ -59,17 +67,74 @@ class SessionViewModel @Inject constructor(
     val uiState: StateFlow<SessionUIState> = _uiState.asStateFlow()
     lateinit var sessionLeft: () -> Unit
 
-    private val connectivityManager by lazy {
-        context.get()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    }
     private val telephonyManager by lazy {
         context.get()?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     }
-    private lateinit var detection5G: Detection5G
-    private var networkType: String = ""
+    private var networkTypeOldApiJob: Job? = null
+
+    private fun startNetworkTypeOldApiJob() {
+        if (networkTypeOldApiJob == null && Build.VERSION.SDK_INT < 30) {
+            networkTypeOldApiJob = viewModelScope.launch(Dispatchers.IO) {
+                while (true) {
+                    Log.d("SessionViewModel", "Running networkTypeOldApiJob")
+                    context.get()?.let {
+                        _uiState.update { sessionUIState ->
+                            sessionUIState.copy(
+                                networkTypeOldApi = getNetworkTypeOldAPI(it)
+                            )
+                        }
+                    }
+                    delay(2000)
+                }
+            }
+        }
+    }
+
+    // Based on https://github.com/tdcolvin/NetworkTypeDetector
+    val telephonyType = callbackFlow {
+        // The thread Executor used to run the listener. This governs how threads are created and
+        // reused. Here we use a single thread.
+        val exec = Executors.newSingleThreadExecutor()
+
+        if (Build.VERSION.SDK_INT >= 31) {
+            // SDK >= 31 uses TelephonyManager.registerTelephonyCallback() to listen for
+            // TelephonyDisplayInfo changes.
+            // It does not require any permissions.
+
+            val callback = object : TelephonyCallback(), TelephonyCallback.DisplayInfoListener {
+                override fun onDisplayInfoChanged(telephonyDisplayInfo: TelephonyDisplayInfo) {
+                    trySend(telephonyDisplayInfo)
+                }
+            }
+            telephonyManager.registerTelephonyCallback(exec, callback)
+
+            awaitClose {
+                telephonyManager.unregisterTelephonyCallback(callback)
+                exec.shutdown()
+            }
+        } else {
+            // SDK 30 uses TelephonyManager.listen() to listen for TelephonyDisplayInfo changes.
+            // It requires READ_PHONE_STATE permission.
+
+            @Suppress("OVERRIDE_DEPRECATION")
+            val callback = object : PhoneStateListener(exec) {
+                override fun onDisplayInfoChanged(telephonyDisplayInfo: TelephonyDisplayInfo) {
+                    trySend(telephonyDisplayInfo)
+                }
+            }
+            telephonyManager.listen(callback, PhoneStateListener.LISTEN_DISPLAY_INFO_CHANGED)
+
+            awaitClose {
+                telephonyManager.listen(callback, 0)
+                exec.shutdown()
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
 
     init {
         initWidgetsState()
+        startNetworkTypeOldApiJob()
     }
 
     private val timer = timer("refresh", period = 5000.toLong(), action = {
@@ -82,8 +147,7 @@ class SessionViewModel @Inject constructor(
 
     val isMuted: Boolean
         get() {
-            val connection = uiState.value.connections.firstOrNull()
-            return connection?.isMuted ?: false
+            return uiState.value.transmitterConnection?.isMuted ?: false
         }
 
 
@@ -97,79 +161,57 @@ class SessionViewModel @Inject constructor(
             return uiState.value.internalMicrophoneEnabled
         }
 
-    val transmitterIdentifier: String
-        get() {
-            val identifier = uiState.value.session?.transmitter?.identifier
-            return identifier ?: ""
-        }
-
     private fun initWidgetsState() {
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
+        _uiState.update {
+            it.copy(
                 directMonitorVolume = syncStage.getDirectMonitorVolume().toFloat() / 100,
                 directMonitorEnabled = syncStage.getDirectMonitorEnabled(),
                 internalMicrophoneEnabled = syncStage.getInternalMicEnabled(),
+                optimizationLevel = syncStage.getLatencyOptimizationLevel(),
             )
-        }
-    }
-
-    fun initiate5GDetection() {
-        context.get()?.let {
-            detection5G = Detection5G(
-                ctx = it,
-                connectivityManager = connectivityManager,
-                onNetworkTypeChange = { networkTypeName ->
-                    networkType = networkTypeName
-                    _uiState.update { sessionUIState ->
-                        sessionUIState.copy(
-                            networkType = networkTypeName
-                        )
-                    }
-                },
-                telephonyManager = telephonyManager
-            )
-            detection5G.startListenNetworkType()
         }
     }
 
     private fun updateSession(value: Session) {
-        val connections: MutableList<ConnectionModel> = mutableListOf()
+        var transmitterConnection: ConnectionModel? = null
+        val connections: MutableMap<String, ConnectionModel> = mutableMapOf()
+
         value.transmitter?.let {
-            connections.add(
+            transmitterConnection =
                 ConnectionModel(
                     identifier = it.identifier,
                     userId = it.userId,
                     displayName = it.displayName,
                     isMuted = it.isMuted
                 )
-            )
+
         }
         value.receivers.forEach { receiver ->
-            connections.add(
-                ConnectionModel(
-                    identifier = receiver.identifier,
-                    userId = receiver.userId,
-                    displayName = receiver.displayName,
-                    isMuted = receiver.isMuted
-                )
+            connections[receiver.identifier] = ConnectionModel(
+                identifier = receiver.identifier,
+                userId = receiver.userId,
+                displayName = receiver.displayName,
+                isMuted = receiver.isMuted
             )
         }
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
+        _uiState.update {
+            it.copy(
+                transmitterConnection = transmitterConnection,
                 connections = connections,
-                session = value
+                session = value,
+                isRecording = value.isRecording
             )
         }
     }
 
     private fun updateConnection(identifier: String, update: (ConnectionModel) -> ConnectionModel) {
         CoroutineScope(Dispatchers.Main).launch {
-            val connections = uiState.value.connections.toMutableList()
-            val index = connections.indexOfFirst { it.identifier == identifier }
-            if (index != -1) {
-                connections[index] = update(connections[index])
-                _uiState.update { sessionUIState ->
-                    sessionUIState.copy(
+            val connections = uiState.value.connections.toMutableMap()
+            val connection = connections[identifier]
+            if (connection != null) {
+                connections[connection.identifier] = update(connection)
+                _uiState.update {
+                    it.copy(
                         connections = connections
                     )
                 }
@@ -192,8 +234,8 @@ class SessionViewModel @Inject constructor(
 
     private fun getDirectMonitorVolume(): Int {
         val dmVolume = syncStage.getDirectMonitorVolume()
-        _uiState.update { sessionUIState ->
-            sessionUIState.copy(
+        _uiState.update {
+            it.copy(
                 directMonitorVolume = (dmVolume / 100).toFloat(),
             )
         }
@@ -204,8 +246,8 @@ class SessionViewModel @Inject constructor(
     fun changeDirectMonitorVolume(volume: Float) {
         val result = syncStage.changeDirectMonitorVolume((volume * 100).toInt())
         if (result == SyncStageSDKErrorCode.OK) {
-            _uiState.update { sessionUIState ->
-                sessionUIState.copy(
+            _uiState.update {
+                it.copy(
                     directMonitorVolume = volume,
                 )
             }
@@ -243,12 +285,11 @@ class SessionViewModel @Inject constructor(
             val result = syncStage.join(
                 sessionCode = sessionCode,
                 userId = userId,
-                displayName = displayName
+                displayName = displayName,
+                zoneId = preferencesRepo.getZoneId(),
+                studioServerId = preferencesRepo.getStudioServerId(),
             )
             if (result.second == SyncStageSDKErrorCode.OK) {
-                context.get()?.let {
-                    sendCommandToService(ACTION_START_SERVICE, it)
-                }
                 val session = result.first
                 session?.let {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -271,35 +312,86 @@ class SessionViewModel @Inject constructor(
         }
     }
 
+    fun startRecording() {
+        _uiState.update {
+            it.copy(
+                recordingRequestPending = true
+            )
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = syncStage.startRecording()
+            _uiState.update {
+                it.copy(
+                    recordingRequestPending = false
+                )
+            }
+        }
+    }
+
+    fun stopRecording() {
+        _uiState.update {
+            it.copy(
+                recordingRequestPending = true
+            )
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = syncStage.stopRecording()
+            _uiState.update {
+                it.copy(
+                    recordingRequestPending = false
+                )
+            }
+        }
+    }
+
     fun toggleMicrophone(value: Boolean) {
         val result = syncStage.toggleMicrophone(value)
         if (result == SyncStageSDKErrorCode.OK) {
-            updateConnection(transmitterIdentifier) { connection ->
-                connection.copy(isMuted = value)
+            _uiState.update {
+                val transmitterConnection = it.transmitterConnection?.copy()
+                transmitterConnection?.isMuted = value
+                it.copy(
+                    transmitterConnection = transmitterConnection
+                )
             }
+
+        }
+    }
+
+    fun setLatencyOptimizationLevel(value: LatencyOptimizationLevel) {
+        syncStage.changeLatencyOptimizationLevel(value)
+        _uiState.update {
+            it.copy(
+                optimizationLevel = value
+            )
         }
     }
 
     fun leaveSession() {
         timer.cancel()
         CoroutineScope(Dispatchers.IO).launch {
-            context.get()?.let {
-                sendCommandToService(ACTION_STOP_SERVICE, it)
-            }
-            val result = syncStage.leave()
-            if (result == SyncStageSDKErrorCode.OK) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    sessionLeft()
-                }
-            }
+            syncStage.leave()
+            sessionLeft()
         }
     }
 
     fun getMeasurements(identifier: String): Measurements {
-        return if (identifier == transmitterIdentifier) {
+        return if (identifier == uiState.value.session?.transmitter?.identifier) {
             syncStage.getTransmitterMeasurements()
         } else {
             syncStage.getReceiverMeasurements(identifier = identifier)
+        }
+    }
+
+    fun startForegroundService() {
+        context.get()?.let {
+            sendCommandToService(ACTION_START_SERVICE, it)
+        }
+    }
+
+    fun stopForegroundService() {
+        context.get()?.let {
+            sendCommandToService(ACTION_STOP_SERVICE, it)
         }
     }
 
@@ -307,16 +399,30 @@ class SessionViewModel @Inject constructor(
         sessionLeft()
     }
 
+    override fun sessionRecordingStarted() {
+        _uiState.update {
+            it.copy(
+                isRecording = true
+            )
+        }
+    }
+
+    override fun sessionRecordingStopped() {
+        _uiState.update {
+            it.copy(
+                isRecording = false
+            )
+        }
+    }
+
     override fun userJoined(connection: Connection) {
         _uiState.update {
-            val connections = it.connections.toMutableList()
-            connections.add(
-                ConnectionModel(
-                    identifier = connection.identifier,
-                    userId = connection.userId,
-                    displayName = connection.displayName,
-                    isMuted = connection.isMuted
-                )
+            val connections = it.connections.toMutableMap()
+            connections[connection.identifier] = ConnectionModel(
+                identifier = connection.identifier,
+                userId = connection.userId,
+                displayName = connection.displayName,
+                isMuted = connection.isMuted
             )
             it.copy(
                 connections = connections
@@ -325,12 +431,10 @@ class SessionViewModel @Inject constructor(
     }
 
     override fun userLeft(identifier: String) {
-        _uiState.update { sessionUIState ->
-            val connections = sessionUIState.connections.toMutableList()
-            connections.removeIf { connection ->
-                connection.identifier == identifier
-            }
-            sessionUIState.copy(
+        _uiState.update {
+            val connections = it.connections.toMutableMap()
+            connections.remove(identifier)
+            it.copy(
                 connections = connections
             )
         }
@@ -355,10 +459,12 @@ class SessionViewModel @Inject constructor(
     }
 
     override fun transmitterConnectivityChanged(connected: Boolean) {
-        if (transmitterIdentifier == _uiState.value.connections.firstOrNull()?.identifier) {
-            updateConnection(transmitterIdentifier) {
-                it.copy(isConnected = connected)
-            }
+        _uiState.update {
+            val transmitterConnection = it.transmitterConnection?.copy()
+            transmitterConnection?.isConnected = connected
+            it.copy(
+                transmitterConnection = transmitterConnection
+            )
         }
     }
 }
