@@ -32,6 +32,7 @@ if (propsFile.isFile()) {
     propsFile.withInputStream { props.load(it) }
     if (props!=null && props.containsKey('sourcesBuild')) {
         sourcesBuild=props['sourcesBuild']
+        println "sourcesBuild property found. Value: ${sourcesBuild}"
     }
 }
 rootProject.name = "SyncStageTestAppAndroid"
