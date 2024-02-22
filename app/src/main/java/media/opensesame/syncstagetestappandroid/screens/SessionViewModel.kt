@@ -1,7 +1,6 @@
 package media.opensesame.syncstagetestappandroid.screens
 
 import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Build
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyCallback
@@ -68,9 +67,6 @@ class SessionViewModel @Inject constructor(
     val uiState: StateFlow<SessionUIState> = _uiState.asStateFlow()
     lateinit var sessionLeft: () -> Unit
 
-    private val connectivityManager by lazy {
-        context.get()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    }
     private val telephonyManager by lazy {
         context.get()?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     }
