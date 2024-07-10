@@ -50,6 +50,7 @@ data class SessionUIState(
     val date: Date = Date(),
     val directMonitorEnabled: Boolean = false,
     val directMonitorVolume: Float = 1F,
+    val noiseCancellationEnabled: Boolean = false,
     val internalMicrophoneEnabled: Boolean = false,
     val isRecording: Boolean = false,
     val recordingRequestPending: Boolean = false,
@@ -161,6 +162,11 @@ class SessionViewModel @Inject constructor(
             return uiState.value.internalMicrophoneEnabled
         }
 
+    val isNoiseCancellationEnabled: Boolean
+        get() {
+            return uiState.value.noiseCancellationEnabled
+        }
+
     private fun initWidgetsState() {
         _uiState.update {
             it.copy(
@@ -254,8 +260,8 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun toggleDirectMonitor(value: Boolean) {
-        val result = syncStage.toggleDirectMonitor(value)
+    fun enableDirectMonitor(value: Boolean) {
+        val result = syncStage.enableDirectMonitor(value)
         if (result == SyncStageSDKErrorCode.OK) {
             _uiState.update {
                 it.copy(
@@ -265,8 +271,19 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun toggleInternalMicrophone(value: Boolean) {
-        val result = syncStage.toggleInternalMic(value)
+    fun enableNoiseCancellation(value: Boolean) {
+        val result = syncStage.enableNoiseCancellation(value)
+        if (result == SyncStageSDKErrorCode.OK) {
+            _uiState.update {
+                it.copy(
+                    noiseCancellationEnabled = value
+                )
+            }
+        }
+    }
+
+    fun enableInternalMicrophone(value: Boolean) {
+        val result = syncStage.enableInternalMic(value)
         if (result == SyncStageSDKErrorCode.OK) {
             _uiState.update {
                 it.copy(

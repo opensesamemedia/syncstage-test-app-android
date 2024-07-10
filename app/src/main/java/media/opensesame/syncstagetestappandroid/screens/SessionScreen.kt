@@ -49,7 +49,6 @@ import media.opensesame.syncstagetestappandroid.components.UserConnection
 import media.opensesame.syncstagetestappandroid.ui.theme.DarkColorScheme
 import media.opensesame.syncstagetestappandroid.ui.theme.LightColorScheme
 import media.opensesame.syncstagetestappandroid.ui.theme.recording_red
-import androidx.compose.material.DropdownMenuItem
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -314,7 +313,7 @@ fun SessionScreen(
                                     modifier = Modifier.padding(start = 10.dp, end = 10.dp),
                                     checked = sessionViewModel.isDirectMonitorEnabled,
                                     onCheckedChange = {
-                                        sessionViewModel.toggleDirectMonitor(it)
+                                        sessionViewModel.enableDirectMonitor(it)
                                     })
                             }
                             Row(
@@ -352,11 +351,36 @@ fun SessionScreen(
                                     modifier = Modifier.padding(start = 10.dp, end = 10.dp),
                                     checked = sessionViewModel.isInternalMicrophoneEnabled,
                                     onCheckedChange = {
-                                        sessionViewModel.toggleInternalMicrophone(it)
+                                        sessionViewModel.enableInternalMicrophone(it)
                                     })
                             }
 
                             Text(text = "Note: A headphone required to enable the direct monitor feature.")
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 12.dp, top = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column {
+                                    Text(
+                                        text = "Noise cancellation",
+                                        style = MaterialTheme.typography.titleLarge,
+                                    )
+                                    Text(
+                                        text = "Remove background noises.",
+                                    )
+                                }
+
+                                Switch(
+                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp),
+                                    checked = sessionViewModel.isNoiseCancellationEnabled,
+                                    onCheckedChange = {
+                                        sessionViewModel.enableNoiseCancellation(it)
+                                    })
+                            }
 
                             Column(
                                 modifier = Modifier
@@ -476,6 +500,7 @@ fun SessionScreen(
             sessionViewModel.joinSession(
                 sessionCode = sessionCode,
             )
+            sessionViewModel.toggleMicrophone(sessionViewModel.isMuted)
         }
     }
 }

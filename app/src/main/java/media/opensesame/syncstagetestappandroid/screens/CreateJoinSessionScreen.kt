@@ -58,7 +58,7 @@ fun CreateJoinSessionScreen(
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = "Enter a code to join an existing session or create a new one.",
+                text = "Create a new session or enter a session code to join an existing session.",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 20.dp),
