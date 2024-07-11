@@ -135,6 +135,7 @@ class SessionViewModel @Inject constructor(
 
     init {
         initWidgetsState()
+        initSyncStageSettingsState()
         startNetworkTypeOldApiJob()
     }
 
@@ -170,12 +171,21 @@ class SessionViewModel @Inject constructor(
     private fun initWidgetsState() {
         _uiState.update {
             it.copy(
-                directMonitorVolume = syncStage.getDirectMonitorVolume().toFloat() / 100,
-                directMonitorEnabled = syncStage.getDirectMonitorEnabled(),
-                internalMicrophoneEnabled = syncStage.getInternalMicEnabled(),
-                optimizationLevel = syncStage.getLatencyOptimizationLevel(),
+                directMonitorVolume = preferencesRepo.getDirectMonitorVolume().toFloat() / 100,
+                directMonitorEnabled = preferencesRepo.getDirectMonitorEnabled(),
+                internalMicrophoneEnabled = preferencesRepo.getInternalMicrophoneEnabled(),
+                optimizationLevel = LatencyOptimizationLevel.fromInt(preferencesRepo.getLatencyOptimizationLevel()),
+                noiseCancellationEnabled = preferencesRepo.getNoiseCancellationEnabled()
             )
         }
+    }
+
+    private fun initSyncStageSettingsState(){
+        syncStage.enableDirectMonitor(preferencesRepo.getDirectMonitorEnabled())
+        syncStage.enableInternalMic(preferencesRepo.getInternalMicrophoneEnabled())
+        syncStage.enableNoiseCancellation(preferencesRepo.getNoiseCancellationEnabled())
+        LatencyOptimizationLevel.fromInt(preferencesRepo.getLatencyOptimizationLevel())
+            ?.let { syncStage.changeLatencyOptimizationLevel(it) }
     }
 
     private fun updateSession(value: Session) {
@@ -238,20 +248,10 @@ class SessionViewModel @Inject constructor(
         return syncStage.getReceiverVolume(identifier = identifier)
     }
 
-    private fun getDirectMonitorVolume(): Int {
-        val dmVolume = syncStage.getDirectMonitorVolume()
-        _uiState.update {
-            it.copy(
-                directMonitorVolume = (dmVolume / 100).toFloat(),
-            )
-        }
-
-        return dmVolume
-    }
-
     fun changeDirectMonitorVolume(volume: Float) {
         val result = syncStage.changeDirectMonitorVolume((volume * 100).toInt())
         if (result == SyncStageSDKErrorCode.OK) {
+            preferencesRepo.setDirectMonitorVolume((volume * 100).toInt())
             _uiState.update {
                 it.copy(
                     directMonitorVolume = volume,
@@ -263,6 +263,7 @@ class SessionViewModel @Inject constructor(
     fun enableDirectMonitor(value: Boolean) {
         val result = syncStage.enableDirectMonitor(value)
         if (result == SyncStageSDKErrorCode.OK) {
+            preferencesRepo.setDirectMonitorEnabled(value)
             _uiState.update {
                 it.copy(
                     directMonitorEnabled = value
@@ -274,6 +275,7 @@ class SessionViewModel @Inject constructor(
     fun enableNoiseCancellation(value: Boolean) {
         val result = syncStage.enableNoiseCancellation(value)
         if (result == SyncStageSDKErrorCode.OK) {
+            preferencesRepo.setNoiseCancellationEnabled(value)
             _uiState.update {
                 it.copy(
                     noiseCancellationEnabled = value
@@ -285,6 +287,7 @@ class SessionViewModel @Inject constructor(
     fun enableInternalMicrophone(value: Boolean) {
         val result = syncStage.enableInternalMic(value)
         if (result == SyncStageSDKErrorCode.OK) {
+            preferencesRepo.setInternalMicrophoneEnabled(value)
             _uiState.update {
                 it.copy(
                     internalMicrophoneEnabled = value
@@ -313,7 +316,7 @@ class SessionViewModel @Inject constructor(
                         updateSession(it)
                     }
                 }
-                getDirectMonitorVolume()
+                preferencesRepo.setDirectMonitorVolume(80)
             } else {
                 CoroutineScope(Dispatchers.Main).launch {
                     context.get()?.let {
@@ -377,6 +380,7 @@ class SessionViewModel @Inject constructor(
 
     fun setLatencyOptimizationLevel(value: LatencyOptimizationLevel) {
         syncStage.changeLatencyOptimizationLevel(value)
+        preferencesRepo.setLatencyOptimizationLevel(value.latencyOptimizationLevel)
         _uiState.update {
             it.copy(
                 optimizationLevel = value
