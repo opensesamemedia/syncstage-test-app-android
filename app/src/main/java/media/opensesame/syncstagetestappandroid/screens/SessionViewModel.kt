@@ -180,7 +180,7 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    private fun initSyncStageSettingsState(){
+    fun initSyncStageSettingsState(){
         syncStage.enableDirectMonitor(preferencesRepo.getDirectMonitorEnabled())
         syncStage.enableInternalMic(preferencesRepo.getInternalMicrophoneEnabled())
         syncStage.enableNoiseCancellation(preferencesRepo.getNoiseCancellationEnabled())
@@ -317,6 +317,8 @@ class SessionViewModel @Inject constructor(
                     }
                 }
                 preferencesRepo.setDirectMonitorVolume(80)
+                enableMicrophone(isMuted)
+                initSyncStageSettingsState()
             } else {
                 CoroutineScope(Dispatchers.Main).launch {
                     context.get()?.let {
@@ -364,7 +366,7 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun toggleMicrophone(value: Boolean) {
+    fun enableMicrophone(value: Boolean) {
         val result = syncStage.toggleMicrophone(value)
         if (result == SyncStageSDKErrorCode.OK) {
             _uiState.update {

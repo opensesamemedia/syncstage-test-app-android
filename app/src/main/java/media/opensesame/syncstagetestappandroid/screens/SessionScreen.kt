@@ -236,7 +236,7 @@ fun SessionScreen(
                         }
                         IconButton(
                             onClick = {
-                                sessionViewModel.toggleMicrophone(!sessionViewModel.isMuted)
+                                sessionViewModel.enableMicrophone(!sessionViewModel.isMuted)
                             },
                             modifier = Modifier
                                 .weight(33.3f)
@@ -500,7 +500,6 @@ fun SessionScreen(
             sessionViewModel.joinSession(
                 sessionCode = sessionCode,
             )
-            sessionViewModel.toggleMicrophone(sessionViewModel.isMuted)
         }
     }
 }
