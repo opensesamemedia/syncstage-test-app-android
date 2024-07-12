@@ -14,7 +14,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import media.opensesame.syncstagesdk.DirectMonitorEnableListener
+import media.opensesame.syncstagesdk.ForceInternalMicListener
 import media.opensesame.syncstagesdk.LatencyOptimizationLevel
+import media.opensesame.syncstagesdk.NoiseFilterEnableListener
 import media.opensesame.syncstagesdk.SyncStage
 import media.opensesame.syncstagesdk.SyncStageSDKErrorCode
 import media.opensesame.syncstagesdk.delegates.SyncStageConnectivityDelegate
@@ -22,6 +25,7 @@ import media.opensesame.syncstagesdk.delegates.SyncStageUserDelegate
 import media.opensesame.syncstagesdk.models.public.Connection
 import media.opensesame.syncstagesdk.models.public.Measurements
 import media.opensesame.syncstagesdk.models.public.Session
+import media.opensesame.syncstagesdk.utils.LogUtil
 import media.opensesame.syncstagesdk.utils.getNetworkTypeOldAPI
 import media.opensesame.syncstagetestappandroid.ACTION_START_SERVICE
 import media.opensesame.syncstagetestappandroid.ACTION_STOP_SERVICE
@@ -137,6 +141,28 @@ class SessionViewModel @Inject constructor(
         initWidgetsState()
         initSyncStageSettingsState()
         startNetworkTypeOldApiJob()
+        _uiState.update { it.copy(directMonitorEnabled = syncStage.getDirectMonitorEnabled()) }
+
+        syncStage.setDirectMonitorEnableListener(object : DirectMonitorEnableListener {
+            override fun onDirectMonitorEnableChanged(enabled: Boolean) {
+                LogUtil.d("SessionViewModelListener", "onDirectMonitorEnableChanged: $enabled")
+                _uiState.update { it.copy(directMonitorEnabled = enabled) }
+            }
+        })
+
+        syncStage.setForceInternalMicListener(object : ForceInternalMicListener {
+            override fun onForceInternalMicChanged(enabled: Boolean) {
+                LogUtil.d("SessionViewModelListener", "onForceInternalMicChanged: $enabled")
+                _uiState.update { it.copy(internalMicrophoneEnabled = enabled) }
+            }
+        })
+
+        syncStage.setNoiseFilterEnableListener(object : NoiseFilterEnableListener {
+            override fun onNoiseFilterEnableChanged(enabled: Boolean) {
+                LogUtil.d("SessionViewModelListener", "onNoiseFilterEnableChanged: $enabled")
+                _uiState.update { it.copy(noiseCancellationEnabled = enabled) }
+            }
+        })
     }
 
     private val timer = timer("refresh", period = 5000.toLong(), action = {
@@ -264,11 +290,7 @@ class SessionViewModel @Inject constructor(
         val result = syncStage.enableDirectMonitor(value)
         if (result == SyncStageSDKErrorCode.OK) {
             preferencesRepo.setDirectMonitorEnabled(value)
-            _uiState.update {
-                it.copy(
-                    directMonitorEnabled = value
-                )
-            }
+
         }
     }
 
@@ -276,11 +298,6 @@ class SessionViewModel @Inject constructor(
         val result = syncStage.enableNoiseCancellation(value)
         if (result == SyncStageSDKErrorCode.OK) {
             preferencesRepo.setNoiseCancellationEnabled(value)
-            _uiState.update {
-                it.copy(
-                    noiseCancellationEnabled = value
-                )
-            }
         }
     }
 
@@ -288,11 +305,6 @@ class SessionViewModel @Inject constructor(
         val result = syncStage.enableInternalMic(value)
         if (result == SyncStageSDKErrorCode.OK) {
             preferencesRepo.setInternalMicrophoneEnabled(value)
-            _uiState.update {
-                it.copy(
-                    internalMicrophoneEnabled = value
-                )
-            }
         }
     }
 
