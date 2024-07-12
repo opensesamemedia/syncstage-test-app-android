@@ -33,6 +33,10 @@ class IntroViewModel @Inject constructor(
     private val prefRepo: PreferencesRepo
 ) : ViewModel() {
 
+    fun removeSessionCode() {
+        prefRepo.removeSessionCode()
+    }
+
     private val _uiState = MutableStateFlow(LoginUIState())
     val uiState: StateFlow<LoginUIState> = _uiState.asStateFlow()
     private var initRetries = 0

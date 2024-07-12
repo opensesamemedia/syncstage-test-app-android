@@ -111,5 +111,6 @@ fun IntroScreen(
         if (loginUIState.loginResult == null) {
             introViewModel.initiateSyncStage()
         }
+        introViewModel.removeSessionCode()
     }
 }

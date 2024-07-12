@@ -164,6 +164,24 @@ class PreferencesRepo @Inject constructor(
         return sharedPref.getInt("latencyOptimizationLevel", DEFAULT_LATENCY_OPTIMIZATION_LEVEL)
     }
 
+    fun setSessionCode(sessionCode: String) {
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("sessionCode", sessionCode)
+            apply()
+        }
+    }
 
+    fun getSessionCode(): String {
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        return sharedPref.getString("sessionCode", "") ?: ""
+    }
 
+    fun removeSessionCode() {
+        val sharedPref = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove("sessionCode")
+            apply()
+        }
+    }
 }

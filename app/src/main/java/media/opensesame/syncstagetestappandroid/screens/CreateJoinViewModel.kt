@@ -32,14 +32,22 @@ class CreateJoinViewModel @Inject constructor(
     lateinit var createSessionCallback: (sessionCode: String) -> Unit
 
 
+    fun loadSessionCode() {
+        _uiState.update {
+            it.copy(
+                sessionCode = prefRepo.getSessionCode()
+            )
+        }
+    }
+
     fun updateSessionCode(code: String) {
         _uiState.update {
             it.copy(
                 sessionCode = code
             )
         }
+        prefRepo.setSessionCode(code)
     }
-
 
     fun createNewSession() {
         val userId = prefRepo.getUserId()
@@ -52,8 +60,9 @@ class CreateJoinViewModel @Inject constructor(
                 )
             if (result.second == SyncStageSDKErrorCode.OK) {
                 result.first?.sessionCode.let { sessionCode ->
+                    sessionCode?.let { prefRepo.setSessionCode(it) }
                     CoroutineScope(Dispatchers.Main).launch {
-                        createSessionCallback(sessionCode!!)
+                        sessionCode?.let { createSessionCallback(it) }
                     }
                 }
             } else {

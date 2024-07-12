@@ -107,6 +107,8 @@ fun CreateJoinSessionScreen(
     if (showLoadingIndicator) {
         LoadingIndicator()
     }
-
+    LaunchedEffect(Unit) {
+        createJoinViewModel.loadSessionCode()
+    }
 
 }
