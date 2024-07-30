@@ -105,7 +105,7 @@ android {
             dimension "environment"
             versionName getVersionName("staging")
             buildConfigField "String", "VERSION_NAME", "\"${getVersionName("staging")}\""
-            buildConfigField "String", "API_URL", "\"https://3bty5ooqg7.execute-api.us-east-1.amazonaws.com/staging/\""
+            buildConfigField "String", "API_URL", "\"https://api-staging.opensesame-test.link\""
             defaultConfig {
                 archivesBaseName = "$applicationId-${getVersionName('staging')}"
             }
